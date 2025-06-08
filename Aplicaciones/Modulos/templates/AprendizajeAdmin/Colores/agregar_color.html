@@ -1,0 +1,88 @@
+{% extends 'plantillaAdmin.html' %}
+
+{% block body %}
+<br><br>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center" style="background-color: #286ea8;">
+                    <h4 style="color: white;">Agregar Color</h4>
+                </div>
+                <div class="card-body Mensaje-error" style="background-color: #bddde4">
+                    <form action="{% url 'agregar_color' %}" method="POST" enctype="multipart/form-data" id="frm_color">
+                        {% csrf_token %}
+
+                        <div class="form-group">
+                            <label for="palabra_col">Palabra en Kichwa:</label>
+                            <input type="text" name="palabra_col" id="palabra_col" class="form-control" placeholder="Ej: Yana (negro)" required>
+                            {% if error_palabra %}
+                                <small class="form-text text-danger">{{ error_palabra }}</small>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="imagen_col">Imagen:</label>
+                            <input type="file" name="imagen_col" id="imagen_col" class="form-control" accept="image/*">
+                            <div class="mt-3 text-center">
+                                <img id="preview_imagen_col" src="#" alt="Vista previa" class="img-thumbnail" style="display:none; max-width: 150px; max-height: 150px;">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="audio_kichwa_col">Audio en Kichwa:</label>
+                            <input type="file" name="audio_kichwa_col" id="audio_kichwa_col" class="form-control" accept="audio/*">
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-outline-primary">Guardar</button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a href="{% url 'lista_colores' %}" class="btn btn-outline-secondary">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#frm_color").validate({
+        rules: {
+            palabra_col: { required: true },
+            imagen_col: { required: true },
+            audio_kichwa_col: { required: true }
+        },
+        messages: {
+            palabra_col: { required: "Ingrese la palabra en kichwa" },
+            imagen_col: { required: "Cargue la imagen" },
+            audio_kichwa_col: { required: "Cargue el audio" }
+        }
+    });
+</script>
+
+<script>
+    document.getElementById('imagen_col').addEventListener('change', function (event) {
+        const input = event.target;
+        const preview = document.getElementById('preview_imagen_col');
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            preview.src = '#';
+            preview.style.display = 'none';
+        }
+    });
+</script>
+
+<script>
+    document.getElementById('palabra_col').addEventListener('input', function (e) {
+        this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s()]/g, '');
+    });
+</script>
+<br>
+{% endblock %}

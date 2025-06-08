@@ -1,0 +1,173 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Importando JQuery-->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <!--Importando Bootstrap-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+    <!--Importando Datatable-->
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css"link>
+    <script src="//cdn.datatables.net/2.0.8/js/dataTables.min.js"> </script>
+    <!--Importando Sweetalert2-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!--Importando JQuery Validation-->
+    <script src="{% static 'librerias/jquery-validation/dist/jquery.validate.min.js' %}"></script>
+    <!--Importando Fontawesome-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!--Script para estadisticas-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- importamos cdn de chart.js-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!--Importando FileInput.js -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/css/fileinput.min.css">
+    <script  src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/js/fileinput.min.js"></script>
+    <title>Kichwa</title>
+
+    <!-- bootstrap core css -->
+    <link rel="stylesheet" type="text/css" href="{% static 'plantilla/adward/css/bootstrap.css' %}" />
+    <!-- progress barstle -->
+    <link rel="stylesheet" href="{% static 'plantilla/adward/css/css-circular-prog-bar.css' %}">
+    <!-- fonts style -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
+    <!-- font wesome stylesheet -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <!-- Custom styles for this template -->
+    <link href="{% static 'plantilla/adward/css/style.css' %}" rel="stylesheet" />
+    <!-- responsive style -->
+    <link href="{% static 'plantilla/adward/css/responsive.css' %}" rel="stylesheet" />
+  
+  
+
+    <link rel="stylesheet" href="{% static 'plantilla/adward/css/css-circular-prog-bar.css' %}">
+
+</head>
+<body>
+    <div class="top_container">
+      <!-- header section strats -->
+      <header class="header_section">
+        <div class="container">
+          <nav class="navbar navbar-expand-lg custom_nav-container ">
+            <a class="navbar-brand" href="index.html">
+              <img src="{% static 'plantilla/adward/images/logo.png' %}" alt="">
+              <span>
+                SUMAK KAWSAY
+              </span>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- MENU INTERACTIVO -->
+            <style>
+                .navbar-nav .nav-link {
+                  transition: all 0.3s ease;
+                  font-size: 20px;
+                  font-weight: bold;
+                  color: #ffffff;
+                  padding: 8px 16px;
+                  border-radius: 100px;
+                }
+              
+                .navbar-nav .nav-link:hover {
+                  color: #fff;
+                  background-color: #ebee48; 
+                  transform: scale(1.2) rotate(-2deg); /* Agranda y gira un poco */
+                  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+                }
+              
+                .navbar-nav .nav-item {
+                  margin: 0 5px;
+                }
+            </style>
+              
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <div class="d-flex ml-auto flex-column flex-lg-row align-items-center">
+                  <ul class="navbar-nav">
+                    <li class="nav-item active">
+                      <a class="nav-link" href="{% url 'inicio' %}">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="about.html">Acerca de</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'login_profesor' %}">Profesor</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="vehicle.html">Transporte</a>
+                    </li>
+                  </ul>
+                  <form class="form-inline my-2 my-lg-0 ml-0 ml-lg-4 mb-3 mb-lg-0">
+                   
+                  </form>
+                </div>
+            </div>   
+              
+          </nav>
+        </div>
+      </header>
+      <section class="hero_section ">
+        <div class="hero-container container">
+          <div class="hero_detail-box">
+            <h3>
+              Bienvenidos a la<br>
+              Escuela
+            </h3>
+            <h1>
+              SUMAK KAWSAY
+            </h1>
+            <p>
+                Cuando aprendemos kichwa, entendemos a nuestros abuelos, cuidamos nuestra cultura 
+                y hablamos con el corazón de nuestra tierra.
+            </p>
+            <div class="hero_btn-continer">
+              <a href="{% url 'aprender' %}" class="call_to-btn btn_white-border" >
+                <span style="color: black;">
+                  Apreder | Yachay
+                </span>
+                <img src="{% static 'plantilla/adward/images/flecha-derecha.png' %}" alt="">
+              </a>
+            </div>
+          </div>
+          <div class="hero_img-container">
+
+            <!-- IMAGEN EN MOVIMIENTO -->
+            <style>
+                .img-floating {
+                  animation: float 1.5s ease-in-out infinite;
+                }
+              
+                @keyframes float {
+                    0%   { transform: translateY(0px); }      /* Comienza en la posición original */
+                    50%  { transform: translateY(-10px); }    /* Sube 10px a la mitad del ciclo */
+                    100% { transform: translateY(0px); }      /* Regresa a la posición original */
+                }
+              </style>
+              
+              <div style="padding-left: 30px;">
+                <img src="{% static 'plantilla/adward/images/ninos.png' %}" alt="" class="img-fluid img-floating">
+              </div>
+              
+          </div>
+        </div>
+      </section>
+    </div>
+    <!-- end header section -->
+
+  <div>
+    {% block body %}
+    {% endblock %}
+  </div>
+
+  <!-- footer section -->
+  <section class="container-fluid footer_section">
+    <p>
+      Copyright &copy; 2025 All Rights Reserved By
+      <a href="https://html.design/">Free Html Templates</a>
+    </p>
+  </section>
+  <!-- footer section -->

@@ -1,0 +1,85 @@
+{% extends 'plantillaAdmin.html' %}
+
+{% block body %}
+<br><br>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card Mensaje-error" >
+                <div class="card-header text-center" style="background-color: #286ea8;">
+                    <h4 style="color: white;">Agregar Palabra del Mes</h4>
+                </div>
+                <div class="card-body" style="background-color: #bddde4">
+                    <form action="{% url 'agregar_mes' %}" method="POST" enctype="multipart/form-data" id="frm_mes">
+                        {% csrf_token %}
+
+                        <div class="form-group">
+                            <label for="palabra_mes">Palabra en Kichwa:</label>
+                            <input type="text" name="palabra_mes" id="palabra_mes" class="form-control" placeholder="Ej: killkak (escribir)" required>
+                            {% if error_palabra %}
+                                <small class="form-text text-danger">{{ error_palabra }}</small>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="imagen_mes">Imagen:</label>
+                            <input type="file" name="imagen_mes" id="imagen_mes" class="form-control" accept="image/*">
+
+                            <div class="mt-3 text-center">
+                                <img id="preview_imagen_mes" src="#" alt="Vista previa" class="img-thumbnail" style="display:none; max-width: 150px; max-height: 150px;">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="audio_kichwa_mes">Audio en Kichwa:</label>
+                            <input type="file" name="audio_kichwa_mes" id="audio_kichwa_mes" class="form-control" accept="audio/*">
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-outline-primary">Guardar</button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a href="{% url 'lista_meses' %}" class="btn btn-outline-secondary">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#frm_mes").validate({
+        rules: {
+            palabra_mes: { required: true },
+            imagen_mes: { required: true },
+            audio_kichwa_mes: { required: true }
+        },
+        messages: {
+            palabra_mes: { required: "Ingrese la palabra en kichwa" },
+            imagen_mes: { required: "Cargue la imagen" },
+            audio_kichwa_mes: { required: "Cargue el audio" }
+        }
+    });
+
+    document.getElementById('imagen_mes').addEventListener('change', function (event) {
+        const input = event.target;
+        const preview = document.getElementById('preview_imagen_mes');
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            preview.src = '#';
+            preview.style.display = 'none';
+        }
+    });
+
+    document.getElementById('palabra_mes').addEventListener('input', function () {
+        this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s()]/g, '');
+    });
+</script>
+<br>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "plantillaModulos.html" %}
+{% load static %}
+{% block body %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/estilosAprender.css' %}">
+</head>
+
+<br>
+
+<div class="text-center mb-4">
+    <div class="fondo_titulo">
+        <h1 class="titulo-kichwa">🙌 ¡Saludos en Kichwa | Rimaykullayki! 🙋‍♂️</h1>
+    </div>
+</div>
+<div class="text-center">
+    <a href="{% url 'aprender' %}" class="btn-volver">VOLVER</a>
+</div>
+
+<br>
+
+<div class="container">
+    <div class="row">
+        {% for saludo in saludos %}
+        <div class="col-md-4 mb-4">
+            <div class="card text-center card-mes">
+                <div class="card-body">
+                    <h5 class="card-title">📖 {{ saludo.palabra_sal }}</h5>
+
+                    {% if saludo.imagen_sal %}
+                    <img src="{{ saludo.imagen_sal.url }}" alt="{{ saludo.palabra_sal }}" class="img-fluid mb-3" style="max-height: 200px; border-radius: 15px;">
+                    {% else %}
+                    <p>📷 No hay imagen disponible.</p>
+                    {% endif %}
+
+                    {% if saludo.audio_kichwa_sal %}
+                    <button class="btn-audio" onclick="document.getElementById('audio_{{ forloop.counter }}').play()">
+                        🔊 Escuchar
+                    </button>
+                    <audio id="audio_{{ forloop.counter }}">
+                        <source src="{{ saludo.audio_kichwa_sal.url }}" type="audio/mpeg">
+                        Tu navegador no soporta audio.
+                    </audio>
+                    {% else %}
+                    <p>🔇 No hay audio disponible.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="text-center mb-4">
+    <div class="fondo_titulo">
+        <h5 class="titulo-juego">¡Si ya aprendiste los SALUDOS te invito a JUGAR!</h5>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-4 mb-4">
+            <a href="{% url 'jugar_saludos' %}" style="text-decoration: none;">
+                <div class="menu-card">
+                    <img src="{% static 'imagenes/jugar.gif' %}" alt="Saludos" class="menu-img">
+                    <div class="menu-title">🎮  JUGAR CON LOS SALUDOS</div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<br>
+{% endblock %}

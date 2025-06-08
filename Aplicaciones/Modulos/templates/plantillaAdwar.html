@@ -1,0 +1,188 @@
+{% load static %}
+
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Breeze Admin</title>
+    <link rel="stylesheet" href="{% static 'plantilla/Breeze/template/assets/vendors/mdi/css/materialdesignicons.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'plantilla/Breeze/template/assets/vendors/flag-icon-css/css/flag-icon.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'plantilla/Breeze/template/assets/vendors/css/vendor.bundle.base.css' %}" />
+    <link rel="stylesheet" href="{% static 'plantilla/Breeze/template/assets/vendors/font-awesome/css/font-awesome.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'plantilla/Breeze/template/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'plantilla/Breeze/template/assets/css/style.css' %}" />
+    <link rel="shortcut icon" href="{% static 'plantilla/Breeze/template/assets/images/favicon.png' %}" />
+    <!-- Importando Font Awesomw -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+     <!--Importando Datatable-->
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css"link>
+    <script src="//cdn.datatables.net/2.0.8/js/dataTables.min.js"> </script>
+    <!--Importando Sweetalert2-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!--Importando JQuery Validation-->
+    <script src="{% static 'librerias/jquery-validation/dist/jquery.validate.min.js' %}"></script>
+    
+  </head>
+
+  <style>
+  
+  .sidebar .nav .nav-link,
+  .sidebar .nav .menu-title,
+  .sidebar .nav i {
+    color: white !important;
+  }
+
+  </style>
+
+
+  <body>
+    <div class="container-scroller">
+      <nav class="sidebar sidebar-offcanvas" id="sidebar" style="background: linear-gradient(to bottom, #165283, #53a9bd); color: white;">
+
+        <div class="text-center sidebar-brand-wrapper d-flex align-items-center">
+          <a class="sidebar-brand" href="{% url 'profesor_bienvenida' %}" style="text-decoration: none;">
+             <i class="fas fa-school me-2" style="color: white;"></i><h3 style="color: white;">SUMAK KAWSAY</h3></a>
+        </div>
+        <ul class="nav">
+          <br><br>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'lista_aprender' %}">
+              <i class="mdi mdi-school menu-icon"></i>
+              <span class="menu-title">Lista de Aprendizaje</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="pages/forms/basic_elements.html">
+              <i class="mdi mdi-format-list-bulleted menu-icon"></i>
+              <span class="menu-title">Forms</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="pages/charts/chartjs.html">
+              <i class="mdi mdi-chart-bar menu-icon"></i>
+              <span class="menu-title">Charts</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="pages/tables/basic-table.html">
+              <i class="mdi mdi-table-large menu-icon"></i>
+              <span class="menu-title">Tables</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <span class="nav-link" href="#">
+              <span class="menu-title">Docs</span>
+            </span>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://www.bootstrapdash.com/demo/breeze-free/documentation/documentation.html">
+              <i class="mdi mdi-file-document-box menu-icon"></i>
+              <span class="menu-title">Documentation</span>
+            </a>
+          </li>
+          
+        </ul>
+        <br><br><br><br><br><br><br><br><br><br><br>
+      </nav>
+      <div class="container-fluid page-body-wrapper">
+        <div id="theme-settings" class="settings-panel">
+          <i class="settings-close mdi mdi-close"></i>
+          <p class="settings-heading">SIDEBAR SKINS</p>
+          <div class="sidebar-bg-options selected" id="sidebar-default-theme">
+            <div class="img-ss rounded-circle bg-light border mr-3"></div> Default
+          </div>
+          <div class="sidebar-bg-options" id="sidebar-dark-theme">
+            <div class="img-ss rounded-circle bg-dark border mr-3"></div> Dark
+          </div>
+          <p class="settings-heading mt-2">HEADER SKINS</p>
+          <div class="color-tiles mx-0 px-4">
+            <div class="tiles light"></div>
+            <div class="tiles dark"></div>
+          </div>
+        </div>
+        
+        <div class=" fixed-top d-flex flex-row" style=" margin-left: 260px; background-color: #165283; height: 70px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <div class="navbar-menu-wrapper d-flex align-items-stretch justify-content-between w-100 px-3">
+            <h2 style="margin-top: 14px; margin-left: 10px; color: white;">Hola! Bienvenido Profesor</h2>
+
+            <!-- <button class="navbar-toggler navbar-toggler align-self-center mr-2" type="button" data-toggle="minimize" style="background: none; border: none; color: white;">
+            <i class="mdi mdi-menu"></i>
+            </button> -->
+
+            <ul class="navbar-nav navbar-nav-right ml-lg-auto d-flex align-items-center mb-0" style="list-style: none;">
+                <li class="nav-item nav-profile dropdown border-0">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" id="profileDropdown" href="#" data-toggle="dropdown" style="color: white; text-decoration: none; margin-top: 10px; margin-right: 10px;">
+                        <i class="fas fa-user-circle fa-lg mr-2"></i>
+                        <span class="profile-name">Profesor</span>
+                    </a>
+                    <div class="dropdown-menu navbar-dropdown w-100" aria-labelledby="profileDropdown">
+                        <a class="dropdown-item" href="{% url 'logout_profesor' %}" id="logout">
+                            <i class="mdi mdi-logout mr-2 text-primary"></i> Cerrar sesión
+                        </a>
+                    </div>
+                </li>
+            </ul>
+
+            <style>
+                #logout:hover {
+                    background-color: rgb(90, 185, 209);
+                }
+            </style>
+
+      </li>
+    </ul>
+
+    <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas" style="background: none; border: none; color: white;">
+      <span class="mdi mdi-menu"></span>
+    </button>
+
+  </div>
+</div>
+
+        
+        <div class="main-panel">
+          <div class="content-wrapper pb-0">
+            <div class="page-header flex-wrap">
+                 <div class="container my-4">
+                  {% block body %}
+                  {% endblock %}
+                </div>
+            </div>
+    
+          </div>
+          <footer class="footer">
+            <div class="d-sm-flex justify-content-center justify-content-sm-between">
+              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © bootstrapdash.com 2020</span>
+              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a href="https://www.bootstrapdash.com/" target="_blank">Bootstrap dashboard template</a> from Bootstrapdash.com</span>
+            </div>
+          </footer>
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="{% static 'plantilla/Breeze/template/assets/vendors/js/vendor.bundle.base.js' %}"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="{% static 'plantilla/Breeze/template/assets/vendors/chart.js/Chart.min.js' %}"></script>
+    <script src="{% static 'plantilla/Breeze/template/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'plantilla/Breeze/template/assets/vendors/flot/jquery.flot.js' %}"></script>
+    <script src="{% static 'plantilla/Breeze/template/assets/vendors/flot/jquery.flot.resize.js' %}"></script>
+    <script src="{% static 'plantilla/Breeze/template/assets/vendors/flot/jquery.flot.categories.js' %}"></script>
+    <script src="{% static 'plantilla/Breeze/template/assets/vendors/flot/jquery.flot.fillbetween.js' %}"></script>
+    <script src="{% static 'plantilla/Breeze/template/assets/vendors/flot/jquery.flot.stack.js' %}"></script>
+    <script src="{% static 'plantilla/Breeze/template/assets/vendors/flot/jquery.flot.pie.js '}"></script>
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="{% static 'plantilla/Breeze/template/assets/js/off-canvas.js' %}"></script>
+    <script src="{% static 'plantilla/Breeze/template/assets/js/hoverable-collapse.js' %}"></script>
+    <script src="{% static 'plantilla/Breeze/template/assets/js/misc.js' %}"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <script src="{% static 'plantilla/Breeze/template/assets/js/dashboard.js' %}"></script>
+    <!-- End custom js for this page -->
+  </body>
+</html>

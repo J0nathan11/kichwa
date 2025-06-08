@@ -1,0 +1,188 @@
+{% extends "plantillaModulos.html" %}
+{% load static %}
+
+{% block body %}
+<link rel="stylesheet" href="{% static 'css/estilosAprender.css' %}">
+
+<style>
+    .card-img-ajustada {
+        width: 100%;
+        height: 100px;
+        object-fit: contain;
+    }
+
+    .dropzone {
+        min-height: 140px !important;
+        padding: 10px;
+    }
+
+    .draggable[draggable="false"] {
+        background-color: #d0f0c0;
+        font-weight: bold;
+    }
+</style>
+
+<div class="text-center">
+    <div class="text-center fondo_titulo">
+        <h1 class="titulo-aprender">🎲 ¡Juega y aprende los Objetos en Kichwa!</h1>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <a href="{% url 'ver_objetos' %}" class="btn btn-secondary">VOLVER</a>
+    <a href="{% url 'jugar_objetos' %}" class="btn btn-secondary">ACTUALIZAR</a>
+</div>
+
+<div class="container mt-5">
+    <div class="row">
+        <!-- Palabras -->
+        <div class="col-md-4">
+            <h3 class="fondo_titulo" style="margin-left: 90px;">📋 Palabras</h3>
+            <br><br>
+            <div class="d-flex flex-column align-items-center" id="contenedor-palabras">
+                {% for obj in objetos|dictsort:"palabra_obj" %}
+                <div class="mb-3 w-100 draggable-container">
+                    <div class="draggable btn btn-warning w-100 text-center" draggable="true" data-obj="{{ obj.palabra_obj }}">
+                        {{ obj.palabra_obj }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Imágenes -->
+        <div class="col-md-8">
+            <h3 class="fondo_titulo" style="margin-left: 80px;">🖼️ Arrastra la palabra al objeto correcto</h3>
+            <br><br>
+            <div class="row">
+                {% for obj in objetos %}
+                <div class="col-md-4 mb-4">
+                    <div class="card p-3 text-center dropzone" data-obj="{{ obj.palabra_obj }}" style="min-height: 200px;">
+                        <img src="{{ obj.imagen_obj.url }}" class="card-img-ajustada mb-2">
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<audio id="sonido-acierto"><source src="{% static 'sonidos/acierto.mp3' %}" type="audio/mpeg"></audio>
+<audio id="sonido-error"><source src="{% static 'sonidos/error.mp3' %}" type="audio/mpeg"></audio>
+<audio id="sonido-exito"><source src="{% static 'sonidos/exito.mp3' %}" type="audio/mpeg"></audio>
+
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    const draggables = document.querySelectorAll('.draggable');
+    const dropzones = document.querySelectorAll('.dropzone');
+    const sonidoAcierto = document.getElementById('sonido-acierto');
+    const sonidoError = document.getElementById('sonido-error');
+    const sonidoExito = document.getElementById('sonido-exito');
+
+
+    let aciertos = 0;
+    const totalObjetos = {{ objetos|length }};
+
+    draggables.forEach(draggable => {
+        draggable.addEventListener('dragstart', e => {
+            e.dataTransfer.setData('text/plain', draggable.dataset.obj);
+        });
+    });
+
+    dropzones.forEach(dropzone => {
+        dropzone.addEventListener('dragover', e => e.preventDefault());
+
+        dropzone.addEventListener('drop', e => {
+            e.preventDefault();
+            const draggedObj = e.dataTransfer.getData('text/plain');
+            const correctObj = dropzone.dataset.obj;
+
+            if (draggedObj === correctObj) {
+                sonidoAcierto.play();
+                dropzone.style.border = '3px solid green';
+                dropzone.style.backgroundColor = '#e0f7fa';
+
+                const label = document.querySelector(`[data-obj="${draggedObj}"]`);
+                label.setAttribute('draggable', false);
+                label.style.opacity = 0.5;
+                label.style.cursor = 'not-allowed';
+
+                const contenedor = document.getElementById('contenedor-palabras');
+                const contenedorPadre = label.closest('.draggable-container');
+                contenedor.prepend(contenedorPadre);
+
+                if (!dropzone.querySelector('.palabra-colocada')) {
+                    const palabraEl = document.createElement('div');
+                    palabraEl.className = 'palabra-colocada';
+                    palabraEl.textContent = draggedObj;
+                    palabraEl.style.marginTop = '2px';
+                    palabraEl.style.fontSize = '26px';
+                    palabraEl.style.fontWeight = 'bold';
+                    palabraEl.style.color = '#2e7d32';
+                    dropzone.appendChild(palabraEl);
+                }
+
+                Swal.fire({
+                    html: `
+                        <div style="text-align: center;">
+                            <img src="{% static 'imagenes/feliz.gif' %}" style="width: 120px; height: 120px;">
+                            <h2>¡Allinmi!</h2>
+                            <p>✅ ¡Muy bien!</p>
+                        </div>
+                    `,
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+
+                aciertos++;
+                if (aciertos === totalObjetos) {
+                    sonidoExito.play();
+
+                    setTimeout(() => {
+                        Swal.fire({
+                            html: `
+                                <div style="text-align: center;">
+                                    <img src="{% static 'imagenes/fiesta.gif' %}" style="width: 150px; height: 150px;">
+                                    <h2>¡Yusulpayki!</h2>
+                                    <p>🎉 ¡Felicidades!</p>
+                                </div>
+                            `,
+                            showCancelButton: true,
+                            confirmButtonText: 'Salir',
+                            cancelButtonText: 'Volver a jugar',
+                            confirmButtonColor: '#d33',
+                            cancelButtonColor: '#28a745'
+                        }).then(result => {
+                            if (result.isConfirmed) {
+                                window.location.href = "{% url 'ver_objetos' %}";
+                            } else {
+                                window.location.href = "{% url 'jugar_objetos' %}";
+                            }
+                        });
+                    }, 500);
+                }
+
+            } else {
+                sonidoError.play();
+                dropzone.style.border = '3px solid red';
+                dropzone.style.backgroundColor = '#fdecea';
+
+                Swal.fire({
+                    html: `
+                        <div style="text-align: center;">
+                            <img src="{% static 'imagenes/triste.gif' %}" style="width: 120px; height: 120px;">
+                            <h2>¡Ñawpa!</h2>
+                            <p>❌ ¡Incorrecto!</p>
+                        </div>
+                    `,
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            }
+        });
+    });
+</script>
+{% endblock %}

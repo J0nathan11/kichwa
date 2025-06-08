@@ -1,0 +1,75 @@
+{% extends "plantillaModulos.html" %}
+{% load static %}
+{% block body %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/estilosAprender.css' %}">
+</head>
+
+<br>
+
+<div class="text-center mb-4">
+    <div class="fondo_titulo">
+        <h1 class="titulo-kichwa">📅 ¡ Meses de Año | WATAPA KILLAKUNA ! 📆</h1>
+    </div>
+</div>
+<div class="text-center">
+    <a href="{% url 'aprender' %}" class="btn-volver">VOLVER</a>
+</div>
+
+<br>
+
+<div class="container">
+    <div class="row">
+        {% for mes in meses %}
+        <div class="col-md-4 mb-4">
+            <div class="card text-center card-mes">
+                <div class="card-body">
+                    <h5 class="card-title">📖 {{ mes.palabra_mes }}</h5>
+
+                    {% if mes.imagen_mes %}
+                    <img src="{{ mes.imagen_mes.url }}" alt="{{ mes.palabra_mes }}" class="img-fluid mb-3" style="max-height: 200px; border-radius: 15px;">
+                    {% else %}
+                    <p>📷 No hay imagen disponible.</p>
+                    {% endif %}
+
+                    {% if mes.audio_kichwa_mes %}
+                    <button class="btn-audio" onclick="document.getElementById('audio_{{ forloop.counter }}').play()">
+                        🔊 Escuchar
+                    </button>
+                    <audio id="audio_{{ forloop.counter }}">
+                        <source src="{{ mes.audio_kichwa_mes.url }}" type="audio/mpeg">
+                        Tu navegador no soporta audio.
+                    </audio>
+                    {% else %}
+                    <p>🔇 No hay audio disponible.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="text-center mb-4">
+    <div class="fondo_titulo">
+        <h5 class="titulo-juego">¡Si ya aprendiste los MESES te invito a JUGAR!</h5>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-4 mb-4">
+            <a href="{% url 'jugar_meses' %}" style="text-decoration: none;">
+                <div class="menu-card">
+                    <img src="{% static 'imagenes/jugar.gif' %}" alt="Animales" class="menu-img">
+                    <div class="menu-title">🎮  JUGAR CON LOS MESES</div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+
+
+<br>
+{% endblock %}

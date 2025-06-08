@@ -1,0 +1,131 @@
+{% extends 'plantillaAdmin.html' %}
+
+{% block body %}
+<br><br><br>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center" style="background-color: #286ea8;">
+                    <h4 style="color: white;">Editar Palabra del Mes</h4>
+                </div>
+                <div class="card-body Mensaje-error" style="background-color: #bddde4">
+                    <form action="{% url 'editar_mes' mes.id %}" method="POST" enctype="multipart/form-data" id="frm_aprender">
+                        {% csrf_token %}
+
+                        <div class="form-group">
+                            <label for="palabra"><b>Palabra:</b></label>
+                            <input type="text" name="palabra" id="palabra" class="form-control" required
+                                   value="{{ palabra|default:mes.palabra_mes }}">
+                            {% if errores.palabra %}
+                                <small class="text-danger">{{ errores.palabra }}</small>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="imagen"><b style="color: rgb(2, 160, 29);">Imagen Actual:</b></label><br>
+                            {% if mes.imagen_mes %}
+                                <img src="{{ mes.imagen_mes.url }}" width="100px" height="80" alt="Imagen actual" id="imagenActual"><br>
+                            {% else %}
+                                No disponible<br>
+                            {% endif %}
+                            
+                            <input type="file" name="imagen" id="imagen" class="form-control mt-2" accept="image/*">
+
+                            <!-- Imagen nueva -->
+                            <div class="mt-2">
+                                <img id="previewNuevaImagen" src="#" alt="Nueva imagen" width="100px" height="80" style="display: none; border: 1px solid #ccc;">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="audio_kichwa"><b style="color: rgb(2, 160, 29);">Audio Actual:</b></label><br>
+                            {% if mes.audio_kichwa_mes %}
+                                <audio controls>
+                                    <source src="{{ mes.audio_kichwa_mes.url }}" type="audio/mpeg">
+                                    Tu navegador no soporta audio.
+                                </audio><br>
+                            {% else %}
+                                No disponible<br>
+                            {% endif %}
+
+                            <input type="file" name="audio_kichwa" id="audio_kichwa" class="form-control mt-2" accept="audio/*">
+
+                            <!-- Audio nuevo seleccionado (vista previa) -->
+                            <div class="mt-2">
+                                <audio id="previewNuevoAudio" controls style="display: none;">
+                                    <source id="sourceNuevoAudio" src="#" type="audio/mpeg">
+                                    Tu navegador no soporta audio.
+                                </audio>
+                            </div>
+                        </div>
+
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-outline-primary">Actualizar</button>
+                            <a href="{% url 'lista_meses' %}" class="btn btn-outline-secondary">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br><br><br>
+
+<script>
+    $("#frm_aprender").validate({
+        rules: {
+            palabra: {
+                required: true,
+                pattern: /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/
+            }
+        },
+        messages: {
+            palabra: {
+                required: "Por favor ingrese la palabra",
+                pattern: "La palabra no debe contener números ni caracteres especiales"
+            }
+        }
+    });
+</script>
+
+<script>
+    document.getElementById('imagen').addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        const preview = document.getElementById('previewNuevaImagen');
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        } else {
+            preview.style.display = 'none';
+        }
+    });
+</script>
+
+<script>
+    document.getElementById('audio_kichwa').addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        const previewAudio = document.getElementById('previewNuevoAudio');
+        const source = document.getElementById('sourceNuevoAudio');
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                source.src = e.target.result;
+                previewAudio.load(); // Recargar el nuevo audio
+                previewAudio.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        } else {
+            previewAudio.style.display = 'none';
+        }
+    });
+</script>
+
+
+{% endblock %}

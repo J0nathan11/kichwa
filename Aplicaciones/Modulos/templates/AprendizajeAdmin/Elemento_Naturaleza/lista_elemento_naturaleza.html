@@ -1,0 +1,98 @@
+{% extends 'plantillaAdmin.html' %}
+
+{% block body %}
+<style>
+    #tbl-Aprender {
+        background-color: #a0ccf3;
+    }
+
+    #tbl-Aprender th {
+        background-color: #1f77b4;
+        color: white;
+    }
+
+    #tbl-Aprender td {
+        color: #333;
+    }
+
+    #tbl-Aprender tr:hover {
+        background-color: #d1e7f7;
+    }
+</style>
+
+<br><br><br><br>
+<div>
+    <br>
+    <div class="card-title text-center">
+        <h3><b>Listado de Palabras en Kichwa</b></h3>
+        <h3><b>Elementos de la Naturaleza</b></h3>
+    </div>
+</div>
+<div style="width: 70%; margin-left: 170px;">
+    <hr style="height: 3px; background-color: #000; border: none;">
+</div>
+<br>
+<div class="text-center">
+    <a href="{% url 'agregar_elemento_naturaleza' %}" class="btn btn-outline-info">
+        <i class="fas fa-plus"></i> Agregar Elemento
+    </a>
+</div>
+<br>
+<div class="container" style="width: 80%; margin-right: 150px;">
+    <table class="table table-bordered table-striped table-hover" id="tbl-Aprender">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Imagen</th>
+                <th>Palabra</th>
+                <th>Audio</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in elementos %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>
+                        {% if item.imagen_ele %}
+                            <img src="{{ item.imagen_ele.url }}" width="100px" height="80" alt="Imagen Elemento">
+                        {% else %}
+                            No disponible
+                        {% endif %}
+                    </td>
+                    <td>{{ item.palabra_ele }}</td>
+                    <td>
+                        {% if item.audio_kichwa_ele %}
+                            <audio controls>
+                                <source src="{{ item.audio_kichwa_ele.url }}" type="audio/mpeg">
+                                Tu navegador no soporta la reproducción de audio.
+                            </audio>
+                        {% else %}
+                            No disponible
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div style="display: flex;">
+                            <a href="{% url 'editar_elemento_naturaleza' item.id %}" class="btn btn-outline-warning btn-circle" title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            &nbsp;&nbsp;
+                            <a href="{% url 'eliminar_elemento_naturaleza' item.id %}" class="btn btn-outline-danger" onclick="return confirm('¿Deseas eliminar este elemento de la naturaleza?')">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5">No hay elementos registrados.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    let table = new DataTable('#tbl-Aprender');
+</script>
+{% endblock %}

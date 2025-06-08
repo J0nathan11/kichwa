@@ -1,0 +1,73 @@
+{% extends "plantillaModulos.html" %}
+{% load static %}
+{% block body %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/estilosAprender.css' %}">
+</head>
+
+<br>
+
+<div class="text-center mb-4">
+    <div class="fondo_titulo">
+        <h1 class="titulo-kichwa">👨‍👩‍👧‍👦 ¡ Parentesco Familiar | AYLLU ! 👵👴</h1>
+    </div>
+</div>
+<div class="text-center">
+    <a href="{% url 'aprender' %}" class="btn-volver">VOLVER</a>
+</div>
+
+<br>
+
+<div class="container">
+    <div class="row">
+        {% for par in parentescos %}
+        <div class="col-md-4 mb-4">
+            <div class="card text-center card-mes">
+                <div class="card-body">
+                <h5 class="card-title">📖 {{ par.palabra_par }}</h5>
+
+                {% if par.imagen_par %}
+                <div class="mb-3">
+                    <img src="{{ par.imagen_par.url }}" alt="{{ par.palabra_par }}" class="img-fluid" style="max-height: 200px; border-radius: 15px;">
+                </div>
+                {% else %}
+                <p>📷 No hay imagen disponible.</p>
+                {% endif %}
+
+                {% if par.audio_kichwa_par %}
+                <div class="text-center mt-2">
+                    <button class="btn-audio" onclick="document.getElementById('audio_{{ forloop.counter }}').play()">
+                        🔊 Escuchar
+                    </button>
+                    <audio id="audio_{{ forloop.counter }}">
+                        <source src="{{ par.audio_kichwa_par.url }}" type="audio/mpeg">
+                        Tu navegador no soporta audio.
+                    </audio>
+                </div>
+                {% else %}
+                <p>🔇 No hay audio disponible.</p>
+                {% endif %}
+            </div>
+
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-4 mb-4">
+            <a href="{% url 'jugar_parentesco' %}" style="text-decoration: none;">
+                <div class="menu-card">
+                    <img src="{% static 'imagenes/jugar.gif' %}" alt="Jugar Parentesco" class="menu-img">
+                    <div class="menu-title">🎮  JUGAR CON EL PARENTESCO</div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<br>
+{% endblock %}

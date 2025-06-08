@@ -1,0 +1,176 @@
+{% extends "plantillaModulos.html" %}
+{% load static %}
+
+{% block body %}
+<link rel="stylesheet" href="{% static 'css/estilosAprender.css' %}">
+
+<style>
+    .numero-imagen {
+        width: 100%;
+        height: 100px;
+        object-fit: contain;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: 0.3s;
+    }
+
+    .contenedor-juego {
+        background-color: #e0f7fa;
+        border-radius: 15px;
+        padding: 20px;
+        margin-top: 30px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .palabra-kichwa {
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 30px;
+        color: #00796b;
+    }
+</style>
+
+<div class="text-center">
+    <div class="text-center fondo_titulo">
+        <h1 class="titulo-aprender">👀 ¡Mira y elige el número correcto en Kichwa!</h1>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <a href="{% url 'ver_numeros' %}" class="btn btn-secondary">VOLVER</a>
+    <a href="{% url 'jugar_numeros' %}" class="btn btn-secondary">ACTUALIZAR</a>
+</div>
+
+<div class="container contenedor-juego text-center">
+    <div id="palabra-mostrar" class="palabra-kichwa">Palabra aquí</div>
+
+    <div class="row justify-content-center" id="contenedor-imagenes">
+        {% for num in numeros %}
+        <div class="col-md-3 mb-4">
+            <img src="{{ num.imagen_num.url }}" class="numero-imagen" data-palabra="{{ num.palabra_num }}">
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<audio id="sonido-acierto"><source src="{% static 'sonidos/acierto.mp3' %}" type="audio/mpeg"></audio>
+<audio id="sonido-error"><source src="{% static 'sonidos/error.mp3' %}" type="audio/mpeg"></audio>
+<audio id="sonido-exito"><source src="{% static 'sonidos/exito.mp3' %}" type="audio/mpeg"></audio>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    const numeros = [
+        {% for num in numeros %}
+        {
+            palabra: "{{ num.palabra_num }}",
+            imagen: "{{ num.imagen_num.url }}"
+        },
+        {% endfor %}
+    ];
+
+    const sonidoAcierto = document.getElementById('sonido-acierto');
+    const sonidoError = document.getElementById('sonido-error');
+    const sonidoExito = document.getElementById('sonido-exito');
+    const contenedorImagenes = document.getElementById('contenedor-imagenes');
+    const palabraMostrar = document.getElementById('palabra-mostrar');
+
+    let palabrasAcertadas = [];
+    let disponibles = [...numeros];
+    let palabraCorrecta = "";
+
+    function mezclar(array) {
+        let copia = [...array];
+        for (let i = copia.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [copia[i], copia[j]] = [copia[j], copia[i]];
+        }
+        return copia;
+    }
+
+    function mostrarPregunta() {
+        disponibles = disponibles.filter(num => !palabrasAcertadas.includes(num.palabra));
+
+        if (disponibles.length === 0) {
+            return; 
+        }
+
+        const pregunta = disponibles[Math.floor(Math.random() * disponibles.length)];
+        palabraCorrecta = pregunta.palabra;
+        palabraMostrar.innerText = palabraCorrecta;
+
+        let opciones = mezclar(numeros.filter(num => !palabrasAcertadas.includes(num.palabra)));
+        contenedorImagenes.innerHTML = "";
+
+        opciones.forEach(num => {
+            const col = document.createElement('div');
+            col.className = 'col-md-3 mb-4';
+            const img = document.createElement('img');
+            img.src = num.imagen;
+            img.className = 'numero-imagen';
+            img.setAttribute('data-palabra', num.palabra);
+            img.addEventListener('click', verificarRespuesta);
+            col.appendChild(img);
+            contenedorImagenes.appendChild(col);
+        });
+    }
+
+    function verificarRespuesta(e) {
+        const seleccion = e.target.getAttribute('data-palabra');
+
+        if (seleccion === palabraCorrecta) {
+            sonidoAcierto.play();
+            palabrasAcertadas.push(palabraCorrecta);
+
+            if (palabrasAcertadas.length === numeros.length) {
+                sonidoExito.play();
+
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Yusulpayki!',
+                    html: '<p>🎉 ¡Has terminado todos los números!</p><img src="{% static "imagenes/fiesta.gif" %}" width="150">',
+                    showCancelButton: true,
+                    confirmButtonText: 'Salir',
+                    cancelButtonText: 'Volver a jugar',
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#28a745'
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        window.location.href = "{% url 'ver_numeros' %}";
+                    } else {
+                        window.location.href = "{% url 'jugar_numeros' %}";
+                    }
+                });
+            } else {
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Allinmi!',
+                    html: '<p>✅ ¡Correcto!</p><img src="{% static "imagenes/feliz.gif" %}" width="120">',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+
+                setTimeout(() => {
+                    mostrarPregunta();
+                }, 1500);
+            }
+
+        } else {
+            sonidoError.play();
+            Swal.fire({
+                icon: 'error',
+                title: '¡Ñawpa!',
+                html: '<p>❌ ¡Incorrecto!</p><img src="{% static "imagenes/triste.gif" %}" width="120">',
+                timer: 1500,
+                showConfirmButton: false
+            });
+        }
+    }
+
+    window.addEventListener('load', () => {
+        mostrarPregunta();
+    });
+</script>
+
+
+{% endblock %}

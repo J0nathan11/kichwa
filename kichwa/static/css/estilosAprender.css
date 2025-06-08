@@ -1,0 +1,106 @@
+
+@keyframes moverArribaAbajo {
+    0% { transform: translateY(15px); }
+    50% { transform: translateY(-5px); }
+    100% { transform: translateY(15px); }
+}
+
+.titulo-aprender,
+.titulo-kichwa {
+    font-family: 'Comic Sans MS', cursive;
+    color: #ff5722;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px #ffe0b2;
+    animation: moverArribaAbajo 2s ease-in-out infinite;
+}
+
+.titulo-juego {
+    font-family: 'Comic Sans MS', cursive;
+    color: #5e645c;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px #ffe0b2;
+    animation: moverArribaAbajo 2s ease-in-out infinite;
+}
+
+.fondo_titulo {
+    background-color: #fce4ec;
+    border-radius: 15px;
+    padding: 15px;
+    display: inline-block;
+}
+
+.menu-card {
+    border-radius: 20px;
+    background-color: #fce4ec;
+    transition: transform 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    padding: 15px;
+}
+
+.menu-card:hover {
+    transform: scale(1.05);
+    background-color: #f8bbd0;
+}
+
+.menu-img {
+    max-height: 160px;
+    border-radius: 15px;
+    margin-bottom: 10px;
+}
+
+.menu-title {
+    font-size: 1.5rem;
+    font-family: 'Comic Sans MS', cursive;
+    color: #ad1457;
+    text-shadow: 1px 1px #fff;
+}
+
+.card-mes {
+    background-color: #fffde7;
+    border-radius: 20px;
+    transition: transform 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.card-mes:hover {
+    transform: scale(1.05);
+}
+
+.card-title {
+    font-size: 1.6rem;
+    color: #388e3c;
+    font-weight: bold;
+}
+
+.btn-audio {
+    background-color: #ffca28;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: #5d4037;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-audio:hover {
+    background-color: #ffc107;
+}
+
+.btn-volver {
+    background-color: #7e7c7a; 
+    color: white;
+    font-size: 1.2rem;
+    padding: 10px 30px;
+    border: none;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-volver:hover {
+    background-color: #afaead; 
+    color: #fffde7;     
+}

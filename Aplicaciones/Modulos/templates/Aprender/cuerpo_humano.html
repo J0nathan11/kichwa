@@ -1,0 +1,75 @@
+{% extends "plantillaModulos.html" %}
+{% load static %}
+{% block body %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/estilosAprender.css' %}">
+</head>
+
+<br>
+
+<div class="text-center mb-4">
+    <div class="fondo_titulo">
+        <h1 class="titulo-kichwa">🧍‍♂️ ¡Aprende el CUERPO HUMANO en Kichwa! 🧍‍♀️</h1>
+    </div>
+</div>
+<div class="text-center">
+    <a href="{% url 'aprender' %}" class="btn-volver">VOLVER</a>
+</div>
+
+<br>
+
+<div class="container">
+    <div class="row">
+        {% for parte in cuerpo_humano %}
+        <div class="col-md-4 mb-4">
+            <div class="card text-center card-mes">
+                <div class="card-body">
+                    <h5 class="card-title">📖 {{ parte.palabra_cue }}</h5>
+
+                    {% if parte.imagen_cue %}
+                    <div class="mb-3">
+                        <img src="{{ parte.imagen_cue.url }}" alt="{{ parte.palabra_cue }}" class="img-fluid" style="max-height: 120px; border-radius: 15px;">
+                    </div>
+                    {% else %}
+                    <p>📷 No hay imagen disponible.</p>
+                    {% endif %}
+
+                    {% if parte.audio_kichwa_cue %}
+                    <div>
+                        <button class="btn-audio mb-2" onclick="document.getElementById('audio_{{ forloop.counter }}').play()">
+                            🔊 Escuchar
+                        </button>
+                        <audio id="audio_{{ forloop.counter }}">
+                            <source src="{{ parte.audio_kichwa_cue.url }}" type="audio/mpeg">
+                            Tu navegador no soporta audio.
+                        </audio>
+                    </div>
+                    {% else %}
+                    <p>🔇 No hay audio disponible.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div style="width: 70%; margin-left: 170px;">
+    <hr style="height: 3px; background-color: #000; border: none;">
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-4 mb-4">
+            <a href="{% url 'jugar_cuerpo_humano' %}" style="text-decoration: none;">
+                <div class="menu-card">
+                    <img src="{% static 'imagenes/jugar.gif' %}" alt="Jugar" class="menu-img">
+                    <div class="menu-title">🎮  JUGAR CON EL CUERPO HUMANO</div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<br>
+{% endblock %}

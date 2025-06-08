@@ -1,0 +1,175 @@
+{% extends "plantillaModulos.html" %}
+{% load static %}
+
+{% block body %}
+<link rel="stylesheet" href="{% static 'css/estilosAprender.css' %}">
+
+<style>
+    .imagen-cuerpo {
+        width: 100%;
+        height: 100px;
+        object-fit: contain;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: 0.3s;
+    }
+
+    .contenedor-juego {
+        background-color: #e0f7fa;
+        border-radius: 15px;
+        padding: 20px;
+        margin-top: 30px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .palabra-kichwa {
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 30px;
+        color: #00796b;
+    }
+</style>
+
+<div class="text-center">
+    <div class="text-center fondo_titulo">
+        <h1 class="titulo-aprender">👀 ¡Mira y elige la parte correcta del cuerpo en Kichwa!</h1>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <a href="{% url 'ver_cuerpo_humano' %}" class="btn btn-secondary">VOLVER</a>
+    <a href="{% url 'jugar_cuerpo_humano' %}" class="btn btn-secondary">ACTUALIZAR</a>
+</div>
+
+<div class="container contenedor-juego text-center">
+    <div id="palabra-mostrar" class="palabra-kichwa">Palabra aquí</div>
+
+    <div class="row justify-content-center" id="contenedor-imagenes">
+        {% for item in cuerpo_humano %}
+        <div class="col-md-3 mb-4">
+            <img src="{{ item.imagen_cue.url }}" class="imagen-cuerpo" data-palabra="{{ item.palabra_cue }}">
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<audio id="sonido-acierto"><source src="{% static 'sonidos/acierto.mp3' %}" type="audio/mpeg"></audio>
+<audio id="sonido-error"><source src="{% static 'sonidos/error.mp3' %}" type="audio/mpeg"></audio>
+<audio id="sonido-exito"><source src="{% static 'sonidos/exito.mp3' %}" type="audio/mpeg"></audio>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    const cuerpoHumano = [
+        {% for item in cuerpo_humano %}
+        {
+            palabra: "{{ item.palabra_cue }}",
+            imagen: "{{ item.imagen_cue.url }}"
+        },
+        {% endfor %}
+    ];
+
+    const sonidoAcierto = document.getElementById('sonido-acierto');
+    const sonidoError = document.getElementById('sonido-error');
+    const sonidoExito = document.getElementById('sonido-exito');
+    const contenedorImagenes = document.getElementById('contenedor-imagenes');
+    const palabraMostrar = document.getElementById('palabra-mostrar');
+
+    let palabrasAcertadas = [];
+    let disponibles = [...cuerpoHumano];
+    let palabraCorrecta = "";
+
+    function mezclar(array) {
+        let copia = [...array];
+        for (let i = copia.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [copia[i], copia[j]] = [copia[j], copia[i]];
+        }
+        return copia;
+    }
+
+    function mostrarPregunta() {
+        disponibles = disponibles.filter(item => !palabrasAcertadas.includes(item.palabra));
+
+        if (disponibles.length === 0) {
+            return; 
+        }
+
+        const pregunta = disponibles[Math.floor(Math.random() * disponibles.length)];
+        palabraCorrecta = pregunta.palabra;
+        palabraMostrar.innerText = palabraCorrecta;
+
+        let opciones = mezclar(cuerpoHumano.filter(item => !palabrasAcertadas.includes(item.palabra)));
+        contenedorImagenes.innerHTML = "";
+
+        opciones.forEach(item => {
+            const col = document.createElement('div');
+            col.className = 'col-md-3 mb-4';
+            const img = document.createElement('img');
+            img.src = item.imagen;
+            img.className = 'imagen-cuerpo';
+            img.setAttribute('data-palabra', item.palabra);
+            img.addEventListener('click', verificarRespuesta);
+            col.appendChild(img);
+            contenedorImagenes.appendChild(col);
+        });
+    }
+
+    function verificarRespuesta(e) {
+        const seleccion = e.target.getAttribute('data-palabra');
+
+        if (seleccion === palabraCorrecta) {
+            sonidoAcierto.play();
+            palabrasAcertadas.push(palabraCorrecta);
+
+            if (palabrasAcertadas.length === cuerpoHumano.length) {
+                sonidoExito.play();
+
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Yusulpayki!',
+                    html: '<p>🎉 ¡Has terminado todas las partes del cuerpo!</p><img src="{% static "imagenes/fiesta.gif" %}" width="150">',
+                    showCancelButton: true,
+                    confirmButtonText: 'Salir',
+                    cancelButtonText: 'Volver a jugar',
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#28a745'
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        window.location.href = "{% url 'ver_cuerpo_humano' %}";
+                    } else {
+                        window.location.href = "{% url 'jugar_cuerpo_humano' %}";
+                    }
+                });
+            } else {
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Allinmi!',
+                    html: '<p>✅ ¡Correcto!</p><img src="{% static "imagenes/feliz.gif" %}" width="120">',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+
+                setTimeout(() => {
+                    mostrarPregunta();
+                }, 1500);
+            }
+
+        } else {
+            sonidoError.play();
+            Swal.fire({
+                icon: 'error',
+                title: '¡Ñawpa!',
+                html: '<p>❌ ¡Incorrecto!</p><img src="{% static "imagenes/triste.gif" %}" width="120">',
+                timer: 1500,
+                showConfirmButton: false
+            });
+        }
+    }
+
+    window.addEventListener('load', () => {
+        mostrarPregunta();
+    });
+</script>
+
+{% endblock %}
