@@ -17,8 +17,8 @@ urlpatterns = [
     #-------------------------MESES------------------------
     path('meses/', views.lista_meses, name='lista_meses'),
     path('meses/agregar/', views.agregar_mes, name='agregar_mes'),
-    path('editar_mes/<int:id>/', views.editar_mes, name='editar_mes'),
-    path('eliminar_mes/<int:id>/', views.eliminar_mes, name='eliminar_mes'),
+    path('mes/editar/<int:id>/', views.editar_mes, name='editar_mes'),
+    path('mes/eliminar/<int:id>/', views.eliminar_mes, name='eliminar_mes'),
 
     #-------------------------NUMEROS---------------------------
     path('numeros/', views.lista_numeros, name='lista_numeros'),
@@ -68,7 +68,11 @@ urlpatterns = [
     path('elemento_naturaleza/editar/<int:id>/', views.editar_elemento_naturaleza, name='editar_elemento_naturaleza'),
     path('elemento_naturaleza/eliminar/<int:id>/', views.eliminar_elemento_naturaleza, name='eliminar_elemento_naturaleza'),
 
-
+    #---------------------------ESTUDIANTES-----------------------------
+    path('estudiantes/', views.lista_estudiantes, name='lista_estudiantes'),
+    path('estudiante/agregar', views.agregar_estudiante, name='agregar_estudiante'),
+    path('estudiante/editar/<int:id_est>/', views.editar_estudiante, name='editar_estudiante'),
+    path('estudiante/eliminar/<int:id>/', views.eliminar_estudiante, name='eliminar_estudiante'),
 
     ###################### LADO DEL USUSARIO #######################
     #---------------------------------APRENDER---------------------------

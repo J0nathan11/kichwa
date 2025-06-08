@@ -79,6 +79,19 @@ class Aprender_Elemento_Naturaleza(models.Model):
 
     def __str__(self):
         return self.palabra_ele
+    
+class Estudiante(models.Model):
+    nombres_est = models.CharField(max_length=100)
+    apellidos_est = models.CharField(max_length=100)
+    cedula_est = models.CharField(max_length=10, unique=True)
+    genero_est = models.CharField(max_length=20)
+    nivel_escolar_est = models.CharField(max_length=50)
+    estado_est = models.CharField(max_length=10) 
+    fecha_registro_est = models.DateField(auto_now_add=True)
+    fecha_actualizacion_est = models.DateField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.nombres_est} {self.apellidos_est}"
 
 #------------------------LOGIN------------------------------
 

@@ -25,6 +25,9 @@
     <!--Importando FileInput.js -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/css/fileinput.min.css">
     <script  src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/js/fileinput.min.js"></script>
+    <!-- Favicon personalizado -->
+    <link rel="icon" href="{% static 'imagenes/favicon.jpg' %}" type="image/png">
+
     <title>Sumak Kawsay</title>
 </head>
 
@@ -120,6 +123,18 @@
         <div class="sidebar-wrapper scrollbar scrollbar-inner">
           <div class="sidebar-content">
             <ul class="nav">
+              <li class="nav-section">
+                <span class="sidebar-mini-icon">
+                  <i class="fa fa-ellipsis-h"></i>
+                </span>
+                <h4 class="text-section">Estudiantes</h4>
+              </li>
+              <li class="nav-item dropdown">
+                <a href="{% url 'lista_estudiantes' %}" class="nav-link">
+                  <i class="fas fa-users"></i>
+                  <p>Estudiantes</p>
+                </a>
+              </li>
               <li class="nav-section">
                 <span class="sidebar-mini-icon">
                   <i class="fa fa-ellipsis-h"></i>

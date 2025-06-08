@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect,get_object_or_404
 from .models import Aprender_Objetos, Aprender_Meses, Aprender_Numeros, Aprender_Dias, Profesor
 from .models import Aprender_Saludos, Aprender_Animales, Aprender_Colores, Aprender_Cuerpo_Humano
-from .models import Aprender_Parentesco, Aprender_Elemento_Naturaleza
+from .models import Aprender_Parentesco, Aprender_Elemento_Naturaleza, Estudiante
 from django.contrib import messages
 import re
 # 
@@ -803,9 +803,95 @@ def eliminar_elemento_naturaleza(request, id):
     return redirect('lista_elemento_naturaleza')
 
 
+# -----------------------ESTUDIANTES-----------------------
+def lista_estudiantes(request):
+    if not request.session.get('profesor_id'):
+        return redirect('login_profesor')
+    
+    estudiantes = Estudiante.objects.all()
+    return render(request, 'EstudiantesAdmin/lista_estudiantes.html', {'estudiantes': estudiantes})
 
+# AGREGAR
+def agregar_estudiante(request):
+    if not request.session.get('profesor_id'):
+        return redirect('login_profesor')
 
+    error_cedula = None
 
+    if request.method == 'POST':
+        nombres = request.POST.get('nombres_est').strip()
+        apellidos = request.POST.get('apellidos_est').strip()
+        cedula = request.POST.get('cedula_est').strip()
+        genero = request.POST.get('genero_est')
+        nivel = request.POST.get('nivel_escolar_est')
+        estado = request.POST.get('estado_est')
+
+        if Estudiante.objects.filter(cedula_est=cedula).exists():
+            error_cedula = f'La cédula "{cedula}" ya está registrada.'
+        else:
+            Estudiante.objects.create(
+                nombres_est=nombres,
+                apellidos_est=apellidos,
+                cedula_est=cedula,
+                genero_est=genero,
+                nivel_escolar_est=nivel,
+                estado_est=estado
+            )
+            messages.success(request, "Estudiante agregado exitosamente.")
+            return redirect('lista_estudiantes')
+
+    return render(request, 'EstudiantesAdmin/agregar_estudiante.html', {
+        'error_cedula': error_cedula,
+    })
+
+# EDITAR
+def editar_estudiante(request, id_est):
+    if not request.session.get('profesor_id'):
+        return redirect('login_profesor')
+
+    estudiante = get_object_or_404(Estudiante, id=id_est)
+    error_cedula = None
+
+    if request.method == 'POST':
+        nombres = request.POST.get('nombres_est').strip()
+        apellidos = request.POST.get('apellidos_est').strip()
+        cedula = request.POST.get('cedula_est').strip()
+        genero = request.POST.get('genero_est')
+        nivel = request.POST.get('nivel_escolar_est')
+        estado = request.POST.get('estado_est')
+
+        # Validar si ya existe otra cédula igual en otro estudiante
+        if Estudiante.objects.filter(cedula_est=cedula).exclude(id=id_est).exists():
+            error_cedula = f'La cédula "{cedula}" ya está registrada en otro estudiante.'
+        else:
+            estudiante.nombres_est = nombres
+            estudiante.apellidos_est = apellidos
+            estudiante.cedula_est = cedula
+            estudiante.genero_est = genero
+            estudiante.nivel_escolar_est = nivel
+            estudiante.estado_est = estado
+            estudiante.save()
+
+            messages.success(request, "Estudiante actualizado exitosamente.")
+            return redirect('lista_estudiantes')
+
+    return render(request, 'EstudiantesAdmin/editar_estudiante.html', {
+        'estudiante': estudiante,
+        'error_cedula': error_cedula
+    })
+
+# ELIMINAR
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
+
+def eliminar_estudiante(request, id):
+    if not request.session.get('profesor_id'):
+        return redirect('login_profesor')
+
+    estudiante = get_object_or_404(Estudiante, id=id)
+    estudiante.delete()
+    messages.success(request, "Estudiante eliminado correctamente.")
+    return redirect('lista_estudiantes')
 
 
 
