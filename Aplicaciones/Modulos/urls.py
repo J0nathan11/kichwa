@@ -74,6 +74,12 @@ urlpatterns = [
     path('estudiante/editar/<int:id_est>/', views.editar_estudiante, name='editar_estudiante'),
     path('estudiante/eliminar/<int:id>/', views.eliminar_estudiante, name='eliminar_estudiante'),
 
+    #-------------------------PROFESORES-------------------------------------
+    path('profesores/', views.lista_profesores, name='lista_profesores'),
+    path('profesor/configuracion/', views.configuracion_profesor, name='configuracion_profesor'),
+
+
+
     ###################### LADO DEL USUSARIO #######################
     #---------------------------------APRENDER---------------------------
     path('aprender/',views.aprender, name='aprender'),

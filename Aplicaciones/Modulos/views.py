@@ -28,15 +28,49 @@ def login_profesor(request):
 
     return render(request, 'Login/login_profesor.html')
 
+# SALIDA
+def logout_profesor(request):
+    request.session.flush() 
+    return redirect('login_profesor')
+
+# BIENVENIDA PROFESOR
 def profesor_bienvenida(request):
     if not request.session.get('profesor_id'):
         return redirect('login_profesor')  
 
-    return render(request, 'Profesores/profesor_bienvenida.html')
+    profesor_id = request.session.get('profesor_id')
+    profesor = Profesor.objects.get(id=profesor_id)
 
-def logout_profesor(request):
-    request.session.flush() 
-    return redirect('login_profesor')
+    return render(request, 'Profesores/profesor_bienvenida.html', {
+        'profesor': profesor
+    })
+
+# CONFIGURACION PROFESOR
+def configuracion_profesor(request):
+    if not request.session.get('profesor_id'):
+        return redirect('login_profesor')
+
+    profesor = get_object_or_404(Profesor, id=request.session['profesor_id'])
+
+    if request.method == 'POST':
+        profesor.nombres = request.POST.get('nombres')
+        profesor.apellidos = request.POST.get('apellidos')
+        profesor.cedula = request.POST.get('cedula')
+        profesor.telefono = request.POST.get('telefono')
+        profesor.email = request.POST.get('email')
+        profesor.sexo = request.POST.get('sexo')
+        profesor.usuario = request.POST.get('usuario')
+        profesor.contrasena = request.POST.get('contrasena')  # Si es en texto plano (no recomendado)
+
+        if 'foto' in request.FILES:
+            profesor.foto = request.FILES['foto']
+
+        profesor.save()
+        messages.success(request, 'Datos actualizados correctamente.')
+        return redirect('configuracion_profesor')
+
+    return render(request, 'Administrador/Profesores/configuracion_profesor.html', {'profesor': profesor})
+
 
 ######################## LADO DEL ADMINISTRADOR #############################
 # -----------------OBJETOS---------------------
@@ -809,7 +843,7 @@ def lista_estudiantes(request):
         return redirect('login_profesor')
     
     estudiantes = Estudiante.objects.all()
-    return render(request, 'EstudiantesAdmin/lista_estudiantes.html', {'estudiantes': estudiantes})
+    return render(request, 'Administrador/Estudiantes/lista_estudiantes.html', {'estudiantes': estudiantes})
 
 # AGREGAR
 def agregar_estudiante(request):
@@ -840,7 +874,7 @@ def agregar_estudiante(request):
             messages.success(request, "Estudiante agregado exitosamente.")
             return redirect('lista_estudiantes')
 
-    return render(request, 'EstudiantesAdmin/agregar_estudiante.html', {
+    return render(request, 'Administrador/Estudiantes/agregar_estudiante.html', {
         'error_cedula': error_cedula,
     })
 
@@ -875,15 +909,12 @@ def editar_estudiante(request, id_est):
             messages.success(request, "Estudiante actualizado exitosamente.")
             return redirect('lista_estudiantes')
 
-    return render(request, 'EstudiantesAdmin/editar_estudiante.html', {
+    return render(request, 'Administrador/Estudiantes/editar_estudiante.html', {
         'estudiante': estudiante,
         'error_cedula': error_cedula
     })
 
 # ELIMINAR
-from django.shortcuts import get_object_or_404, redirect
-from django.contrib import messages
-
 def eliminar_estudiante(request, id):
     if not request.session.get('profesor_id'):
         return redirect('login_profesor')
@@ -892,6 +923,17 @@ def eliminar_estudiante(request, id):
     estudiante.delete()
     messages.success(request, "Estudiante eliminado correctamente.")
     return redirect('lista_estudiantes')
+
+
+#----------------------PROFESORES------------
+def lista_profesores(request):
+    if not request.session.get('profesor_id'):
+        return redirect('login_profesor')
+    
+    profesores = Profesor.objects.all()
+    return render(request, 'Administrador/Profesores/lista_profesores.html', {'profesores': profesores})
+
+
 
 
 

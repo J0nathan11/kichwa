@@ -1,0 +1,142 @@
+{% extends 'plantillaAdmin.html' %}
+{% load static %}
+
+{% block body %}
+<br><br>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header text-center" style="background-color: #286ea8;">
+          <h4 style="color: white;">Configuración de Perfil</h4>
+        </div>
+        <div class="card-body" style="background-color: #bddde4;">
+          <form method="post" enctype="multipart/form-data" id="frm_profesor">
+            {% csrf_token %}
+
+            {% if messages %}
+              {% for message in messages %}
+                <div class="alert alert-success">{{ message }}</div>
+              {% endfor %}
+            {% endif %}
+
+            <div class="form-group text-center">
+              {% if profesor.foto %}
+                <img src="{{ profesor.foto.url }}" class="rounded-circle mb-3" width="120" height="120" alt="Foto del Profesor">
+              {% else %}
+                <img src="{% static 'default-user.png' %}" class="rounded-circle mb-3" width="120" height="120" alt="Sin Foto">
+              {% endif %}
+            </div>
+
+            <div class="form-group">
+              <label for="foto">Subir nueva foto:</label>
+              <input type="file" name="foto" id="foto" class="form-control">
+            </div>
+
+            <div class="form-group">
+              <label for="nombres">Nombres:</label>
+              <input type="text" name="nombres" id="nombres" class="form-control" value="{{ profesor.nombres }}" required>
+            </div>
+
+            <div class="form-group">
+              <label for="apellidos">Apellidos:</label>
+              <input type="text" name="apellidos" id="apellidos" class="form-control" value="{{ profesor.apellidos }}" required>
+            </div>
+
+            <div class="form-group">
+              <label for="cedula">Cédula:</label>
+              <input type="text" name="cedula" id="cedula" class="form-control" value="{{ profesor.cedula }}" maxlength="10" required>
+            </div>
+
+            <div class="form-group">
+              <label for="telefono">Teléfono:</label>
+              <input type="text" name="telefono" id="telefono" class="form-control" value="{{ profesor.telefono }}" maxlength="10">
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email:</label>
+              <input type="email" name="email" id="email" class="form-control" value="{{ profesor.email }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="usuario">Usuario:</label>
+                <input type="text" name="usuario" id="usuario" class="form-control" value="{{ profesor.usuario }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="contrasena">Contraseña:</label>
+                <input type="password" name="contrasena" id="contrasena" class="form-control" value="{{ profesor.contrasena }}" required>
+                <input type="checkbox" onclick="togglePassword()"> Mostrar contraseña
+            </div>
+
+            <script>
+                function togglePassword() {
+                    var input = document.getElementById("contrasena");
+                    input.type = input.type === "password" ? "text" : "password";
+                }
+            </script>
+
+            <div class="form-group">
+              <label for="sexo">Sexo:</label>
+              <select name="sexo" id="sexo" class="form-control" required>
+                <option value="">Seleccione</option>
+                <option value="Masculino" {% if profesor.sexo == 'Masculino' %}selected{% endif %}>Masculino</option>
+                <option value="Femenino" {% if profesor.sexo == 'Femenino' %}selected{% endif %}>Femenino</option>
+              </select>
+            </div>
+
+            <div class="text-center mt-4">
+              <button type="submit" class="btn btn-success">Guardar Cambios</button>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <a href="{% url 'profesor_bienvenida' %}" class="btn btn-secondary">Cancelar</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+
+<script>
+  $("#frm_profesor").validate({
+    rules: {
+      nombres: { required: true },
+      apellidos: { required: true },
+      cedula: { required: true, minlength: 10, maxlength: 10 },
+      telefono: { required: true },
+      email: { required: true },
+      sexo: { required: true }
+    },
+    messages: {
+      nombres: { required: "Ingrese los nombres" },
+      apellidos: { required: "Ingrese los apellidos" },
+      cedula: {
+        required: "Ingrese la cédula",
+        minlength: "La cédula debe tener 10 dígitos",
+        maxlength: "La cédula debe tener 10 dígitos"
+      },
+      telefono: { required: "Ingrese el número de teléfono" },
+      email: { required: "Ingrese el correo electrónico" },
+      sexo: { required: "Seleccione el género" }
+    }
+  });
+
+  document.getElementById('cedula').addEventListener('input', function () {
+    this.value = this.value.replace(/[^0-9]/g, '');
+  });
+
+  document.getElementById('telefono').addEventListener('input', function () {
+    this.value = this.value.replace(/[^0-9]/g, '');
+  });
+
+  document.getElementById('nombres').addEventListener('input', function () {
+    this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+  });
+
+  document.getElementById('apellidos').addEventListener('input', function () {
+    this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+  });
+</script>
+
+{% endblock %}

@@ -6,11 +6,20 @@
   <div class="card shadow-lg border-0 rounded p-4" style="background-color: #e6f7ff;">
     <div class="card-body text-center">
       <i class="fas fa-chalkboard-teacher fa-3x mb-3 text-primary"></i>
-      <h1 class="font-weight-bold">¡Bienvenido, Profesor!</h1>
+
+      <h1 class="font-weight-bold">
+        {% if profesor.sexo|lower == 'femenino' %}
+          ¡Bienvenida Profesora {{ profesor.nombres }} {{ profesor.apellidos }}!
+        {% else %}
+          ¡Bienvenido Profesor {{ profesor.nombres }} {{ profesor.apellidos }}!
+        {% endif %}
+      </h1>
+
       <p class="lead mt-3">
         Nos alegra tenerte de vuelta. Desde aquí podrás gestionar tus cursos, revisar a los estudiantes y acceder a recursos útiles para tu enseñanza.
       </p>
-      <a href="" class="btn btn-primary mt-4">
+
+      <a href="#" class="btn btn-primary mt-4">
         Ir a mis cursos <i class="fas fa-arrow-right ms-2"></i>
       </a>
     </div>

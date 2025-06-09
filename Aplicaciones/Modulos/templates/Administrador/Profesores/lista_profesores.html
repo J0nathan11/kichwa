@@ -1,0 +1,90 @@
+{% extends 'plantillaAdmin.html' %}
+
+{% block body %}
+<style>
+    #tbl-Profesores {
+        background-color: #a0ccf3;
+    }
+
+    #tbl-Profesores th {
+        background-color: #1f77b4;
+        color: white;
+    }
+
+    #tbl-Profesores td {
+        color: #333;
+    }
+
+    #tbl-Profesores tr:hover {
+        background-color: #d1e7f7;
+    }
+</style>
+
+<br><br><br><br>
+<div>
+    <br>
+    <div class="card-title text-center">
+        <h3><b>Listado de Profesores</b></h3>
+    </div>
+</div>
+<div style="width: 70%; margin-left: 170px;">
+    <hr style="height: 3px; background-color: #000; border: none;">
+</div>
+<br>
+<div class="text-center">
+    <a href="{% url 'agregar_profesor' %}" class="btn btn-outline-info">
+        <i class="fas fa-plus"></i> Agregar Profesor
+    </a>
+</div>
+<br>
+<div class="container" style="width: 90%;">
+    <table class="table table-bordered table-striped table-hover" id="tbl-Profesores">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Usuario</th>
+                <th>Nombres</th>
+                <th>Apellidos</th>
+                <th>Cédula</th>
+                <th>Teléfono</th>
+                <th>Email</th>
+                <th>Sexo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for prof in profesores %}
+                <tr>
+                    <td>{{ prof.id }}</td>
+                    <td>{{ prof.usuario }}</td>
+                    <td>{{ prof.nombres }}</td>
+                    <td>{{ prof.apellidos }}</td>
+                    <td>{{ prof.cedula }}</td>
+                    <td>{{ prof.telefono }}</td>
+                    <td>{{ prof.email }}</td>
+                    <td>{{ prof.sexo }}</td>
+                    <td>
+                        <div style="display: flex;">
+                            <a href="{% url 'editar_profesor' prof.id %}" class="btn btn-outline-warning btn-circle" title="Editar Profesor">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            &nbsp;&nbsp;
+                            <a href="{% url 'eliminar_profesor' prof.id %}" class="btn btn-outline-danger" onclick="return confirm('¿Deseas eliminar este profesor?')">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="9">No hay profesores registrados.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    let table = new DataTable('#tbl-Profesores');
+</script>
+{% endblock %}

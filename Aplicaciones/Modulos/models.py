@@ -99,5 +99,14 @@ class Profesor(models.Model):
     usuario = models.CharField(max_length=150, unique=True)
     contrasena = models.CharField(max_length=128)
 
+    nombres = models.CharField(max_length=100)
+    apellidos = models.CharField(max_length=100)
+    cedula = models.CharField(max_length=10, unique=True)
+    foto = models.ImageField(upload_to='foto_profesor/', null=True, blank=True)
+    telefono = models.CharField(max_length=15, blank=True, null=True)
+    email = models.EmailField(unique=True)
+    sexo = models.CharField(max_length=10)
+
     def __str__(self):
-        return self.usuario
+        return f"{self.nombres} {self.apellidos}"
+    
