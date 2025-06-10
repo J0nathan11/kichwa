@@ -81,10 +81,12 @@ urlpatterns = [
     #--------------------------EVALUACIONES---------------------------
     path('evaluacion/', views.lista_evaluaciones, name='lista_evaluaciones'),
     path('agregar_evaluacion/', views.agregar_evaluacion, name='agregar_evaluacion'),
-    path('evaluacion/<int:evaluacion_id>/', views.mostrar_evaluacion, name='mostrar_evaluacion'),
+    path('evaluacion/editar/<int:id>/', views.editar_evaluacion, name='editar_evaluacion'),
+
 
     #-------------------------CALIFICACIONES-----------------------------
     path('calificaciones/', views.lista_calificaciones, name='lista_calificaciones'),
+    path('evaluacion/eliminar/<int:id>/', views.eliminar_evaluacion, name='eliminar_evaluacion'),
 
 
 
@@ -94,6 +96,7 @@ urlpatterns = [
     # -------------------------------EVALUACION------------------
     path('login_estudiante/', views.login_estudiante, name='login_estudiante'),
     path('ver_evaluacion/', views.ver_evaluacion, name='ver_evaluacion'),
+    path('evaluacion/<int:evaluacion_id>/', views.mostrar_evaluacion, name='mostrar_evaluacion'),
 
     #---------------------------------APRENDER---------------------------
     path('aprender/',views.aprender, name='aprender'),

@@ -6,14 +6,17 @@
 <div class="container mt-5">
     <div class="card shadow-lg">
         <div class="card-header text-white" style="background-color: #286ea8;">
-            <h4 class="mb-0">Crear Evaluación</h4>
+            <h4 class="mb-0">Editar Evaluación</h4>
         </div>
         <div class="card-body Mensaje-error" style="background-color: #bddde4">
             <form method="post" id="frm_evaluacion">
                 {% csrf_token %}
+                <input type="hidden" name="id_eva" value="{{ evaluacion.id }}">
+
                 <div class="mb-3">
                     <label class="form-label">Título</label>
-                    <input type="text" name="titulo_eva" id="titulo_eva" class="form-control" placeholder="Ingresa el título de la evaluación" required>
+                    <input type="text" name="titulo_eva" id="titulo_eva" class="form-control"
+                        value="{{ evaluacion.titulo_eva }}" required>
                     {% if error_titulo %}
                         <small class="form-text text-danger">{{ error_titulo }}</small>
                     {% endif %}
@@ -21,11 +24,13 @@
 
                 <div class="mb-3">
                     <label class="form-label">Descripción</label>
-                    <textarea name="descripcion_eva" id="descripcion_eva" class="form-control" rows="3" placeholder="Ingresa una descripción breve" required></textarea>
+                    <textarea name="descripcion_eva" id="descripcion_eva" class="form-control" rows="3"
+                        required>{{ evaluacion.descripcion_eva }}</textarea>
                 </div>
 
                 <div class="form-check form-switch mb-3">
-                    <input class="form-check-input" type="checkbox" name="estado_eva" id="estadoCheck">
+                    <input class="form-check-input" type="checkbox" name="estado_eva" id="estadoCheck"
+                        {% if evaluacion.estado_eva %}checked{% endif %}>
                     <label class="form-check-label" for="estadoCheck">Estado Activo</label>
                 </div>
 
@@ -39,7 +44,11 @@
                         {% for valor, texto in tipos_aprendizaje %}
                         <div class="col-md-4">
                             <div class="form-check">
-                                <input type="checkbox" class="form-check-input tipo-check" name="tipo_aprendizaje_eva" value="{{ valor }}" id="check_{{ valor }}">
+                                <input type="checkbox" class="form-check-input tipo-check"
+                                    name="tipo_aprendizaje_eva"
+                                    value="{{ valor }}"
+                                    id="check_{{ valor }}"
+                                    {% if valor in evaluacion.tipos_lista %}checked{% endif %}>
                                 <label class="form-check-label" for="check_{{ valor }}">{{ texto }}</label>
                             </div>
                         </div>
@@ -51,9 +60,9 @@
                 </div>
 
                 <div class="text-end text-center">
-                    <button type="submit" class="btn btn-outline-primary">Crear Evaluación</button>
+                    <button type="submit" class="btn btn-outline-primary">Guardar Cambios</button>
                     &nbsp;&nbsp;
-                    <a class="btn btn-outline-secondary"  href="{% url 'lista_evaluaciones' %}">Cancelar</a>
+                    <a class="btn btn-outline-secondary" href="{% url 'lista_evaluaciones' %}"> Cancelar</a>
                 </div>
             </form>
         </div>
@@ -67,33 +76,25 @@
             descripcion_eva: { required: true }
         },
         messages: {
-            titulo_eva: { required: "Ingrese un Titulo para Evaluación" },
+            titulo_eva: { required: "Ingrese un Título para la Evaluación" },
             descripcion_eva: { required: "Ingrese una descripción" }
         }
     });
 
-    // Solo letras y números sin caracteres especiales
     document.addEventListener('DOMContentLoaded', function () {
         const tituloInput = document.getElementById('titulo_eva');
         tituloInput.addEventListener('input', function () {
             this.value = this.value.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]/g, '');
         });
-    });
 
-    // Script para seleccionar o deseleccionar todos los tipos
-    document.addEventListener("DOMContentLoaded", function () {
         const selectAllCheckbox = document.getElementById("selectAll");
         const checkboxes = document.querySelectorAll(".tipo-check");
 
         selectAllCheckbox.addEventListener("change", function () {
             checkboxes.forEach(cb => cb.checked = selectAllCheckbox.checked);
         });
-    });
 
-    // Validación visual de tipos de aprendizaje
-    document.addEventListener("DOMContentLoaded", function () {
         const form = document.getElementById('frm_evaluacion');
-        const checkboxes = document.querySelectorAll('.tipo-check');
         const errorTipos = document.getElementById('errorTipos');
         const checkboxGroup = document.getElementById('checkbox-group');
 

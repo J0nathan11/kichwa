@@ -951,25 +951,32 @@ TIPOS_APRENDIZAJE = [
 ]
 
 def agregar_evaluacion(request):
+    error_titulo = None
+
     if request.method == "POST":
-        titulo = request.POST["titulo_eva"]
+        titulo = request.POST["titulo_eva"].strip()
         descripcion = request.POST["descripcion_eva"]
         estado = request.POST.get("estado_eva") == "on"
         tipos = request.POST.getlist("tipo_aprendizaje_eva")
 
-        # Guardamos como texto separado por comas
-        evaluacion = Evaluacion.objects.create(
-            titulo_eva=titulo,
-            descripcion_eva=descripcion,
-            estado_eva=estado,
-            tipo_aprendizaje_eva=",".join(tipos),
-            fecha_creacion_eva=timezone.now()
-        )
-        messages.success(request, "Evaluacion agregado exitosamente.")
-        return redirect("lista_evaluacion", evaluacion.id)
+        # Verificamos si el título ya existe (ignorando mayúsculas/minúsculas)
+        if Evaluacion.objects.filter(titulo_eva__iexact=titulo).exists():
+            error_titulo = f'El título "{titulo}" ya está registrado.'
+        else:
+            Evaluacion.objects.create(
+                titulo_eva=titulo,
+                descripcion_eva=descripcion,
+                estado_eva=estado,
+                tipo_aprendizaje_eva=",".join(tipos),
+                fecha_creacion_eva=timezone.now()
+            )
+            messages.success(request, "Evaluación agregada exitosamente.")
+            return redirect("lista_evaluaciones")
 
-    return render(request, "Administrador/Evaluaciones/agregar_evaluacion.html", {"tipos_aprendizaje": TIPOS_APRENDIZAJE})
-
+    return render(request, "Administrador/Evaluaciones/agregar_evaluacion.html", {
+        "tipos_aprendizaje": TIPOS_APRENDIZAJE,
+        "error_titulo": error_titulo
+    })
 
 def lista_evaluaciones(request):
     if not request.session.get('profesor_id'):
@@ -982,81 +989,47 @@ def lista_evaluaciones(request):
 
     return render(request, 'Administrador/Evaluaciones/lista_evaluacion.html', {'evaluaciones': evaluaciones})
 
-# VER EVALUACION
-def mostrar_evaluacion(request, evaluacion_id):
-    estudiante_id = request.session.get('estudiante_id')
-    if not estudiante_id:
-        return redirect('login_estudiante')
 
-    estudiante = Estudiante.objects.filter(id=estudiante_id).first()
-    if not estudiante:
-        return redirect('login_estudiante')
+# EDITAR
+def editar_evaluacion(request, id):
+    evaluacion = get_object_or_404(Evaluacion, id=id)
+    error_titulo = None
 
-    evaluacion = get_object_or_404(Evaluacion, id=evaluacion_id)
-    tipos = evaluacion.tipo_aprendizaje_eva.split(',')
+    if request.method == "POST":
+        titulo = request.POST["titulo_eva"].strip()
+        descripcion = request.POST["descripcion_eva"]
+        estado = request.POST.get("estado_eva") == "on"
+        tipos = request.POST.getlist("tipo_aprendizaje_eva")
 
-    if request.method == 'POST':
-        nota = request.POST.get('nota')
-        if nota is not None:
-            try:
-                nota_decimal = float(nota)
-            except ValueError:
-                nota_decimal = 0.0
+        # Verifica título duplicado (ignorando el actual)
+        if Evaluacion.objects.filter(titulo_eva__iexact=titulo).exclude(id=evaluacion.id).exists():
+            error_titulo = f'El título "{titulo}" ya está registrado.'
+        else:
+            evaluacion.titulo_eva = titulo
+            evaluacion.descripcion_eva = descripcion
+            evaluacion.estado_eva = estado
+            evaluacion.tipo_aprendizaje_eva = ",".join(tipos)
+            evaluacion.save()
+            messages.success(request, "Evaluación actualizada exitosamente.")
+            return redirect("lista_evaluaciones")
 
-            Resultado_Evaluacion.objects.create(
-                fk_estudiante=estudiante,
-                fk_evaluacion=evaluacion,
-                nota_res=nota_decimal,
-                fecha_res=timezone.now()
-            )
-            # En lugar de redirigir, enviamos el puntaje para mostrar resultado
-            return render(request, 'Administrador/Evaluaciones/evaluacion.html', {
-                'evaluacion': evaluacion,
-                'mostrar_resultado': True,
-                'puntaje': nota_decimal,
-            })
+    evaluacion.tipos_lista = [t.strip() for t in evaluacion.tipo_aprendizaje_eva.split(",")] if evaluacion.tipo_aprendizaje_eva else []
 
-    # GET: Preparar preguntas normalmente
-    modelos = {
-        'objetos': Aprender_Objetos,
-        'meses': Aprender_Meses,
-        'numeros': Aprender_Numeros,
-        'dias': Aprender_Dias,
-        'saludos': Aprender_Saludos,
-        'animales': Aprender_Animales,
-        'colores': Aprender_Colores,
-        'cuerpo_humano': Aprender_Cuerpo_Humano,
-        'parentesco': Aprender_Parentesco,
-        'elemento_naturaleza': Aprender_Elemento_Naturaleza,
-    }
-
-    preguntas_unificadas = []
-
-    for tipo in tipos:
-        modelo = modelos.get(tipo.strip())
-        if modelo:
-            datos = list(modelo.objects.all())
-            for d in datos:
-                correcta = getattr(d, f'palabra_{tipo[:3]}', d.__str__())
-                imagen = getattr(d, f'imagen_{tipo[:3]}', None)
-                otras_opciones = random.sample([getattr(x, f'palabra_{tipo[:3]}', x.__str__()) for x in datos if x != d], k=2) if len(datos) > 2 else []
-                opciones = [{'texto': o, 'es_correcta': False} for o in otras_opciones]
-                opciones.append({'texto': correcta, 'es_correcta': True})
-                random.shuffle(opciones)
-
-                preguntas_unificadas.append({
-                    'palabra_correcta': correcta,
-                    'imagen': imagen,
-                    'opciones': opciones,
-                })
-
-    preguntas_random = random.sample(preguntas_unificadas, min(10, len(preguntas_unificadas)))
-
-    return render(request, 'Administrador/Evaluaciones/evaluacion.html', {
-        'evaluacion': evaluacion,
-        'preguntas': preguntas_random,
-        'mostrar_resultado': False,
+    return render(request, "Administrador/Evaluaciones/editar_evaluacion.html", {
+        "evaluacion": evaluacion,
+        "tipos_aprendizaje": TIPOS_APRENDIZAJE,
+        "error_titulo": error_titulo
     })
+
+# ELIMINAR
+def eliminar_evaluacion(request, id):
+    evaluacion = get_object_or_404(Evaluacion, id=id)
+    evaluacion.delete()
+    messages.success(request, "Evaluación eliminada correctamente.")
+    return redirect("lista_evaluaciones")
+
+
+
 
 
 
@@ -1151,7 +1124,7 @@ def login_estudiante(request):
     return render(request, 'Login/login_estudiante.html')
 
 
-# --------------EVALUACION-----------------
+# --------------VER TIPO EVALUACION -----------------
 def ver_evaluacion(request):
     estudiante_id = request.session.get('estudiante_id')
     if not estudiante_id:
@@ -1166,6 +1139,84 @@ def ver_evaluacion(request):
     return render(request, 'Evaluacion/ver_evaluacion.html', {
         'estudiante': estudiante,
         'evaluaciones': evaluaciones,  # NOTA: plural
+    })
+
+#--------------------VER EVALUACION 10 PREGUNTAS-------------------------
+
+# VER EVALUACION
+def mostrar_evaluacion(request, evaluacion_id):
+    estudiante_id = request.session.get('estudiante_id')
+    if not estudiante_id:
+        return redirect('login_estudiante')
+
+    estudiante = Estudiante.objects.filter(id=estudiante_id).first()
+    if not estudiante:
+        return redirect('login_estudiante')
+
+    evaluacion = get_object_or_404(Evaluacion, id=evaluacion_id)
+    tipos = evaluacion.tipo_aprendizaje_eva.split(',')
+
+    if request.method == 'POST':
+        nota = request.POST.get('nota')
+        if nota is not None:
+            try:
+                nota_decimal = float(nota)
+            except ValueError:
+                nota_decimal = 0.0
+
+            Resultado_Evaluacion.objects.create(
+                fk_estudiante=estudiante,
+                fk_evaluacion=evaluacion,
+                nota_res=nota_decimal,
+                fecha_res=timezone.now()
+            )
+            # En lugar de redirigir, enviamos el puntaje para mostrar resultado
+            return render(request, 'Administrador/Evaluaciones/evaluacion.html', {
+                'evaluacion': evaluacion,
+                'mostrar_resultado': True,
+                'puntaje': nota_decimal,
+            })
+
+    # GET: Preparar preguntas normalmente
+    modelos = {
+        'objetos': Aprender_Objetos,
+        'meses': Aprender_Meses,
+        'numeros': Aprender_Numeros,
+        'dias': Aprender_Dias,
+        'saludos': Aprender_Saludos,
+        'animales': Aprender_Animales,
+        'colores': Aprender_Colores,
+        'cuerpo_humano': Aprender_Cuerpo_Humano,
+        'parentesco': Aprender_Parentesco,
+        'elemento_naturaleza': Aprender_Elemento_Naturaleza,
+    }
+
+    preguntas_unificadas = []
+
+    for tipo in tipos:
+        modelo = modelos.get(tipo.strip())
+        if modelo:
+            datos = list(modelo.objects.all())
+            for d in datos:
+                correcta = getattr(d, f'palabra_{tipo[:3]}', d.__str__())
+                imagen = getattr(d, f'imagen_{tipo[:3]}', None)
+                otras_opciones = random.sample([getattr(x, f'palabra_{tipo[:3]}', x.__str__()) for x in datos if x != d], k=2) if len(datos) > 2 else []
+                opciones = [{'texto': o, 'es_correcta': False} for o in otras_opciones]
+                opciones.append({'texto': correcta, 'es_correcta': True})
+                random.shuffle(opciones)
+
+                preguntas_unificadas.append({
+                    'palabra_correcta': correcta,
+                    'imagen': imagen,
+                    'opciones': opciones,
+                })
+
+    preguntas_random = random.sample(preguntas_unificadas, min(10, len(preguntas_unificadas)))
+
+    return render(request, 'Administrador/Evaluaciones/evaluacion.html', {
+        'evaluacion': evaluacion,
+        'preguntas': preguntas_random,
+        'mostrar_resultado': False,
     })
 
 

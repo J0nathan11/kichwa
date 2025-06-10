@@ -67,11 +67,11 @@
                     <td>{{ eva.estado_eva|yesno:"Activo,Inactivo" }}</td>
                     <td>
                         <div style="display: flex;">
-                            <a href="" class="btn btn-outline-warning btn-circle" title="Editar Evaluación">
+                            <a href="{% url 'editar_evaluacion' eva.id %}" class="btn btn-outline-warning btn-circle" title="Editar Evaluación">
                                 <i class="fas fa-edit"></i>
                             </a>
                             &nbsp;&nbsp;
-                            <a href="" class="btn btn-outline-danger" onclick="return confirm('¿Deseas eliminar esta evaluación?')">
+                            <a href="{% url 'eliminar_evaluacion' eva.id %}" class="btn btn-outline-danger" onclick="return confirm('¿Deseas eliminar esta evaluación?')">
                                 <i class="fas fa-trash-alt"></i>
                             </a>
                     
