@@ -1,7 +1,9 @@
 {% extends 'plantillaAdmin.html' %}
+{% load diccionario_extras %}   <!-- Aquí cargas el filtro -->
 
 {% block body %}
 <style>
+    /* Tus estilos */
     #tbl-Calificaciones {
         background-color: #a0ccf3;
     }
@@ -36,41 +38,45 @@
     <table class="table table-bordered table-striped table-hover" id="tbl-Calificaciones">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Estudiante</th>
-                <th>Evaluación</th>
-                <th>Nota</th>
-                <th>Fecha de Registro</th>
-                <th>Acciones</th>
+                {% for eva in evaluaciones %}
+                    <th>{{ eva.titulo_eva }}</th>
+                {% endfor %}
+                <th>Promedio Total</th>
+                <th>Última Fecha de Registro</th>
             </tr>
         </thead>
         <tbody>
-            {% for cal in calificaciones %}
+            {% for est in estudiantes %}
                 <tr>
-                    <td>{{ cal.id }}</td>
-                    <td>{{ cal.fk_estudiante.nombres_est }} {{ cal.fk_estudiante.apellidos_est }}</td>
-                    <td>{{ cal.fk_evaluacion.titulo_eva }}</td>  <!-- Corregido aquí -->
-                    <td>{{ cal.nota_res }}</td>
-                    <td>{{ cal.fecha_res|date:"Y-m-d H:i" }}</td>
+                    <td>{{ est.nombres_est }} {{ est.apellidos_est }}</td>
+
+                    {% for eva in evaluaciones %}
+                        {% with notas_por_estudiante|dict_get:est.id as notas_est %}
+                            {% with notas_est|dict_get:eva.id as nota %}
+                                <td>{{ nota|default:"-"|floatformat:2 }}</td>
+                            {% endwith %}
+                        {% endwith %}
+                    {% endfor %}
+
+                    <td>{{ promedios|dict_get:est.id|default:"-"|floatformat:2 }}</td>
+
                     <td>
-                        <div style="display: flex;">
-                            <a href="" class="btn btn-outline-warning btn-circle" title="Editar Calificación">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            &nbsp;&nbsp;
-                            <a href="" class="btn btn-outline-danger" onclick="return confirm('¿Deseas eliminar esta calificación?')">
-                                <i class="fas fa-trash-alt"></i>
-                            </a>
-                        </div>
+                        {% with fechas_ultimo_registro|dict_get:est.id as fecha %}
+                            {% if fecha %}
+                                {{ fecha|date:"Y-m-d H:i" }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        {% endwith %}
                     </td>
                 </tr>
             {% empty %}
                 <tr>
-                    <td colspan="6">No hay calificaciones registradas.</td>
+                    <td colspan="{{ evaluaciones|length|add:'3' }}">No hay calificaciones registradas.</td>
                 </tr>
             {% endfor %}
         </tbody>
-
     </table>
 </div>
 

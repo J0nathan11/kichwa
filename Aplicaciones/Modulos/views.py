@@ -965,8 +965,8 @@ def agregar_evaluacion(request):
             tipo_aprendizaje_eva=",".join(tipos),
             fecha_creacion_eva=timezone.now()
         )
-
-        return redirect("mostrar_evaluacion", evaluacion.id)
+        messages.success(request, "Evaluacion agregado exitosamente.")
+        return redirect("lista_evaluacion", evaluacion.id)
 
     return render(request, "Administrador/Evaluaciones/agregar_evaluacion.html", {"tipos_aprendizaje": TIPOS_APRENDIZAJE})
 
@@ -1061,13 +1061,60 @@ def mostrar_evaluacion(request, evaluacion_id):
 
 
 # ---------------------------------CALIFICACIONES---------------------
+from django.db.models import Max
+
 def lista_calificaciones(request):
     if not request.session.get('profesor_id'):
         return redirect('login_profesor')
-    
-    calificaciones = Resultado_Evaluacion.objects.select_related('fk_estudiante', 'fk_evaluacion').all()
-    return render(request, 'Administrador/Calificaciones/lista_calificaciones.html', {'calificaciones': calificaciones})
 
+    # Obtener todas las evaluaciones ordenadas por id
+    evaluaciones = Evaluacion.objects.all().order_by('id')
+
+    # Obtener todas las calificaciones con relaciones para eficiencia
+    calificaciones = Resultado_Evaluacion.objects.select_related('fk_estudiante', 'fk_evaluacion').all()
+
+    # Obtener estudiantes que tienen calificaciones (ID únicos)
+    estudiantes_ids = set(calificaciones.values_list('fk_estudiante__id', flat=True))
+
+    # Crear lista de objetos Estudiante para esos IDs
+    estudiantes = []
+    for est_id in estudiantes_ids:
+        estudiante = calificaciones.filter(fk_estudiante=est_id).first().fk_estudiante
+        estudiantes.append(estudiante)
+
+    # Crear diccionario de notas por estudiante y evaluación
+    notas_por_estudiante = {}
+    for cal in calificaciones:
+        est_id = cal.fk_estudiante.id
+        eva_id = cal.fk_evaluacion.id
+        if est_id not in notas_por_estudiante:
+            notas_por_estudiante[est_id] = {}
+        notas_por_estudiante[est_id][eva_id] = float(cal.nota_res)
+
+    # Calcular promedio por estudiante
+    promedios = {}
+    for est_id in estudiantes_ids:
+        notas = notas_por_estudiante.get(est_id, {}).values()
+        if notas:
+            promedios[est_id] = sum(notas) / len(notas)
+        else:
+            promedios[est_id] = None
+
+    # Obtener última fecha de registro por estudiante
+    fechas_ultimo_registro = {}
+    for est_id in estudiantes_ids:
+        ultima_fecha = calificaciones.filter(fk_estudiante=est_id).aggregate(Max('fecha_res'))['fecha_res__max']
+        fechas_ultimo_registro[est_id] = ultima_fecha
+
+    context = {
+        'evaluaciones': evaluaciones,
+        'estudiantes': estudiantes,
+        'notas_por_estudiante': notas_por_estudiante,
+        'promedios': promedios,
+        'fechas_ultimo_registro': fechas_ultimo_registro,
+    }
+
+    return render(request, 'Administrador/Calificaciones/lista_calificaciones.html', context)
 
 
 
