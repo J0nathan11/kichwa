@@ -25,6 +25,8 @@
     <!--Importando FileInput.js -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/css/fileinput.min.css">
     <script  src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/js/fileinput.min.js"></script>
+
+
     <!-- Favicon personalizado -->
     <link rel="icon" href="{% static 'imagenes/favicon.jpg' %}" type="image/png">
 
@@ -135,6 +137,12 @@
                   <p>Estudiantes</p>
                 </a>
               </li>
+              <li class="nav-item dropdown">
+                <a href="{% url 'lista_evaluaciones' %}" class="nav-link">
+                  <i class="fas fa-users"></i>
+                  <p>Evaluación</p>
+                </a>
+              </li>
               <li class="nav-section">
                 <span class="sidebar-mini-icon">
                   <i class="fa fa-ellipsis-h"></i>
@@ -233,18 +241,18 @@
                   </a>
                   <div class="dropdown-menu quick-actions animated fadeIn">
                     <div class="quick-actions-header">
-                      <span class="title mb-1">Reportes</span>
+                      <span class="title mb-1">Reporte de Calificaciones</span>
                       <span class="subtitle op-7">Ver</span>
                     </div>
                     <div class="quick-actions-scroll scrollbar-outer">
                       <div class="quick-actions-items">
                         <div class="row m-0">
-                          <a class="col-6 col-md-6 p-0" href="">
+                          <a class="col-6 col-md-6 p-0" href="{% url 'lista_calificaciones' %}">
                             <div class="quick-actions-item">
                               <div class="avatar-item bg-info rounded-circle">
                                 <i class="fas fa-users"></i>
                               </div>
-                              <span class="text">Votantes</span>
+                              <span class="text">Calificaciones</span>
                             </div>
                           </a>
                           <a class="col-6 col-md-6 p-0" href="">

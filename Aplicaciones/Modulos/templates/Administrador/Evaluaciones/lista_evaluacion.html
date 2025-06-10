@@ -1,0 +1,96 @@
+{% extends 'plantillaAdmin.html' %}
+
+{% block body %}
+<style>
+    #tbl-Evaluaciones {
+        background-color: #a0ccf3;
+    }
+
+    #tbl-Evaluaciones th {
+        background-color: #1f77b4;
+        color: white;
+    }
+
+    #tbl-Evaluaciones td {
+        color: #333;
+    }
+
+    #tbl-Evaluaciones tr:hover {
+        background-color: #d1e7f7;
+    }
+</style>
+
+<br><br><br><br>
+<div>
+    <br>
+    <div class="card-title text-center">
+        <h3><b>Listado de Evaluaciones</b></h3>
+    </div>
+</div>
+<div style="width: 70%; margin-left: 170px;">
+    <hr style="height: 3px; background-color: #000; border: none;">
+</div>
+<br>
+<div class="text-center">
+    <a href="{% url 'agregar_evaluacion' %}" class="btn btn-outline-info">
+        <i class="fas fa-plus"></i> Crear Evaluación
+    </a>
+</div>
+<br>
+<div class="container" style="width: 90%;">
+    <table class="table table-bordered table-striped table-hover" id="tbl-Evaluaciones">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Título</th>
+                <th>Descripción</th>
+                <th>Tipos de Aprendizaje</th>
+                <th>Fecha de Creación</th>
+                <th>Última Actualización</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for eva in evaluaciones %}
+                <tr>
+                    <td>{{ eva.id }}</td>
+                    <td>{{ eva.titulo_eva }}</td>
+                    <td>{{ eva.descripcion_eva }}</td>
+                    <td>
+                        {% for tipo in eva.tipos_lista %}
+                            <span class="badge bg-info">{{ tipo }}</span>
+                        {% endfor %}
+                    </td>
+                    <td>{{ eva.fecha_creacion_eva }}</td>
+                    <td>{{ eva.fecha_actualizacion_eva }}</td>
+                    <td>{{ eva.estado_eva|yesno:"Activo,Inactivo" }}</td>
+                    <td>
+                        <div style="display: flex;">
+                            <a href="" class="btn btn-outline-warning btn-circle" title="Editar Evaluación">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            &nbsp;&nbsp;
+                            <a href="" class="btn btn-outline-danger" onclick="return confirm('¿Deseas eliminar esta evaluación?')">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                            &nbsp;&nbsp;
+                            <a href="{% url 'mostrar_evaluacion' eva.id %}" class="btn btn-outline-primary" title="Ver Evaluación">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="8">No hay evaluaciones registradas.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    let table = new DataTable('#tbl-Evaluaciones');
+</script>
+{% endblock %}

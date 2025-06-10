@@ -1,0 +1,32 @@
+{% extends 'plantillaAdmin.html' %}
+{% load static %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2>Crear Evaluación</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Título</label>
+            <input type="text" name="titulo_eva" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label>Descripción</label>
+            <textarea name="descripcion_eva" class="form-control" required></textarea>
+        </div>
+        <div class="form-group">
+            <label>Estado</label><br>
+            <input type="checkbox" name="estado_eva"> Activo
+        </div>
+        <div class="form-group">
+            <label>Tipo de Aprendizaje (puedes seleccionar varios)</label>
+            <select name="tipo_aprendizaje_eva" class="form-control" multiple required>
+                {% for valor, texto in tipos_aprendizaje %}
+                    <option value="{{ valor }}">{{ texto }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Crear Evaluación</button>
+    </form>
+</div>
+{% endblock %}

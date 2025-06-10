@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect,get_object_or_404
 from .models import Aprender_Objetos, Aprender_Meses, Aprender_Numeros, Aprender_Dias, Profesor
 from .models import Aprender_Saludos, Aprender_Animales, Aprender_Colores, Aprender_Cuerpo_Humano
-from .models import Aprender_Parentesco, Aprender_Elemento_Naturaleza, Estudiante
+from .models import Aprender_Parentesco, Aprender_Elemento_Naturaleza, Estudiante, Evaluacion, Resultado_Evaluacion
 from django.contrib import messages
 import re
 # 
@@ -934,10 +934,194 @@ def lista_profesores(request):
     return render(request, 'Administrador/Profesores/lista_profesores.html', {'profesores': profesores})
 
 
+#------------EVALUACION-----------------------
+# AGREGAR
+from django.utils import timezone
+TIPOS_APRENDIZAJE = [
+    ("objetos", "Objetos"),
+    ("meses", "Meses"),
+    ("numeros", "Números"),
+    ("dias", "Días"),
+    ("saludos", "Saludos"),
+    ("animales", "Animales"),
+    ("colores", "Colores"),
+    ("cuerpo_humano", "Cuerpo Humano"),
+    ("parentesco", "Parentesco"),
+    ("naturaleza", "Elementos de la Naturaleza"),
+]
+
+def agregar_evaluacion(request):
+    if request.method == "POST":
+        titulo = request.POST["titulo_eva"]
+        descripcion = request.POST["descripcion_eva"]
+        estado = request.POST.get("estado_eva") == "on"
+        tipos = request.POST.getlist("tipo_aprendizaje_eva")
+
+        # Guardamos como texto separado por comas
+        evaluacion = Evaluacion.objects.create(
+            titulo_eva=titulo,
+            descripcion_eva=descripcion,
+            estado_eva=estado,
+            tipo_aprendizaje_eva=",".join(tipos),
+            fecha_creacion_eva=timezone.now()
+        )
+
+        return redirect("mostrar_evaluacion", evaluacion.id)
+
+    return render(request, "Administrador/Evaluaciones/agregar_evaluacion.html", {"tipos_aprendizaje": TIPOS_APRENDIZAJE})
+
+
+def lista_evaluaciones(request):
+    if not request.session.get('profesor_id'):
+        return redirect('login_profesor')
+
+    evaluaciones = Evaluacion.objects.all()
+
+    for eva in evaluaciones:
+        eva.tipos_lista = [t.strip() for t in eva.tipo_aprendizaje_eva.split(",")] if eva.tipo_aprendizaje_eva else []
+
+    return render(request, 'Administrador/Evaluaciones/lista_evaluacion.html', {'evaluaciones': evaluaciones})
+
+# VER EVALUACION
+def mostrar_evaluacion(request, evaluacion_id):
+    estudiante_id = request.session.get('estudiante_id')
+    if not estudiante_id:
+        return redirect('login_estudiante')
+
+    estudiante = Estudiante.objects.filter(id=estudiante_id).first()
+    if not estudiante:
+        return redirect('login_estudiante')
+
+    evaluacion = get_object_or_404(Evaluacion, id=evaluacion_id)
+    tipos = evaluacion.tipo_aprendizaje_eva.split(',')
+
+    if request.method == 'POST':
+        nota = request.POST.get('nota')
+        if nota is not None:
+            try:
+                nota_decimal = float(nota)
+            except ValueError:
+                nota_decimal = 0.0
+
+            Resultado_Evaluacion.objects.create(
+                fk_estudiante=estudiante,
+                fk_evaluacion=evaluacion,
+                nota_res=nota_decimal,
+                fecha_res=timezone.now()
+            )
+            # En lugar de redirigir, enviamos el puntaje para mostrar resultado
+            return render(request, 'Administrador/Evaluaciones/evaluacion.html', {
+                'evaluacion': evaluacion,
+                'mostrar_resultado': True,
+                'puntaje': nota_decimal,
+            })
+
+    # GET: Preparar preguntas normalmente
+    modelos = {
+        'objetos': Aprender_Objetos,
+        'meses': Aprender_Meses,
+        'numeros': Aprender_Numeros,
+        'dias': Aprender_Dias,
+        'saludos': Aprender_Saludos,
+        'animales': Aprender_Animales,
+        'colores': Aprender_Colores,
+        'cuerpo_humano': Aprender_Cuerpo_Humano,
+        'parentesco': Aprender_Parentesco,
+        'elemento_naturaleza': Aprender_Elemento_Naturaleza,
+    }
+
+    preguntas_unificadas = []
+
+    for tipo in tipos:
+        modelo = modelos.get(tipo.strip())
+        if modelo:
+            datos = list(modelo.objects.all())
+            for d in datos:
+                correcta = getattr(d, f'palabra_{tipo[:3]}', d.__str__())
+                imagen = getattr(d, f'imagen_{tipo[:3]}', None)
+                otras_opciones = random.sample([getattr(x, f'palabra_{tipo[:3]}', x.__str__()) for x in datos if x != d], k=2) if len(datos) > 2 else []
+                opciones = [{'texto': o, 'es_correcta': False} for o in otras_opciones]
+                opciones.append({'texto': correcta, 'es_correcta': True})
+                random.shuffle(opciones)
+
+                preguntas_unificadas.append({
+                    'palabra_correcta': correcta,
+                    'imagen': imagen,
+                    'opciones': opciones,
+                })
+
+    preguntas_random = random.sample(preguntas_unificadas, min(10, len(preguntas_unificadas)))
+
+    return render(request, 'Administrador/Evaluaciones/evaluacion.html', {
+        'evaluacion': evaluacion,
+        'preguntas': preguntas_random,
+        'mostrar_resultado': False,
+    })
+
+
+
+# ---------------------------------CALIFICACIONES---------------------
+def lista_calificaciones(request):
+    if not request.session.get('profesor_id'):
+        return redirect('login_profesor')
+    
+    calificaciones = Resultado_Evaluacion.objects.select_related('fk_estudiante', 'fk_evaluacion').all()
+    return render(request, 'Administrador/Calificaciones/lista_calificaciones.html', {'calificaciones': calificaciones})
+
+
+
+
+
+
+
+
+
+
 
 
 
 ############################### LADO DEL USUARIO #################################
+
+# LOGIN ESTUDIANTE
+def login_estudiante(request):
+    if request.method == 'POST':
+        nombres = request.POST.get('nombres').strip()
+        apellidos = request.POST.get('apellidos').strip()
+        cedula = request.POST.get('cedula').strip()
+
+        estudiante = Estudiante.objects.filter(
+            nombres_est__iexact=nombres,
+            apellidos_est__iexact=apellidos,
+            cedula_est=cedula
+        ).first()
+
+        if estudiante:
+            request.session['estudiante_id'] = estudiante.id
+            return redirect('ver_evaluacion')
+        else:
+            messages.error(request, "Estudiante no encontrado, verifique sus datos.")
+    
+    return render(request, 'Login/login_estudiante.html')
+
+
+# --------------EVALUACION-----------------
+def ver_evaluacion(request):
+    estudiante_id = request.session.get('estudiante_id')
+    if not estudiante_id:
+        return redirect('login_estudiante')
+
+    estudiante = Estudiante.objects.filter(id=estudiante_id).first()
+    if not estudiante:
+        return redirect('login_estudiante')
+
+    evaluaciones = Evaluacion.objects.filter(estado_eva=True)
+
+    return render(request, 'Evaluacion/ver_evaluacion.html', {
+        'estudiante': estudiante,
+        'evaluaciones': evaluaciones,  # NOTA: plural
+    })
+
+
 
 #-------------------------------ARENDER  ---------------------
 # MESES

@@ -1,0 +1,80 @@
+{% extends 'plantillaAdmin.html' %}
+
+{% block body %}
+<style>
+    #tbl-Calificaciones {
+        background-color: #a0ccf3;
+    }
+
+    #tbl-Calificaciones th {
+        background-color: #1f77b4;
+        color: white;
+    }
+
+    #tbl-Calificaciones td {
+        color: #333;
+    }
+
+    #tbl-Calificaciones tr:hover {
+        background-color: #d1e7f7;
+    }
+</style>
+
+<br><br><br><br>
+<div>
+    <br>
+    <div class="card-title text-center">
+        <h3><b>Listado de Calificaciones</b></h3>
+    </div>
+</div>
+<div style="width: 70%; margin-left: 170px;">
+    <hr style="height: 3px; background-color: #000; border: none;">
+</div>
+
+<br>
+<div class="container" style="width: 90%;">
+    <table class="table table-bordered table-striped table-hover" id="tbl-Calificaciones">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Estudiante</th>
+                <th>Evaluación</th>
+                <th>Nota</th>
+                <th>Fecha de Registro</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cal in calificaciones %}
+                <tr>
+                    <td>{{ cal.id }}</td>
+                    <td>{{ cal.fk_estudiante.nombres_est }} {{ cal.fk_estudiante.apellidos_est }}</td>
+                    <td>{{ cal.fk_evaluacion.titulo_eva }}</td>  <!-- Corregido aquí -->
+                    <td>{{ cal.nota_res }}</td>
+                    <td>{{ cal.fecha_res|date:"Y-m-d H:i" }}</td>
+                    <td>
+                        <div style="display: flex;">
+                            <a href="" class="btn btn-outline-warning btn-circle" title="Editar Calificación">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            &nbsp;&nbsp;
+                            <a href="" class="btn btn-outline-danger" onclick="return confirm('¿Deseas eliminar esta calificación?')">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6">No hay calificaciones registradas.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+</div>
+
+<script>
+    let table = new DataTable('#tbl-Calificaciones');
+</script>
+{% endblock %}

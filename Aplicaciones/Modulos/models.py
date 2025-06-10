@@ -79,7 +79,34 @@ class Aprender_Elemento_Naturaleza(models.Model):
 
     def __str__(self):
         return self.palabra_ele
+
+ # ------------------EVALUACION 
+
+
+class Evaluacion(models.Model):
+    titulo_eva = models.CharField(max_length=200)
+    descripcion_eva = models.TextField()
+    estado_eva = models.BooleanField(default=True)
+    tipo_aprendizaje_eva = models.TextField()  # Aquí guardaremos los tipos seleccionados como texto
+    fecha_creacion_eva = models.DateTimeField(auto_now_add=True)
+    fecha_actualizacion_eva = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.titulo_eva
     
+
+class Resultado_Evaluacion(models.Model):
+    fk_estudiante = models.ForeignKey('Estudiante', on_delete=models.CASCADE)
+    fk_evaluacion = models.ForeignKey('Evaluacion', on_delete=models.CASCADE)
+    nota_res = models.DecimalField(max_digits=5, decimal_places=2)
+    fecha_res = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.fk_estudiante} - Nota: {self.nota_res}"
+
+
+ #----------------------ESTUDIANTE 
+
 class Estudiante(models.Model):
     nombres_est = models.CharField(max_length=100)
     apellidos_est = models.CharField(max_length=100)
