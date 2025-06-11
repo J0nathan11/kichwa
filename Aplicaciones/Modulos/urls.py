@@ -87,6 +87,10 @@ urlpatterns = [
     #-------------------------CALIFICACIONES-----------------------------
     path('calificaciones/', views.lista_calificaciones, name='lista_calificaciones'),
     path('evaluacion/eliminar/<int:id>/', views.eliminar_evaluacion, name='eliminar_evaluacion'),
+    path('lista_calificaciones_3ro/', views.lista_calificaciones_3ro, name='lista_calificaciones_3ro'),
+    path('lista_calificaciones_4to/', views.lista_calificaciones_4to, name='lista_calificaciones_4to'),
+
+
 
 
 

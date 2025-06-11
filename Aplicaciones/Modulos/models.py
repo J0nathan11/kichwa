@@ -86,8 +86,9 @@ class Aprender_Elemento_Naturaleza(models.Model):
 class Evaluacion(models.Model):
     titulo_eva = models.CharField(max_length=200)
     descripcion_eva = models.TextField()
+    nivel_escolar_eva = models.CharField(max_length=50, blank=True, null=True)
     estado_eva = models.BooleanField(default=True)
-    tipo_aprendizaje_eva = models.TextField()  # Aquí guardaremos los tipos seleccionados como texto
+    tipo_aprendizaje_eva = models.TextField()  
     fecha_creacion_eva = models.DateTimeField(auto_now_add=True)
     fecha_actualizacion_eva = models.DateTimeField(auto_now=True)
 
@@ -105,7 +106,7 @@ class Resultado_Evaluacion(models.Model):
         return f"{self.fk_estudiante} - Nota: {self.nota_res}"
 
 
- #----------------------ESTUDIANTE 
+ #----------------------ESTUDIANTE------------------------
 
 class Estudiante(models.Model):
     nombres_est = models.CharField(max_length=100)
@@ -114,8 +115,8 @@ class Estudiante(models.Model):
     genero_est = models.CharField(max_length=20)
     nivel_escolar_est = models.CharField(max_length=50)
     estado_est = models.CharField(max_length=10) 
-    fecha_registro_est = models.DateField(auto_now_add=True)
-    fecha_actualizacion_est = models.DateField(auto_now=True)
+    fecha_registro_est = models.DateTimeField(auto_now_add=True)
+    fecha_actualizacion_est = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.nombres_est} {self.apellidos_est}"

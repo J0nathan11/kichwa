@@ -28,6 +28,16 @@
                         required>{{ evaluacion.descripcion_eva }}</textarea>
                 </div>
 
+                <div class="mb-3">
+                    <label class="form-label">Nivel Escolar</label>
+                    <select name="nivel_escolar_eva" id="nivel_escolar_eva" class="form-select" required>
+                        <option value="" disabled {% if not evaluacion.nivel_escolar_eva %}selected{% endif %}>Selecciona un nivel escolar</option>
+                        <option value="3ro" {% if evaluacion.nivel_escolar_eva == "3ro" %}selected{% endif %}>3ro</option>
+                        <option value="4to" {% if evaluacion.nivel_escolar_eva == "4to" %}selected{% endif %}>4to</option>
+                    </select>
+                </div>
+
+
                 <div class="form-check form-switch mb-3">
                     <input class="form-check-input" type="checkbox" name="estado_eva" id="estadoCheck"
                         {% if evaluacion.estado_eva %}checked{% endif %}>

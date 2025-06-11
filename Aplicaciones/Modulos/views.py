@@ -956,6 +956,7 @@ def agregar_evaluacion(request):
     if request.method == "POST":
         titulo = request.POST["titulo_eva"].strip()
         descripcion = request.POST["descripcion_eva"]
+        nivel_escolar = request.POST.get("nivel_escolar_eva", "").strip()  
         estado = request.POST.get("estado_eva") == "on"
         tipos = request.POST.getlist("tipo_aprendizaje_eva")
 
@@ -966,6 +967,7 @@ def agregar_evaluacion(request):
             Evaluacion.objects.create(
                 titulo_eva=titulo,
                 descripcion_eva=descripcion,
+                nivel_escolar_eva=nivel_escolar,  
                 estado_eva=estado,
                 tipo_aprendizaje_eva=",".join(tipos),
                 fecha_creacion_eva=timezone.now()
@@ -998,6 +1000,7 @@ def editar_evaluacion(request, id):
     if request.method == "POST":
         titulo = request.POST["titulo_eva"].strip()
         descripcion = request.POST["descripcion_eva"]
+        nivel_escolar = request.POST.get("nivel_escolar_eva", "").strip()
         estado = request.POST.get("estado_eva") == "on"
         tipos = request.POST.getlist("tipo_aprendizaje_eva")
 
@@ -1007,6 +1010,7 @@ def editar_evaluacion(request, id):
         else:
             evaluacion.titulo_eva = titulo
             evaluacion.descripcion_eva = descripcion
+            evaluacion.nivel_escolar_eva = nivel_escolar
             evaluacion.estado_eva = estado
             evaluacion.tipo_aprendizaje_eva = ",".join(tipos)
             evaluacion.save()
@@ -1066,12 +1070,19 @@ def lista_calificaciones(request):
 
     # Calcular promedio por estudiante
     promedios = {}
+    total_evaluaciones = evaluaciones.count()
+
     for est_id in estudiantes_ids:
-        notas = notas_por_estudiante.get(est_id, {}).values()
-        if notas:
-            promedios[est_id] = sum(notas) / len(notas)
+        notas = notas_por_estudiante.get(est_id, {})
+        suma_notas = 0
+        for eva in evaluaciones:
+            nota = notas.get(eva.id, 0)  # Si no tiene nota, se considera 0
+            suma_notas += nota
+        if total_evaluaciones > 0:
+            promedios[est_id] = suma_notas / total_evaluaciones
         else:
             promedios[est_id] = None
+
 
     # Obtener última fecha de registro por estudiante
     fechas_ultimo_registro = {}
@@ -1089,15 +1100,102 @@ def lista_calificaciones(request):
 
     return render(request, 'Administrador/Calificaciones/lista_calificaciones.html', context)
 
+# -------------------CALIFICACIONES 3ro----------------------------
+def lista_calificaciones_3ro(request):
+    if not request.session.get('profesor_id'):
+        return redirect('login_profesor')
+
+    evaluaciones = Evaluacion.objects.all().order_by('id')
+    calificaciones = Resultado_Evaluacion.objects.select_related('fk_estudiante', 'fk_evaluacion').all()
+
+    # Filtrar calificaciones solo de estudiantes de 3ro
+    calificaciones_3ro = [cal for cal in calificaciones if cal.fk_estudiante.nivel_escolar_est == '3ro']
+
+    estudiantes_ids = set(cal.fk_estudiante.id for cal in calificaciones_3ro)
+    
+    # Obtener objetos únicos de estudiantes de 4to
+    estudiantes = list({cal.fk_estudiante.id: cal.fk_estudiante for cal in calificaciones_3ro}.values())
 
 
+    notas_por_estudiante = {}
+    for cal in calificaciones_3ro:
+        est_id = cal.fk_estudiante.id
+        eva_id = cal.fk_evaluacion.id
+        if est_id not in notas_por_estudiante:
+            notas_por_estudiante[est_id] = {}
+        notas_por_estudiante[est_id][eva_id] = float(cal.nota_res)
+
+    # Calcular promedio con evaluaciones aunque no tenga nota (promedio estricto)
+    promedios = {}
+    total_evaluaciones = evaluaciones.count()
+    for est_id in estudiantes_ids:
+        notas = notas_por_estudiante.get(est_id, {})
+        suma_notas = sum(notas.get(eva.id, 0) for eva in evaluaciones)
+        promedios[est_id] = suma_notas / total_evaluaciones if total_evaluaciones > 0 else None
+
+    fechas_ultimo_registro = {}
+    for est_id in estudiantes_ids:
+        ultima_fecha = Resultado_Evaluacion.objects.filter(fk_estudiante_id=est_id).aggregate(Max('fecha_res'))['fecha_res__max']
+        fechas_ultimo_registro[est_id] = ultima_fecha
+
+    context = {
+        'evaluaciones': evaluaciones,
+        'estudiantes': estudiantes,
+        'notas_por_estudiante': notas_por_estudiante,
+        'promedios': promedios,
+        'fechas_ultimo_registro': fechas_ultimo_registro,
+    }
+
+    return render(request, 'Administrador/Calificaciones/lista_calificaciones_3ro.html', context)
 
 
+# -------------------CALIFICACIONES 4to----------------------------
+def lista_calificaciones_4to(request):
+    if not request.session.get('profesor_id'):
+        return redirect('login_profesor')
+
+    evaluaciones = Evaluacion.objects.all().order_by('id')
+    calificaciones = Resultado_Evaluacion.objects.select_related('fk_estudiante', 'fk_evaluacion').all()
+
+    # Filtrar calificaciones solo de estudiantes de 4to
+    calificaciones_4to = [cal for cal in calificaciones if cal.fk_estudiante.nivel_escolar_est == '4to']
+
+    estudiantes_ids = set(cal.fk_estudiante.id for cal in calificaciones_4to)
+    
+    # Obtener objetos únicos de estudiantes de 4to
+    estudiantes = list({cal.fk_estudiante.id: cal.fk_estudiante for cal in calificaciones_4to}.values())
 
 
+    notas_por_estudiante = {}
+    for cal in calificaciones_4to:
+        est_id = cal.fk_estudiante.id
+        eva_id = cal.fk_evaluacion.id
+        if est_id not in notas_por_estudiante:
+            notas_por_estudiante[est_id] = {}
+        notas_por_estudiante[est_id][eva_id] = float(cal.nota_res)
 
+    # Calcular promedio con evaluaciones aunque no tenga nota (promedio estricto)
+    promedios = {}
+    total_evaluaciones = evaluaciones.count()
+    for est_id in estudiantes_ids:
+        notas = notas_por_estudiante.get(est_id, {})
+        suma_notas = sum(notas.get(eva.id, 0) for eva in evaluaciones)
+        promedios[est_id] = suma_notas / total_evaluaciones if total_evaluaciones > 0 else None
 
+    fechas_ultimo_registro = {}
+    for est_id in estudiantes_ids:
+        ultima_fecha = Resultado_Evaluacion.objects.filter(fk_estudiante_id=est_id).aggregate(Max('fecha_res'))['fecha_res__max']
+        fechas_ultimo_registro[est_id] = ultima_fecha
 
+    context = {
+        'evaluaciones': evaluaciones,
+        'estudiantes': estudiantes,
+        'notas_por_estudiante': notas_por_estudiante,
+        'promedios': promedios,
+        'fechas_ultimo_registro': fechas_ultimo_registro,
+    }
+
+    return render(request, 'Administrador/Calificaciones/lista_calificaciones_4to.html', context)
 
 
 ############################### LADO DEL USUARIO #################################

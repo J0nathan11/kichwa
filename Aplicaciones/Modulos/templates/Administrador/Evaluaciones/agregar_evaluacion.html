@@ -24,6 +24,15 @@
                     <textarea name="descripcion_eva" id="descripcion_eva" class="form-control" rows="3" placeholder="Ingresa una descripción breve" required></textarea>
                 </div>
 
+                <div class="mb-3">
+                    <label class="form-label">Nivel Escolar</label>
+                    <select name="nivel_escolar_eva" id="nivel_escolar_eva" class="form-select">
+                        <option value="" selected disabled>Selecciona un nivel escolar</option>
+                        <option value="3ro">3ro</option>
+                        <option value="4to">4to</option>
+                    </select>
+                </div>
+
                 <div class="form-check form-switch mb-3">
                     <input class="form-check-input" type="checkbox" name="estado_eva" id="estadoCheck">
                     <label class="form-check-label" for="estadoCheck">Estado Activo</label>
@@ -64,11 +73,13 @@
     $("#frm_evaluacion").validate({
         rules: {
             titulo_eva: { required: true },
-            descripcion_eva: { required: true }
+            descripcion_eva: { required: true }, 
+            nivel_escolar_eva: {required: true}
         },
         messages: {
             titulo_eva: { required: "Ingrese un Titulo para Evaluación" },
-            descripcion_eva: { required: "Ingrese una descripción" }
+            descripcion_eva: { required: "Ingrese una descripción" },
+            nivel_escolar_eva: {required: "Seleccione un nivel escolar"}
         }
     });
 
