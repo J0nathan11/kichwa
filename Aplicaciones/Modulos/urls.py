@@ -90,6 +90,9 @@ urlpatterns = [
     path('lista_calificaciones_3ro/', views.lista_calificaciones_3ro, name='lista_calificaciones_3ro'),
     path('lista_calificaciones_4to/', views.lista_calificaciones_4to, name='lista_calificaciones_4to'),
 
+    #---------------------------DESCARGA PDF----------------------
+    path('calificaciones/pdf/', views.pdf_calificaciones_3ro, name='pdf_calificaciones_3ro'),
+    
 
 
 

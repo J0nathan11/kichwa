@@ -1197,6 +1197,63 @@ def lista_calificaciones_4to(request):
 
     return render(request, 'Administrador/Calificaciones/lista_calificaciones_4to.html', context)
 
+#----------------------DESCARGA PDF-------------------------
+from django.template.loader import get_template
+from django.http import HttpResponse
+from xhtml2pdf import pisa
+
+def render_to_pdf(template_src, context_dict={}):
+    template = get_template(template_src)
+    html = template.render(context_dict)
+    response = HttpResponse(content_type='application/pdf')
+    pisa_status = pisa.CreatePDF(html, dest=response)
+    if pisa_status.err:
+        return HttpResponse('Error al generar el PDF', status=500)
+    return response
+
+def pdf_calificaciones_3ro(request):
+    estudiantes = Estudiante.objects.filter(nivel_escolar_est='3ro')
+    evaluaciones = Evaluacion.objects.all()
+
+    notas_por_estudiante = {}
+    promedios = {}
+    fechas_ultimo_registro = {}
+
+    for est in estudiantes:
+        notas_por_estudiante[est.id] = {}
+        total = 0
+        count = 0
+        ultima_fecha = None
+
+        for eva in evaluaciones:
+            nota = Resultado_Evaluacion.objects.filter(fk_estudiante=est, fk_evaluacion=eva).first()
+            if nota:
+                notas_por_estudiante[est.id][eva.id] = nota.nota_res
+                total += float(nota.nota_res)  # Asegúrate de convertir a float si es Decimal
+                count += 1
+                if not ultima_fecha or nota.fecha_res > ultima_fecha:
+                    ultima_fecha = nota.fecha_res
+
+        if count > 0:
+            promedios[est.id] = round(total / count, 2)
+        else:
+            promedios[est.id] = None
+
+        fechas_ultimo_registro[est.id] = ultima_fecha
+
+    contexto = {
+        'estudiantes': estudiantes,
+        'evaluaciones': evaluaciones,
+        'notas_por_estudiante': notas_por_estudiante,
+        'promedios': promedios,
+        'fechas_ultimo_registro': fechas_ultimo_registro,
+    }
+
+    return render_to_pdf('pdfs/calificaciones_3ro.html', contexto)
+
+
+
+
 
 ############################### LADO DEL USUARIO #################################
 
