@@ -78,6 +78,9 @@ urlpatterns = [
     path('profesores/', views.lista_profesores, name='lista_profesores'),
     path('profesor/configuracion/', views.configuracion_profesor, name='configuracion_profesor'),
 
+    #----------------------------SELECCIONDE EVALUACIONES----------------
+    path('evaluacion/seleccion', views.seleccion_evaluacion, name='seleccion_evaluacion'),
+
     #--------------------------EVALUACIONES---------------------------
     path('evaluacion/', views.lista_evaluaciones, name='lista_evaluaciones'),
     path('agregar_evaluacion/', views.agregar_evaluacion, name='agregar_evaluacion'),

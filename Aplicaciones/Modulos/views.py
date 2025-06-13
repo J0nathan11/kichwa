@@ -933,6 +933,14 @@ def lista_profesores(request):
     profesores = Profesor.objects.all()
     return render(request, 'Administrador/Profesores/lista_profesores.html', {'profesores': profesores})
 
+#----------------------SELECCION DE EVALUACION------------
+def seleccion_evaluacion(request):
+    if not request.session.get('profesor_id'):
+        return redirect('login_profesor')
+    
+    evaluaciones = Profesor.objects.all()
+    return render(request, 'Administrador/Evaluaciones/seleccion_evaluacion.html', {'evaluaciones': evaluaciones})
+
 
 #------------EVALUACION-----------------------
 # AGREGAR
@@ -975,7 +983,7 @@ def agregar_evaluacion(request):
             messages.success(request, "Evaluación agregada exitosamente.")
             return redirect("lista_evaluaciones")
 
-    return render(request, "Administrador/Evaluaciones/agregar_evaluacion.html", {
+    return render(request, "Administrador/Evaluaciones/Cuarto/agregar_evaluacion.html", {
         "tipos_aprendizaje": TIPOS_APRENDIZAJE,
         "error_titulo": error_titulo
     })
@@ -985,11 +993,15 @@ def lista_evaluaciones(request):
         return redirect('login_profesor')
 
     evaluaciones = Evaluacion.objects.all()
-
     for eva in evaluaciones:
         eva.tipos_lista = [t.strip() for t in eva.tipo_aprendizaje_eva.split(",")] if eva.tipo_aprendizaje_eva else []
 
-    return render(request, 'Administrador/Evaluaciones/lista_evaluacion.html', {'evaluaciones': evaluaciones})
+    total_evaluaciones = evaluaciones.count()  # <-- Conteo
+
+    return render(request, 'Administrador/Evaluaciones/Cuarto/lista_evaluacion.html', {
+        'evaluaciones': evaluaciones,
+        'total_evaluaciones': total_evaluaciones  # <-- Enviamos a la plantilla
+    })
 
 
 # EDITAR
@@ -1019,7 +1031,7 @@ def editar_evaluacion(request, id):
 
     evaluacion.tipos_lista = [t.strip() for t in evaluacion.tipo_aprendizaje_eva.split(",")] if evaluacion.tipo_aprendizaje_eva else []
 
-    return render(request, "Administrador/Evaluaciones/editar_evaluacion.html", {
+    return render(request, "Administrador/Evaluaciones/Cuarto/editar_evaluacion.html", {
         "evaluacion": evaluacion,
         "tipos_aprendizaje": TIPOS_APRENDIZAJE,
         "error_titulo": error_titulo

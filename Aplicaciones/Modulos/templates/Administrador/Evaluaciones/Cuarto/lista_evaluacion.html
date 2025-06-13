@@ -25,6 +25,7 @@
     <br>
     <div class="card-title text-center">
         <h3><b>Listado de Evaluaciones</b></h3>
+        <h3><b>Tercer Año de Educación Básica</b></h3>
     </div>
 </div>
 <div style="width: 70%; margin-left: 170px;">
@@ -32,10 +33,21 @@
 </div>
 <br>
 <div class="text-center">
-    <a href="{% url 'agregar_evaluacion' %}" class="btn btn-outline-info">
-        <i class="fas fa-plus"></i> Crear Evaluación
-    </a>
+    {% if total_evaluaciones < 3 %}
+        <a href="{% url 'agregar_evaluacion' %}" class="btn btn-outline-info">
+            <i class="fas fa-plus"></i> Crear Evaluación
+        </a>
+    {% else %}
+        <button class="btn btn-outline-secondary" disabled>
+            <i class="fas fa-ban"></i> Límite de Evaluaciones (3)
+        </button>
+        <p style="color: red; margin-top: 10px;"><b>¡Ya se alcanzó el límite de 3 evaluaciones!</b></p>
+    {% endif %}
 </div>
+<div style="margin-left: 70px;">
+    <a href="{% url 'seleccion_evaluacion' %}" class="btn btn-outline-secondary"> VOLVER</a>
+</div>
+
 <br>
 <div class="container" style="width: 90%;">
     <table class="table table-bordered table-striped table-hover" id="tbl-Evaluaciones">
