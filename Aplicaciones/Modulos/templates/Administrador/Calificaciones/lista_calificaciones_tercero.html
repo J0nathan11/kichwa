@@ -32,7 +32,13 @@
     <hr style="height: 3px; background-color: #000; border: none;">
 </div>
 
-<br>
+<div style="margin-left: 65px; margin-top: 10px;">
+    <a href="{% url 'seleccion_calificaciones' %}" class="btn btn-outline-secondary">VOLVER</a>
+    <a href="{% url 'reporte_pdf_calificaciones_tercero' %}" class="btn btn-danger">
+        <i class="fas fa-file-pdf"></i> PDF
+    </a>
+</div>
+
 <div class="container" style="width: 90%;">
     <table class="table table-bordered table-striped table-hover" id="tbl-Calificaciones">
         <thead>

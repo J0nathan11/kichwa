@@ -1,28 +1,34 @@
 {% extends 'plantillaAdmin.html' %}
-
+{% load static %}
 {% block body %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/estilosSeleccionar.css' %}">
+</head>
+
+
 <br><br><br>
 <div class="container mt-5">
-  <h2 class="text-center mb-4">Selecciona la Evaluación para el Año de Educación Básica</h2>
+  <h2 class="titulo-principal">Gestión de Evaluaciones por Nivel</h2>
   <div class="row justify-content-center">
 
-    <!-- Card Tercero -->
+     <!-- Card Tercero -->
     <div class="col-md-4">
       <div class="card shadow-lg border-0">
         <div class="card-body text-center">
-          <h5 class="card-title">Tercero de Educación Básica</h5>
-          <p class="card-text">Explora las actividades y contenidos para el tercer año.</p>
+          <h5 class="card-title">3° Educación Básica</h5>
+          <p class="card-text">Registrar y gestionar evaluaciones para estudiantes del tercer año.</p>
           <a href="{% url 'lista_evaluaciones_tercero' %}" class="btn btn-primary">Evaluación Tercero</a>
         </div>
       </div>
     </div>
 
+
     <!-- Card Cuarto -->
     <div class="col-md-4">
       <div class="card shadow-lg border-0">
         <div class="card-body text-center">
-          <h5 class="card-title">Cuarto de Educación Básica</h5>
-          <p class="card-text">Explora las actividades y contenidos para el cuarto año.</p>
+          <h5 class="card-title">4° de Educación Básica</h5>
+          <p class="card-text">Registrar y gestionar evaluaciones para estudiantes del cuarto año.</p>
           <a href="{% url 'lista_evaluaciones_cuarto' %}" class="btn btn-success">Evaluación Cuarto</a>
         </div>
       </div>

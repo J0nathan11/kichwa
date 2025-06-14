@@ -1,0 +1,33 @@
+
+  .card {
+    background-color: rgba(216, 248, 250, 0.95);
+    border-radius: 15px;
+    transition: transform 0.3s ease;
+  }
+
+  .card:hover {
+    transform: scale(1.03);
+  }
+
+  .btn-nivel {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+  }
+
+  .titulo-principal {
+    font-weight: bold;
+    color: #2a6eaa;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .card-title {
+    font-weight: 600;
+    color: #1f4e79;
+  }
+
+  .card-text {
+    font-size: 14px;
+    color: #333;
+  }

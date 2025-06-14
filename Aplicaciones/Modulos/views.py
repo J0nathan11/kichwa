@@ -1361,61 +1361,69 @@ def lista_calificaciones_tercero(request):
     }
     return render(request, 'Administrador/Calificaciones/lista_calificaciones_tercero.html', context)
 
-# -------------------CALIFICACIONES 3ro----------------------------
-
-#----------------------DESCARGA PDF-------------------------
+# -------------------REPORTE EN PDF----------------------------
+# TERCERO
 from django.template.loader import get_template
 from django.http import HttpResponse
 from xhtml2pdf import pisa
+from io import BytesIO
+from .models import Estudiante_Tercero, Evaluacion_Tercero, Resultado_Evaluacion_Tercero
 
-def render_to_pdf(template_src, context_dict={}):
-    template = get_template(template_src)
-    html = template.render(context_dict)
-    response = HttpResponse(content_type='application/pdf')
-    pisa_status = pisa.CreatePDF(html, dest=response)
-    if pisa_status.err:
-        return HttpResponse('Error al generar el PDF', status=500)
-    return response
+def generar_pdf_calificaciones_tercero(request):
+    estudiantes = Estudiante_Tercero.objects.all()
+    evaluaciones = Evaluacion_Tercero.objects.all()
 
-def pdf_calificaciones_3ro(request):
-    estudiantes = Estudiante.objects.filter(nivel_escolar_est='3ro')
-    evaluaciones = Evaluacion.objects.all()
-
+    # Preparar notas y promedios igual que en la vista HTML
     notas_por_estudiante = {}
     promedios = {}
     fechas_ultimo_registro = {}
 
     for est in estudiantes:
-        notas_por_estudiante[est.id] = {}
-        total = 0
+        notas_est = {}
+        suma = 0
         count = 0
         ultima_fecha = None
 
         for eva in evaluaciones:
-            nota = Resultado_Evaluacion.objects.filter(fk_estudiante=est, fk_evaluacion=eva).first()
-            if nota:
-                notas_por_estudiante[est.id][eva.id] = nota.nota_res
-                total += float(nota.nota_res)  # Asegúrate de convertir a float si es Decimal
+            nota_obj = Resultado_Evaluacion_Tercero.objects.filter(
+                fk_estudiante_ter=est,
+                fk_evaluacion_ter=eva
+            ).last()
+
+            if nota_obj:
+                # Usar el nombre correcto del campo de nota y fecha
+                notas_est[eva.id] = nota_obj.nota_res_ter
+                suma += float(nota_obj.nota_res_ter)
                 count += 1
-                if not ultima_fecha or nota.fecha_res > ultima_fecha:
-                    ultima_fecha = nota.fecha_res
+                if not ultima_fecha or nota_obj.fecha_res_ter > ultima_fecha:
+                    ultima_fecha = nota_obj.fecha_res_ter
+            else:
+                notas_est[eva.id] = 0.0
 
-        if count > 0:
-            promedios[est.id] = round(total / count, 2)
-        else:
-            promedios[est.id] = None
-
+        notas_por_estudiante[est.id] = notas_est
+        promedios[est.id] = suma / count if count else 0
         fechas_ultimo_registro[est.id] = ultima_fecha
 
-    contexto = {
+    # Cargar plantilla
+    template = get_template('Administrador/Calificaciones/Reportes/reporte_calificaciones_tercero.html')
+    html = template.render({
         'estudiantes': estudiantes,
         'evaluaciones': evaluaciones,
         'notas_por_estudiante': notas_por_estudiante,
         'promedios': promedios,
         'fechas_ultimo_registro': fechas_ultimo_registro,
-    }
+    })
 
-    return render_to_pdf('pdfs/calificaciones_3ro.html', contexto)
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename="calificaciones_tercero.pdf"'
+
+    pisa_status = pisa.CreatePDF(BytesIO(html.encode('utf-8')), dest=response)
+
+    if pisa_status.err:
+        return HttpResponse('Error al generar el PDF', status=500)
+
+    return response
+
 
 
 ############################### LADO DEL USUARIO #################################

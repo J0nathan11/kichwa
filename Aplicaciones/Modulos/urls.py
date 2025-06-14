@@ -107,11 +107,11 @@ urlpatterns = [
 
 
     #-------------------------CALIFICACIONES-----------------------------
-    
     path('calificaciones/cuarto/', views.lista_calificaciones_cuarto, name='lista_calificaciones_cuarto'),
     path('calificaciones/tercero/', views.lista_calificaciones_tercero, name='lista_calificaciones_tercero'),
+
     #---------------------------DESCARGA PDF----------------------
-    path('calificaciones/pdf/', views.pdf_calificaciones_3ro, name='pdf_calificaciones_3ro'),
+    path('reporte_pdf_calificaciones_tercero/', views.generar_pdf_calificaciones_tercero, name='reporte_pdf_calificaciones_tercero'),
     
 
 
