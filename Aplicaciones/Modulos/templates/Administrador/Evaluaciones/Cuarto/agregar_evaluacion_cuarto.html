@@ -1,0 +1,124 @@
+{% extends 'plantillaAdmin.html' %}
+{% load static %}
+
+{% block body %}
+<br><br>
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header text-white" style="background-color: #286ea8;">
+            <h4 class="mb-0">Crear Evaluación Cuarto</h4>
+        </div>
+        <div class="card-body Mensaje-error" style="background-color: #bddde4">
+            <form method="post" id="frm_evaluacion">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">Título</label>
+                    <input type="text" name="titulo_eva_cua" id="titulo_eva_cua" class="form-control" placeholder="Ingresa el título de la evaluación" required>
+                    {% if error_titulo %}
+                        <small class="form-text text-danger">{{ error_titulo }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Descripción</label>
+                    <textarea name="descripcion_eva_cua" id="descripcion_eva_cua" class="form-control" rows="3" placeholder="Ingresa una descripción breve" required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Nivel Escolar</label>
+                    <input type="text" name="nivel_escolar_eva_cua" id="nivel_escolar_eva_cua" value="4to" class="form-control" readonly>
+                </div>
+
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" name="estado_eva_cua" id="estadoCheck">
+                    <label class="form-check-label" for="estadoCheck">Estado Activo</label>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Tipos de Aprendizaje (puedes seleccionar varios)</label>
+                    <div class="form-check mb-2">
+                        <input type="checkbox" class="form-check-input" id="selectAll">
+                        <label class="form-check-label fw-bold" for="selectAll">Seleccionar Todos</label>
+                    </div>
+                    <div class="row" id="checkbox-group">
+                        {% for valor, texto in tipos_aprendizaje %}
+                        <div class="col-md-4">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input tipo-check" name="tipo_aprendizaje_eva_cua" value="{{ valor }}" id="check_{{ valor }}">
+                                <label class="form-check-label" for="check_{{ valor }}">{{ texto }}</label>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div id="errorTipos" class="invalid-feedback d-block" style="display: none;">
+                        Debes seleccionar al menos un tipo de aprendizaje.
+                    </div>
+                </div>
+
+                <div class="text-end text-center">
+                    <button type="submit" class="btn btn-outline-primary">Crear Evaluación</button>
+                    &nbsp;&nbsp;
+                    <a class="btn btn-outline-secondary" href="{% url 'lista_evaluaciones_cuarto' %}">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#frm_evaluacion").validate({
+        rules: {
+            titulo_eva_cua: { required: true },
+            descripcion_eva_cua: { required: true }, 
+            nivel_escolar_eva_cua: { required: true }
+        },
+        messages: {
+            titulo_eva_cua: { required: "Ingrese un Título para Evaluación" },
+            descripcion_eva_cua: { required: "Ingrese una descripción" },
+            nivel_escolar_eva_cua: { required: "Seleccione un nivel escolar" }
+        }
+    });
+
+    // Solo letras y números sin caracteres especiales
+    document.addEventListener('DOMContentLoaded', function () {
+        const tituloInput = document.getElementById('titulo_eva_cua');
+        tituloInput.addEventListener('input', function () {
+            this.value = this.value.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]/g, '');
+        });
+    });
+
+    // Script para seleccionar o deseleccionar todos los tipos
+    document.addEventListener("DOMContentLoaded", function () {
+        const selectAllCheckbox = document.getElementById("selectAll");
+        const checkboxes = document.querySelectorAll(".tipo-check");
+
+        selectAllCheckbox.addEventListener("change", function () {
+            checkboxes.forEach(cb => cb.checked = selectAllCheckbox.checked);
+        });
+    });
+
+    // Validación visual de tipos de aprendizaje
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById('frm_evaluacion');
+        const checkboxes = document.querySelectorAll('.tipo-check');
+        const errorTipos = document.getElementById('errorTipos');
+        const checkboxGroup = document.getElementById('checkbox-group');
+
+        function validarTiposAprendizaje() {
+            return Array.from(checkboxes).some(cb => cb.checked);
+        }
+
+        form.addEventListener('submit', function (e) {
+            if (!validarTiposAprendizaje()) {
+                e.preventDefault();
+                checkboxGroup.classList.add("border", "border-danger", "rounded", "p-2");
+                errorTipos.style.display = 'block';
+                window.scrollTo({ top: form.offsetTop, behavior: 'smooth' });
+            } else {
+                checkboxGroup.classList.remove("border", "border-danger", "rounded", "p-2");
+                errorTipos.style.display = 'none';
+            }
+        });
+    });
+</script>
+{% endblock %}

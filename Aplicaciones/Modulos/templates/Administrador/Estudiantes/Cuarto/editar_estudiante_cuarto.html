@@ -7,25 +7,25 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header text-center" style="background-color: #286ea8;">
-                    <h4 style="color: white;">Agregar Estudiante</h4>
+                    <h4 style="color: white;">Editar Estudiante de Cuarto</h4>
                 </div>
                 <div class="card-body Mensaje-error" style="background-color: #bddde4">
-                    <form action="{% url 'agregar_estudiante' %}" method="POST" id="frm_estudiante">
+                    <form action="{% url 'editar_estudiante_cuarto' estudiante.id %}" method="POST" id="frm_estudiante_cuarto">
                         {% csrf_token %}
 
                         <div class="form-group">
                             <label for="nombres_est">Nombres:</label>
-                            <input type="text" name="nombres_est" id="nombres_est" class="form-control"  placeholder="Ingrese nombres del estudiante" required>
+                            <input type="text" name="nombres_est" id="nombres_est" class="form-control" value="{{ estudiante.nombres_est_cua }}" required>
                         </div>
 
                         <div class="form-group">
                             <label for="apellidos_est">Apellidos:</label>
-                            <input type="text" name="apellidos_est" id="apellidos_est" class="form-control" placeholder="Ingrese apellidos del estuidante" required>
+                            <input type="text" name="apellidos_est" id="apellidos_est" class="form-control" value="{{ estudiante.apellidos_est_cua }}" required>
                         </div>
 
                         <div class="form-group">
                             <label for="cedula_est">Cédula:</label>
-                            <input type="text" name="cedula_est" id="cedula_est" class="form-control" placeholder="Ingrese el número de cedula del estudiante" maxlength="10" required>
+                            <input type="text" name="cedula_est" id="cedula_est" class="form-control" value="{{ estudiante.cedula_est_cua }}" maxlength="10" required>
                             {% if error_cedula %}
                                 <small class="form-text text-danger">{{ error_cedula }}</small>
                             {% endif %}
@@ -35,33 +35,30 @@
                             <label for="genero_est">Género:</label>
                             <select name="genero_est" id="genero_est" class="form-control" required>
                                 <option value="">Seleccione</option>
-                                <option value="MASCULINO">MASCULINO</option>
-                                <option value="FEMENINO">FEMENINO</option>
+                                <option value="MASCULINO" {% if estudiante.genero_est_cua == 'MASCULINO' %}selected{% endif %}>MASCULINO</option>
+                                <option value="FEMENINO" {% if estudiante.genero_est_cua == 'FEMENINO' %}selected{% endif %}>FEMENINO</option>
                             </select>
                         </div>
 
                         <div class="form-group">
                             <label for="nivel_escolar_est">Nivel Escolar:</label>
-                            <select name="nivel_escolar_est" id="nivel_escolar_est" class="form-control" required>
-                                <option value="">Seleccione</option>
-                                <option value="4to">4to</option>
-                                <option value="3ro">3ro</option>
-                            </select>
+                            <input type="hidden" name="nivel_escolar_est" id="nivel_escolar_est" value="{{ estudiante.nivel_escolar_est_cua }}">
+                            <p class="form-control-plaintext">{{ estudiante.nivel_escolar_est_cua }}</p>
                         </div>
 
                         <div class="form-group">
                             <label for="estado_est">Estado:</label>
                             <select name="estado_est" id="estado_est" class="form-control" required>
                                 <option value="">Seleccione</option>
-                                <option value="ACTIVO">ACTIVO</option>
-                                <option value="INACTIVO">INACTIVO</option>
+                                <option value="ACTIVO" {% if estudiante.estado_est_cua == 'ACTIVO' %}selected{% endif %}>ACTIVO</option>
+                                <option value="INACTIVO" {% if estudiante.estado_est_cua == 'INACTIVO' %}selected{% endif %}>INACTIVO</option>
                             </select>
                         </div>
 
                         <div class="text-center mt-4">
-                            <button type="submit" class="btn btn-outline-primary">Guardar</button>
+                            <button type="submit" class="btn btn-outline-primary">Actualizar</button>
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <a href="{% url 'lista_estudiantes' %}" class="btn btn-outline-secondary">Cancelar</a>
+                            <a href="{% url 'lista_estudiantes_cuarto' %}" class="btn btn-outline-secondary">Cancelar</a>
                         </div>
                     </form>
                 </div>
@@ -71,7 +68,7 @@
 </div>
 
 <script>
-    $("#frm_estudiante").validate({
+    $("#frm_estudiante_cuarto").validate({
         rules: {
             nombres_est: { required: true },
             apellidos_est: { required: true },
@@ -94,20 +91,18 @@
         }
     });
 
-    // Solo números para cédula
     document.getElementById('cedula_est').addEventListener('input', function () {
         this.value = this.value.replace(/[^0-9]/g, '');
     });
-    // Solo palabras para nombre
-    document.getElementById('nombres_est').addEventListener('input', function (e) {
-        this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s()]/g, '');
+
+    document.getElementById('nombres_est').addEventListener('input', function () {
+        this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
     });
-    // Solo palabra para apellido
-    document.getElementById('apellidos_est').addEventListener('input', function (e) {
-        this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s()]/g, '');
+
+    document.getElementById('apellidos_est').addEventListener('input', function () {
+        this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
     });
 </script>
-
 
 <br>
 {% endblock %}

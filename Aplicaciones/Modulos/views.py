@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect,get_object_or_404
 from .models import Aprender_Objetos, Aprender_Meses, Aprender_Numeros, Aprender_Dias, Profesor
 from .models import Aprender_Saludos, Aprender_Animales, Aprender_Colores, Aprender_Cuerpo_Humano
-from .models import Aprender_Parentesco, Aprender_Elemento_Naturaleza, Estudiante, Evaluacion, Resultado_Evaluacion
+from .models import Aprender_Parentesco, Aprender_Elemento_Naturaleza, Estudiante_Cuarto, Estudiante_Tercero
+from .models import Evaluacion_Cuarto, Evaluacion_Tercero, Resultado_Evaluacion_Cuarto, Resultado_Evaluacion_Tercero
 from django.contrib import messages
 import re
 # 
@@ -837,16 +838,26 @@ def eliminar_elemento_naturaleza(request, id):
     return redirect('lista_elemento_naturaleza')
 
 
-# -----------------------ESTUDIANTES-----------------------
-def lista_estudiantes(request):
+#----------------------SELECCION DE ESTUDIANTE------------
+def seleccion_estudiantes(request):
     if not request.session.get('profesor_id'):
         return redirect('login_profesor')
     
-    estudiantes = Estudiante.objects.all()
-    return render(request, 'Administrador/Estudiantes/lista_estudiantes.html', {'estudiantes': estudiantes})
+    estudiantes = Profesor.objects.all()
+    return render(request, 'Administrador/Estudiantes/seleccion_estudiantes.html', {'estudiantes': estudiantes})
 
-# AGREGAR
-def agregar_estudiante(request):
+
+# -----------------------ESTUDIANTES CUARTO-----------------------
+
+def lista_estudiantes_cuarto(request):
+    if not request.session.get('profesor_id'):
+        return redirect('login_profesor')
+    
+    estudiantes = Estudiante_Cuarto.objects.all()
+    return render(request, 'Administrador/Estudiantes/Cuarto/lista_estudiantes_cuarto.html', {'estudiantes': estudiantes})
+
+# AGREGAR CUARTO
+def agregar_estudiante_cuarto(request):
     if not request.session.get('profesor_id'):
         return redirect('login_profesor')
 
@@ -860,30 +871,30 @@ def agregar_estudiante(request):
         nivel = request.POST.get('nivel_escolar_est')
         estado = request.POST.get('estado_est')
 
-        if Estudiante.objects.filter(cedula_est=cedula).exists():
+        if Estudiante_Cuarto.objects.filter(cedula_est_cua=cedula).exists():
             error_cedula = f'La cédula "{cedula}" ya está registrada.'
         else:
-            Estudiante.objects.create(
-                nombres_est=nombres,
-                apellidos_est=apellidos,
-                cedula_est=cedula,
-                genero_est=genero,
-                nivel_escolar_est=nivel,
-                estado_est=estado
+            Estudiante_Cuarto.objects.create(
+                nombres_est_cua=nombres,
+                apellidos_est_cua=apellidos,
+                cedula_est_cua=cedula,
+                genero_est_cua=genero,
+                nivel_escolar_est_cua=nivel,
+                estado_est_cua=estado
             )
-            messages.success(request, "Estudiante agregado exitosamente.")
-            return redirect('lista_estudiantes')
+            messages.success(request, "Estudiante de Cuarto agregado exitosamente.")
+            return redirect('lista_estudiantes_cuarto')
 
-    return render(request, 'Administrador/Estudiantes/agregar_estudiante.html', {
+    return render(request, 'Administrador/Estudiantes/Cuarto/agregar_estudiante_cuarto.html', {
         'error_cedula': error_cedula,
     })
 
-# EDITAR
-def editar_estudiante(request, id_est):
+# EDITAR CUARTO
+def editar_estudiante_cuarto(request, id_est):
     if not request.session.get('profesor_id'):
         return redirect('login_profesor')
 
-    estudiante = get_object_or_404(Estudiante, id=id_est)
+    estudiante = get_object_or_404(Estudiante_Cuarto, id=id_est)
     error_cedula = None
 
     if request.method == 'POST':
@@ -894,35 +905,124 @@ def editar_estudiante(request, id_est):
         nivel = request.POST.get('nivel_escolar_est')
         estado = request.POST.get('estado_est')
 
-        # Validar si ya existe otra cédula igual en otro estudiante
-        if Estudiante.objects.filter(cedula_est=cedula).exclude(id=id_est).exists():
+        if Estudiante_Cuarto.objects.filter(cedula_est_cua=cedula).exclude(id=id_est).exists():
             error_cedula = f'La cédula "{cedula}" ya está registrada en otro estudiante.'
         else:
-            estudiante.nombres_est = nombres
-            estudiante.apellidos_est = apellidos
-            estudiante.cedula_est = cedula
-            estudiante.genero_est = genero
-            estudiante.nivel_escolar_est = nivel
-            estudiante.estado_est = estado
+            estudiante.nombres_est_cua = nombres
+            estudiante.apellidos_est_cua = apellidos
+            estudiante.cedula_est_cua = cedula
+            estudiante.genero_est_cua = genero
+            estudiante.nivel_escolar_est_cua = nivel
+            estudiante.estado_est_cua = estado
             estudiante.save()
 
-            messages.success(request, "Estudiante actualizado exitosamente.")
-            return redirect('lista_estudiantes')
+            messages.success(request, "Estudiante de Cuarto actualizado exitosamente.")
+            return redirect('lista_estudiantes_cuarto')
 
-    return render(request, 'Administrador/Estudiantes/editar_estudiante.html', {
+    return render(request, 'Administrador/Estudiantes/Cuarto/editar_estudiante_cuarto.html', {
         'estudiante': estudiante,
         'error_cedula': error_cedula
     })
 
-# ELIMINAR
-def eliminar_estudiante(request, id):
+# ELIMINAR CUARTO
+def eliminar_estudiante_cuarto(request, id):
     if not request.session.get('profesor_id'):
         return redirect('login_profesor')
 
-    estudiante = get_object_or_404(Estudiante, id=id)
+    estudiante = get_object_or_404(Estudiante_Cuarto, id=id)
     estudiante.delete()
-    messages.success(request, "Estudiante eliminado correctamente.")
-    return redirect('lista_estudiantes')
+    messages.success(request, "Estudiante de Cuarto eliminado correctamente.")
+    return redirect('lista_estudiantes_cuarto')
+
+
+
+# -----------------------ESTUDIANTES TERCERO-----------------------
+def lista_estudiantes_tercero(request):
+    if not request.session.get('profesor_id'):
+        return redirect('login_profesor')
+    
+    estudiantes = Estudiante_Tercero.objects.all()
+    return render(request, 'Administrador/Estudiantes/Tercero/lista_estudiantes_tercero.html', {'estudiantes': estudiantes})
+
+# AGREGAR TERCERO
+def agregar_estudiante_tercero(request):
+    if not request.session.get('profesor_id'):
+        return redirect('login_profesor')
+
+    error_cedula = None
+
+    if request.method == 'POST':
+        nombres = request.POST.get('nombres_est').strip()
+        apellidos = request.POST.get('apellidos_est').strip()
+        cedula = request.POST.get('cedula_est').strip()
+        genero = request.POST.get('genero_est')
+        nivel = request.POST.get('nivel_escolar_est')
+        estado = request.POST.get('estado_est')
+
+        if Estudiante_Tercero.objects.filter(cedula_est_ter=cedula).exists():
+            error_cedula = f'La cédula "{cedula}" ya está registrada.'
+        else:
+            Estudiante_Tercero.objects.create(
+                nombres_est_ter=nombres,
+                apellidos_est_ter=apellidos,
+                cedula_est_ter=cedula,
+                genero_est_ter=genero,
+                nivel_escolar_est_ter=nivel,
+                estado_est_ter=estado
+            )
+            messages.success(request, "Estudiante de Tercero agregado exitosamente.")
+            return redirect('lista_estudiantes_tercero')
+
+    return render(request, 'Administrador/Estudiantes/Tercero/agregar_estudiante_tercero.html', {
+        'error_cedula': error_cedula,
+    })
+
+# EDITAR TERCERO
+def editar_estudiante_tercero(request, id_est):
+    if not request.session.get('profesor_id'):
+        return redirect('login_profesor')
+
+    estudiante = get_object_or_404(Estudiante_Tercero, id=id_est)
+    error_cedula = None
+
+    if request.method == 'POST':
+        nombres = request.POST.get('nombres_est').strip()
+        apellidos = request.POST.get('apellidos_est').strip()
+        cedula = request.POST.get('cedula_est').strip()
+        genero = request.POST.get('genero_est')
+        nivel = request.POST.get('nivel_escolar_est')
+        estado = request.POST.get('estado_est')
+
+        if Estudiante_Tercero.objects.filter(cedula_est_ter=cedula).exclude(id=id_est).exists():
+            error_cedula = f'La cédula "{cedula}" ya está registrada en otro estudiante.'
+        else:
+            estudiante.nombres_est_ter = nombres
+            estudiante.apellidos_est_ter = apellidos
+            estudiante.cedula_est_ter = cedula
+            estudiante.genero_est_ter = genero
+            estudiante.nivel_escolar_est_ter = nivel
+            estudiante.estado_est_ter = estado
+            estudiante.save()
+
+            messages.success(request, "Estudiante de Tercero actualizado exitosamente.")
+            return redirect('lista_estudiantes_tercero')
+
+    return render(request, 'Administrador/Estudiantes/Tercero/editar_estudiante_tercero.html', {
+        'estudiante': estudiante,
+        'error_cedula': error_cedula
+    })
+
+# ELIMINAR TERCERO
+def eliminar_estudiante_tercero(request, id):
+    if not request.session.get('profesor_id'):
+        return redirect('login_profesor')
+
+    estudiante = get_object_or_404(Estudiante_Tercero, id=id)
+    estudiante.delete()
+    messages.success(request, "Estudiante de Tercero eliminado correctamente.")
+    return redirect('lista_estudiantes_tercero')
+
+
 
 
 #----------------------PROFESORES------------
@@ -933,6 +1033,9 @@ def lista_profesores(request):
     profesores = Profesor.objects.all()
     return render(request, 'Administrador/Profesores/lista_profesores.html', {'profesores': profesores})
 
+
+
+
 #----------------------SELECCION DE EVALUACION------------
 def seleccion_evaluacion(request):
     if not request.session.get('profesor_id'):
@@ -941,10 +1044,9 @@ def seleccion_evaluacion(request):
     evaluaciones = Profesor.objects.all()
     return render(request, 'Administrador/Evaluaciones/seleccion_evaluacion.html', {'evaluaciones': evaluaciones})
 
-
-#------------EVALUACION-----------------------
-# AGREGAR
+#--------EVALUACION CUARTO------------------------
 from django.utils import timezone
+
 TIPOS_APRENDIZAJE = [
     ("objetos", "Objetos"),
     ("meses", "Meses"),
@@ -958,91 +1060,205 @@ TIPOS_APRENDIZAJE = [
     ("naturaleza", "Elementos de la Naturaleza"),
 ]
 
-def agregar_evaluacion(request):
+# AGREGAR EVALUACION CUARTO
+def agregar_evaluacion_cuarto(request):
     error_titulo = None
+    max_evaluaciones = 3
+    total_evaluaciones = Evaluacion_Cuarto.objects.count()
+
+    if total_evaluaciones >= max_evaluaciones:
+        messages.warning(request, "Ya has alcanzado el límite de 3 evaluaciones para Cuarto.")
+        return redirect("lista_evaluaciones_cuarto")
 
     if request.method == "POST":
-        titulo = request.POST["titulo_eva"].strip()
-        descripcion = request.POST["descripcion_eva"]
-        nivel_escolar = request.POST.get("nivel_escolar_eva", "").strip()  
-        estado = request.POST.get("estado_eva") == "on"
-        tipos = request.POST.getlist("tipo_aprendizaje_eva")
+        titulo = request.POST.get("titulo_eva_cua", "").strip()
+        descripcion = request.POST.get("descripcion_eva_cua", "")
+        nivel_escolar = request.POST.get("nivel_escolar_eva_cua", "").strip()
+        estado = request.POST.get("estado_eva_cua") == "on"
+        tipos = request.POST.getlist("tipo_aprendizaje_eva_cua")
 
-        # Verificamos si el título ya existe (ignorando mayúsculas/minúsculas)
-        if Evaluacion.objects.filter(titulo_eva__iexact=titulo).exists():
+        if Evaluacion_Cuarto.objects.filter(titulo_eva_cua__iexact=titulo).exists():
             error_titulo = f'El título "{titulo}" ya está registrado.'
         else:
-            Evaluacion.objects.create(
-                titulo_eva=titulo,
-                descripcion_eva=descripcion,
-                nivel_escolar_eva=nivel_escolar,  
-                estado_eva=estado,
-                tipo_aprendizaje_eva=",".join(tipos),
-                fecha_creacion_eva=timezone.now()
+            Evaluacion_Cuarto.objects.create(
+                titulo_eva_cua=titulo,
+                descripcion_eva_cua=descripcion,
+                nivel_escolar_eva_cua=nivel_escolar,
+                estado_eva_cua=estado,
+                tipo_aprendizaje_eva_cua=",".join(tipos),
+                fecha_creacion_eva_cua=timezone.now()
             )
             messages.success(request, "Evaluación agregada exitosamente.")
-            return redirect("lista_evaluaciones")
+            return redirect("lista_evaluaciones_cuarto")
 
-    return render(request, "Administrador/Evaluaciones/Cuarto/agregar_evaluacion.html", {
+    return render(request, "Administrador/Evaluaciones/Cuarto/agregar_evaluacion_cuarto.html", {
         "tipos_aprendizaje": TIPOS_APRENDIZAJE,
         "error_titulo": error_titulo
     })
 
-def lista_evaluaciones(request):
+# LISTAR EVALUACIONES CUARTO
+def lista_evaluaciones_cuarto(request):
     if not request.session.get('profesor_id'):
         return redirect('login_profesor')
 
-    evaluaciones = Evaluacion.objects.all()
+    evaluaciones = Evaluacion_Cuarto.objects.all()
     for eva in evaluaciones:
-        eva.tipos_lista = [t.strip() for t in eva.tipo_aprendizaje_eva.split(",")] if eva.tipo_aprendizaje_eva else []
+        eva.tipos_lista = [t.strip() for t in eva.tipo_aprendizaje_eva_cua.split(",")] if eva.tipo_aprendizaje_eva_cua else []
 
-    total_evaluaciones = evaluaciones.count()  # <-- Conteo
+    total_evaluaciones = evaluaciones.count()
 
-    return render(request, 'Administrador/Evaluaciones/Cuarto/lista_evaluacion.html', {
+    return render(request, 'Administrador/Evaluaciones/Cuarto/lista_evaluacion_cuarto.html', {
         'evaluaciones': evaluaciones,
-        'total_evaluaciones': total_evaluaciones  # <-- Enviamos a la plantilla
+        'total_evaluaciones': total_evaluaciones
     })
 
 
-# EDITAR
-def editar_evaluacion(request, id):
-    evaluacion = get_object_or_404(Evaluacion, id=id)
+# EDITAR EVALUACION CUARTO
+def editar_evaluacion_cuarto(request, id):
+    evaluacion = get_object_or_404(Evaluacion_Cuarto, id=id)
     error_titulo = None
 
     if request.method == "POST":
-        titulo = request.POST["titulo_eva"].strip()
-        descripcion = request.POST["descripcion_eva"]
-        nivel_escolar = request.POST.get("nivel_escolar_eva", "").strip()
-        estado = request.POST.get("estado_eva") == "on"
-        tipos = request.POST.getlist("tipo_aprendizaje_eva")
+        titulo = request.POST.get("titulo_eva_cua", "").strip()
+        descripcion = request.POST.get("descripcion_eva_cua", "")
+        nivel_escolar = request.POST.get("nivel_escolar_eva_cua", "").strip()
+        estado = request.POST.get("estado_eva_cua") == "on"
+        tipos = request.POST.getlist("tipo_aprendizaje_eva_cua")
 
-        # Verifica título duplicado (ignorando el actual)
-        if Evaluacion.objects.filter(titulo_eva__iexact=titulo).exclude(id=evaluacion.id).exists():
+        if Evaluacion_Cuarto.objects.filter(titulo_eva_cua__iexact=titulo).exclude(id=evaluacion.id).exists():
             error_titulo = f'El título "{titulo}" ya está registrado.'
         else:
-            evaluacion.titulo_eva = titulo
-            evaluacion.descripcion_eva = descripcion
-            evaluacion.nivel_escolar_eva = nivel_escolar
-            evaluacion.estado_eva = estado
-            evaluacion.tipo_aprendizaje_eva = ",".join(tipos)
+            evaluacion.titulo_eva_cua = titulo
+            evaluacion.descripcion_eva_cua = descripcion
+            evaluacion.nivel_escolar_eva_cua = nivel_escolar
+            evaluacion.estado_eva_cua = estado
+            evaluacion.tipo_aprendizaje_eva_cua = ",".join(tipos)
             evaluacion.save()
             messages.success(request, "Evaluación actualizada exitosamente.")
-            return redirect("lista_evaluaciones")
+            return redirect("lista_evaluaciones_cuarto")
 
-    evaluacion.tipos_lista = [t.strip() for t in evaluacion.tipo_aprendizaje_eva.split(",")] if evaluacion.tipo_aprendizaje_eva else []
+    evaluacion.tipos_lista = [t.strip() for t in evaluacion.tipo_aprendizaje_eva_cua.split(",")] if evaluacion.tipo_aprendizaje_eva_cua else []
 
-    return render(request, "Administrador/Evaluaciones/Cuarto/editar_evaluacion.html", {
+    return render(request, "Administrador/Evaluaciones/Cuarto/editar_evaluacion_cuarto.html", {
+        "evaluacion": evaluacion,
+        "tipos_aprendizaje": TIPOS_APRENDIZAJE,
+        "error_titulo": error_titulo
+    })
+
+
+# ELIMINAR EVALUACION CUARTO
+def eliminar_evaluacion_cuarto(request, id):
+    evaluacion = get_object_or_404(Evaluacion_Cuarto, id=id)
+    evaluacion.delete()
+    messages.success(request, "Evaluación eliminada correctamente.")
+    return redirect("lista_evaluaciones_cuarto")
+
+
+#---------------EVALUACION TERCERO-------------------
+from django.utils import timezone
+
+TIPOS_APRENDIZAJE = [
+    ("objetos", "Objetos"),
+    ("meses", "Meses"),
+    ("numeros", "Números"),
+    ("dias", "Días"),
+    ("saludos", "Saludos"),
+    ("animales", "Animales"),
+    ("colores", "Colores"),
+    ("cuerpo_humano", "Cuerpo Humano"),
+    ("parentesco", "Parentesco"),
+    ("naturaleza", "Elementos de la Naturaleza"),
+]
+
+def agregar_evaluacion_tercero(request):
+    error_titulo = None
+    max_evaluaciones = 3
+    total_evaluaciones = Evaluacion_Tercero.objects.count()
+
+    if total_evaluaciones >= max_evaluaciones:
+        messages.warning(request, "Ya has alcanzado el límite de 3 evaluaciones para Tercero.")
+        return redirect("lista_evaluaciones_tercero")
+
+    if request.method == "POST":
+        titulo = request.POST.get("titulo_eva_ter", "").strip()
+        descripcion = request.POST.get("descripcion_eva_ter", "")
+        nivel_escolar = request.POST.get("nivel_escolar_eva_ter", "").strip()
+        estado = request.POST.get("estado_eva_ter") == "on"
+        tipos = request.POST.getlist("tipo_aprendizaje_eva_ter")
+
+        if Evaluacion_Tercero.objects.filter(titulo_eva_ter__iexact=titulo).exists():
+            error_titulo = f'El título "{titulo}" ya está registrado.'
+        else:
+            Evaluacion_Tercero.objects.create(
+                titulo_eva_ter=titulo,
+                descripcion_eva_ter=descripcion,
+                nivel_escolar_eva_ter=nivel_escolar,
+                estado_eva_ter=estado,
+                tipo_aprendizaje_eva_ter=",".join(tipos),
+            )
+            messages.success(request, "Evaluación agregada exitosamente.")
+            return redirect("lista_evaluaciones_tercero")
+
+    return render(request, "Administrador/Evaluaciones/Tercero/agregar_evaluacion_tercero.html", {
+        "tipos_aprendizaje": TIPOS_APRENDIZAJE,
+        "error_titulo": error_titulo
+    })
+
+# LISTAR
+def lista_evaluaciones_tercero(request):
+    if not request.session.get('profesor_id'):
+        return redirect('login_profesor')
+
+    evaluaciones = Evaluacion_Tercero.objects.all()
+    for eva in evaluaciones:
+        eva.tipos_lista = [t.strip() for t in eva.tipo_aprendizaje_eva_ter.split(",")] if eva.tipo_aprendizaje_eva_ter else []
+
+    total_evaluaciones = evaluaciones.count()
+
+    return render(request, 'Administrador/Evaluaciones/Tercero/lista_evaluacion_tercero.html', {
+        'evaluaciones': evaluaciones,
+        'total_evaluaciones': total_evaluaciones
+    })
+
+# EDITAR
+def editar_evaluacion_tercero(request, id):
+    evaluacion = get_object_or_404(Evaluacion_Tercero, id=id)
+    error_titulo = None
+
+    if request.method == "POST":
+        titulo = request.POST.get("titulo_eva_ter", "").strip()
+        descripcion = request.POST.get("descripcion_eva_ter", "")
+        nivel_escolar = request.POST.get("nivel_escolar_eva_ter", "").strip()
+        estado = request.POST.get("estado_eva_ter") == "on"
+        tipos = request.POST.getlist("tipo_aprendizaje_eva_ter")
+
+        if Evaluacion_Tercero.objects.filter(titulo_eva_ter__iexact=titulo).exclude(id=evaluacion.id).exists():
+            error_titulo = f'El título "{titulo}" ya está registrado.'
+        else:
+            evaluacion.titulo_eva_ter = titulo
+            evaluacion.descripcion_eva_ter = descripcion
+            evaluacion.nivel_escolar_eva_ter = nivel_escolar
+            evaluacion.estado_eva_ter = estado
+            evaluacion.tipo_aprendizaje_eva_ter = ",".join(tipos)
+            evaluacion.save()
+            messages.success(request, "Evaluación actualizada exitosamente.")
+            return redirect("lista_evaluaciones_tercero")
+
+    evaluacion.tipos_lista = [t.strip() for t in evaluacion.tipo_aprendizaje_eva_ter.split(",")] if evaluacion.tipo_aprendizaje_eva_ter else []
+
+    return render(request, "Administrador/Evaluaciones/Tercero/editar_evaluacion_tercero.html", {
         "evaluacion": evaluacion,
         "tipos_aprendizaje": TIPOS_APRENDIZAJE,
         "error_titulo": error_titulo
     })
 
 # ELIMINAR
-def eliminar_evaluacion(request, id):
-    evaluacion = get_object_or_404(Evaluacion, id=id)
+def eliminar_evaluacion_tercero(request, id):
+    evaluacion = get_object_or_404(Evaluacion_Tercero, id=id)
     evaluacion.delete()
     messages.success(request, "Evaluación eliminada correctamente.")
-    return redirect("lista_evaluaciones")
+    return redirect("lista_evaluaciones_tercero")
+
 
 
 
@@ -1264,9 +1480,6 @@ def pdf_calificaciones_3ro(request):
     return render_to_pdf('pdfs/calificaciones_3ro.html', contexto)
 
 
-
-
-
 ############################### LADO DEL USUARIO #################################
 
 # LOGIN ESTUDIANTE
@@ -1276,36 +1489,68 @@ def login_estudiante(request):
         apellidos = request.POST.get('apellidos').strip()
         cedula = request.POST.get('cedula').strip()
 
-        estudiante = Estudiante.objects.filter(
-            nombres_est__iexact=nombres,
-            apellidos_est__iexact=apellidos,
-            cedula_est=cedula
+        # Buscar en estudiantes de tercero
+        estudiante_ter = Estudiante_Tercero.objects.filter(
+            nombres_est_ter__iexact=nombres,
+            apellidos_est_ter__iexact=apellidos,
+            cedula_est_ter=cedula
         ).first()
 
-        if estudiante:
-            request.session['estudiante_id'] = estudiante.id
-            return redirect('ver_evaluacion')
-        else:
-            messages.error(request, "Estudiante no encontrado, verifique sus datos.")
-    
+        if estudiante_ter:
+            request.session['estudiante_id'] = estudiante_ter.id
+            request.session['nivel'] = 'tercero'
+            return redirect('ver_evaluacion_tercero')
+
+        # Buscar en estudiantes de cuarto
+        estudiante_cua = Estudiante_Cuarto.objects.filter(
+            nombres_est_cua__iexact=nombres,
+            apellidos_est_cua__iexact=apellidos,
+            cedula_est_cua=cedula
+        ).first()
+
+        if estudiante_cua:
+            request.session['estudiante_id'] = estudiante_cua.id
+            request.session['nivel'] = 'cuarto'
+            return redirect('ver_evaluacion_cuarto')
+
+        messages.error(request, 'Datos incorrectos. Verifica tu cédula, nombres o apellidos.')
+
     return render(request, 'Login/login_estudiante.html')
 
-
 # --------------VER TIPO EVALUACION -----------------
-def ver_evaluacion(request):
+def ver_evaluacion_tercero(request):
     estudiante_id = request.session.get('estudiante_id')
-    if not estudiante_id:
+    if not estudiante_id or request.session.get('nivel') != 'tercero':
         return redirect('login_estudiante')
 
-    estudiante = Estudiante.objects.filter(id=estudiante_id).first()
+    estudiante = Estudiante_Tercero.objects.filter(id=estudiante_id).first()
     if not estudiante:
         return redirect('login_estudiante')
 
-    evaluaciones = Evaluacion.objects.filter(estado_eva=True)
+    # Corrección aquí
+    evaluaciones = Evaluacion_Tercero.objects.filter(estado_eva_ter=True)
 
-    return render(request, 'Evaluacion/ver_evaluacion.html', {
+    return render(request, 'Evaluacion/ver_evaluacion_tercero.html', {
         'estudiante': estudiante,
-        'evaluaciones': evaluaciones,  # NOTA: plural
+        'evaluaciones': evaluaciones
+    })
+
+
+def ver_evaluacion_cuarto(request):
+    estudiante_id = request.session.get('estudiante_id')
+    if not estudiante_id or request.session.get('nivel') != 'cuarto':
+        return redirect('login_estudiante')
+
+    estudiante = Estudiante_Cuarto.objects.filter(id=estudiante_id).first()
+    if not estudiante:
+        return redirect('login_estudiante')
+
+    # Corrección aquí
+    evaluaciones = Evaluacion_Cuarto.objects.filter(estado_eva_cua=True)
+
+    return render(request, 'Evaluacion/ver_evaluacion_cuarto.html', {
+        'estudiante': estudiante,
+        'evaluaciones': evaluaciones
     })
 
 #--------------------VER EVALUACION 10 PREGUNTAS-------------------------

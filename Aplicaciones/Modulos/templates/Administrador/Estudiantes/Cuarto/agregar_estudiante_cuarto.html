@@ -1,0 +1,109 @@
+{% extends 'plantillaAdmin.html' %}
+
+{% block body %}
+<br><br>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center" style="background-color: #286ea8;">
+                    <h4 style="color: white;">Agregar Estudiante de Cuarto</h4>
+                </div>
+                <div class="card-body Mensaje-error" style="background-color: #bddde4">
+                    <form action="{% url 'agregar_estudiante_cuarto' %}" method="POST" id="frm_estudiante_cuarto">
+                        {% csrf_token %}
+
+                        <div class="form-group">
+                            <label for="nombres_est">Nombres:</label>
+                            <input type="text" name="nombres_est" id="nombres_est_cua" class="form-control" placeholder="Ingrese nombres del estudiante" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="apellidos_est">Apellidos:</label>
+                            <input type="text" name="apellidos_est" id="apellidos_est_cua" class="form-control" placeholder="Ingrese apellidos del estudiante" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cedula_est">Cédula:</label>
+                            <input type="text" name="cedula_est" id="cedula_est_cua" class="form-control" placeholder="Ingrese el número de cédula del estudiante" maxlength="10" required>
+                            {% if error_cedula %}
+                                <small class="form-text text-danger">{{ error_cedula }}</small>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="genero_est">Género:</label>
+                            <select name="genero_est" id="genero_est_cua" class="form-control" required>
+                                <option value="">Seleccione</option>
+                                <option value="MASCULINO">MASCULINO</option>
+                                <option value="FEMENINO">FEMENINO</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="nivel_escolar_est">Nivel Escolar:</label>
+                            <input type="hidden" name="nivel_escolar_est" id="nivel_escolar_est_cua" value="4to">
+                            <p class="form-control-plaintext">4to</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="estado_est">Estado:</label>
+                            <select name="estado_est" id="estado_est" class="form-control" required>
+                                <option value="">Seleccione</option>
+                                <option value="ACTIVO">ACTIVO</option>
+                                <option value="INACTIVO">INACTIVO</option>
+                            </select>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-outline-primary">Guardar</button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a href="{% url 'lista_estudiantes_cuarto' %}" class="btn btn-outline-secondary">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#frm_estudiante_cuarto").validate({
+        rules: {
+            nombres_est: { required: true },
+            apellidos_est: { required: true },
+            cedula_est: { required: true, minlength: 10, maxlength: 10 },
+            genero_est: { required: true },
+            nivel_escolar_est: { required: true },
+            estado_est: { required: true }
+        },
+        messages: {
+            nombres_est: { required: "Ingrese los nombres" },
+            apellidos_est: { required: "Ingrese los apellidos" },
+            cedula_est: {
+                required: "Ingrese la cédula",
+                minlength: "La cédula debe tener 10 dígitos",
+                maxlength: "La cédula debe tener 10 dígitos"
+            },
+            genero_est: { required: "Seleccione el género" },
+            nivel_escolar_est: { required: "Ingrese el nivel escolar" },
+            estado_est: { required: "Seleccione el estado" }
+        }
+    });
+
+    // Solo números para cédula
+    document.getElementById('cedula_est_cua').addEventListener('input', function () {
+        this.value = this.value.replace(/[^0-9]/g, '');
+    });
+
+    // Solo letras para nombres y apellidos
+    document.getElementById('nombres_est_cua').addEventListener('input', function () {
+        this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+    });
+    document.getElementById('apellidos_est_cua').addEventListener('input', function () {
+        this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+    });
+</script>
+
+<br>
+{% endblock %}

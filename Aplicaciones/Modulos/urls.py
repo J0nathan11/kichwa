@@ -68,28 +68,45 @@ urlpatterns = [
     path('elemento_naturaleza/editar/<int:id>/', views.editar_elemento_naturaleza, name='editar_elemento_naturaleza'),
     path('elemento_naturaleza/eliminar/<int:id>/', views.eliminar_elemento_naturaleza, name='eliminar_elemento_naturaleza'),
 
-    #---------------------------ESTUDIANTES-----------------------------
-    path('estudiantes/', views.lista_estudiantes, name='lista_estudiantes'),
-    path('estudiante/agregar', views.agregar_estudiante, name='agregar_estudiante'),
-    path('estudiante/editar/<int:id_est>/', views.editar_estudiante, name='editar_estudiante'),
-    path('estudiante/eliminar/<int:id>/', views.eliminar_estudiante, name='eliminar_estudiante'),
+    #---------------------------ESTUDIANTES CUARTO-----------------------------
+    path('estudiantes_cuarto/', views.lista_estudiantes_cuarto, name='lista_estudiantes_cuarto'),
+    path('estudiante_cuarto/agregar', views.agregar_estudiante_cuarto, name='agregar_estudiante_cuarto'),
+    path('estudiante_cuarto/editar/<int:id_est>/', views.editar_estudiante_cuarto, name='editar_estudiante_cuarto'),
+    path('estudiante_cuarto/eliminar/<int:id>/', views.eliminar_estudiante_cuarto, name='eliminar_estudiante_cuarto'),
+
+        #---------------------------ESTUDIANTES TERCERO-----------------------------
+    path('estudiantes_tercero/', views.lista_estudiantes_tercero, name='lista_estudiantes_tercero'),
+    path('estudiante_tercero/agregar', views.agregar_estudiante_tercero, name='agregar_estudiante_tercero'),
+    path('estudiante_tercero/editar/<int:id_est>/', views.editar_estudiante_tercero, name='editar_estudiante_tercero'),
+    path('estudiante_tercero/eliminar/<int:id>/', views.eliminar_estudiante_tercero, name='eliminar_estudiante_tercero'),
+
 
     #-------------------------PROFESORES-------------------------------------
     path('profesores/', views.lista_profesores, name='lista_profesores'),
     path('profesor/configuracion/', views.configuracion_profesor, name='configuracion_profesor'),
 
-    #----------------------------SELECCIONDE EVALUACIONES----------------
+    #----------------------------SELECCION DE EVALUACIONES----------------
     path('evaluacion/seleccion', views.seleccion_evaluacion, name='seleccion_evaluacion'),
+    #----------------------------SELECCIOND DE ESTUDIANTES----------------
+    path('estudiantes/seleccion', views.seleccion_estudiantes, name='seleccion_estudiantes'),
 
-    #--------------------------EVALUACIONES---------------------------
-    path('evaluacion/', views.lista_evaluaciones, name='lista_evaluaciones'),
-    path('agregar_evaluacion/', views.agregar_evaluacion, name='agregar_evaluacion'),
-    path('evaluacion/editar/<int:id>/', views.editar_evaluacion, name='editar_evaluacion'),
+    #--------------------------EVALUACIONES CUARTO---------------------------
+    path('evaluaciones/cuarto/', views.lista_evaluaciones_cuarto, name='lista_evaluaciones_cuarto'),
+    path('evaluaciones/cuarto/agregar/', views.agregar_evaluacion_cuarto, name='agregar_evaluacion_cuarto'),
+    path('evaluaciones/cuarto/editar/<int:id>/', views.editar_evaluacion_cuarto, name='editar_evaluacion_cuarto'),
+    path('evaluaciones/cuarto/eliminar/<int:id>/', views.eliminar_evaluacion_cuarto, name='eliminar_evaluacion_cuarto'),
+
+    #-------------------------------EVALUACIONES TERCERO-------------------------------
+    path('evaluaciones/tercero/', views.lista_evaluaciones_tercero, name='lista_evaluaciones_tercero'),
+    path('evaluaciones/tercero/agregar/', views.agregar_evaluacion_tercero, name='agregar_evaluacion_tercero'),
+    path('evaluaciones/tercero/editar/<int:id>/', views.editar_evaluacion_tercero, name='editar_evaluacion_tercero'),
+    path('evaluaciones/tercero/eliminar/<int:id>/', views.eliminar_evaluacion_tercero, name='eliminar_evaluacion_tercero'),
+
 
 
     #-------------------------CALIFICACIONES-----------------------------
     path('calificaciones/', views.lista_calificaciones, name='lista_calificaciones'),
-    path('evaluacion/eliminar/<int:id>/', views.eliminar_evaluacion, name='eliminar_evaluacion'),
+    
     path('lista_calificaciones_3ro/', views.lista_calificaciones_3ro, name='lista_calificaciones_3ro'),
     path('lista_calificaciones_4to/', views.lista_calificaciones_4to, name='lista_calificaciones_4to'),
 
@@ -105,7 +122,12 @@ urlpatterns = [
 
     # -------------------------------EVALUACION------------------
     path('login_estudiante/', views.login_estudiante, name='login_estudiante'),
-    path('ver_evaluacion/', views.ver_evaluacion, name='ver_evaluacion'),
+    # SELECCION DE EVALUACION
+    path('login-estudiante/', views.login_estudiante, name='login_estudiante'),
+    path('ver_evaluaciones/tercero/', views.ver_evaluacion_tercero, name='ver_evaluacion_tercero'),
+    path('ver_evaluaciones/cuarto/', views.ver_evaluacion_cuarto, name='ver_evaluacion_cuarto'),
+
+
     path('evaluacion/<int:evaluacion_id>/', views.mostrar_evaluacion, name='mostrar_evaluacion'),
 
     #---------------------------------APRENDER---------------------------

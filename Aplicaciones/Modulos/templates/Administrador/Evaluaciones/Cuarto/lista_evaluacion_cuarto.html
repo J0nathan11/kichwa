@@ -1,0 +1,106 @@
+{% extends 'plantillaAdmin.html' %}
+
+{% block body %}
+<style>
+    #tbl-Evaluaciones {
+        background-color: #a0ccf3;
+    }
+
+    #tbl-Evaluaciones th {
+        background-color: #1f77b4;
+        color: white;
+    }
+
+    #tbl-Evaluaciones td {
+        color: #333;
+    }
+
+    #tbl-Evaluaciones tr:hover {
+        background-color: #d1e7f7;
+    }
+</style>
+
+<br><br><br><br>
+<div>
+    <br>
+    <div class="card-title text-center">
+        <h3><b>Listado de Evaluaciones</b></h3>
+        <h3><b>Cuarto Año de Educación Básica</b></h3>
+    </div>
+</div>
+<div style="width: 70%; margin-left: 170px;">
+    <hr style="height: 3px; background-color: #000; border: none;">
+</div>
+<br>
+<div class="text-center">
+    {% if total_evaluaciones < 3 %}
+        <a href="{% url 'agregar_evaluacion_cuarto' %}" class="btn btn-outline-info">
+            <i class="fas fa-plus"></i> Crear Evaluación
+        </a>
+    {% else %}
+        <button class="btn btn-outline-secondary" disabled>
+            <i class="fas fa-ban"></i> Límite de Evaluaciones (3)
+        </button>
+        <p style="color: red; margin-top: 10px;"><b>¡Ya se alcanzó el límite de 3 evaluaciones!</b></p>
+    {% endif %}
+</div>
+<div style="margin-left: 70px;">
+    <a href="{% url 'seleccion_evaluacion' %}" class="btn btn-outline-secondary"> VOLVER</a>
+</div>
+
+<br>
+<div class="container" style="width: 90%;">
+    <table class="table table-bordered table-striped table-hover" id="tbl-Evaluaciones">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Título</th>
+                <th>Descripción</th>
+                <th>Tipos de Aprendizaje</th>
+                <th>Fecha de Creación</th>
+                <th>Última Actualización</th>
+                <th>Estado</th>
+                <th>Nivel Escolar</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for eva in evaluaciones %}
+                <tr>
+                    <td>{{ eva.id }}</td>
+                    <td>{{ eva.titulo_eva_cua }}</td>
+                    <td>{{ eva.descripcion_eva_cua }}</td>
+                    <td>
+                        {% for tipo in eva.tipos_lista %}
+                            <span class="badge bg-info">{{ tipo }}</span>
+                        {% endfor %}
+                    </td>
+                    <td>{{ eva.fecha_creacion_eva_cua|date:"d/m/Y H:i" }}</td>
+                    <td>{{ eva.fecha_actualizacion_eva_cua|date:"d/m/Y H:i" }}</td>
+                    <td>{{ eva.estado_eva_cua|yesno:"Activo,Inactivo" }}</td>
+                    <td>{{ eva.nivel_escolar_eva_cua }}</td>
+                    <td>
+                        <div style="display: flex;">
+                            <a href="{% url 'editar_evaluacion_cuarto' eva.id %}" class="btn btn-outline-warning btn-circle" title="Editar Evaluación">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            &nbsp;&nbsp;
+                            <a href="{% url 'eliminar_evaluacion_cuarto' eva.id %}" class="btn btn-outline-danger" onclick="return confirm('¿Deseas eliminar esta evaluación?')">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="9" class="text-center">No hay evaluaciones registradas.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    let table = new DataTable('#tbl-Evaluaciones');
+</script>
+{% endblock %}

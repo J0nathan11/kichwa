@@ -80,46 +80,81 @@ class Aprender_Elemento_Naturaleza(models.Model):
     def __str__(self):
         return self.palabra_ele
 
- # ------------------EVALUACION 
 
+ #----------------------ESTUDIANTES CUARTO Y TERCERO------------------------
 
-class Evaluacion(models.Model):
-    titulo_eva = models.CharField(max_length=200)
-    descripcion_eva = models.TextField()
-    nivel_escolar_eva = models.CharField(max_length=50, blank=True, null=True)
-    estado_eva = models.BooleanField(default=True)
-    tipo_aprendizaje_eva = models.TextField()  
-    fecha_creacion_eva = models.DateTimeField(auto_now_add=True)
-    fecha_actualizacion_eva = models.DateTimeField(auto_now=True)
+class Estudiante_Cuarto(models.Model):
+    nombres_est_cua = models.CharField(max_length=100)
+    apellidos_est_cua = models.CharField(max_length=100)
+    cedula_est_cua = models.CharField(max_length=10, unique=True)
+    genero_est_cua = models.CharField(max_length=20)
+    nivel_escolar_est_cua = models.CharField(max_length=50)
+    estado_est_cua = models.CharField(max_length=10) 
+    fecha_registro_est_cua = models.DateTimeField(auto_now_add=True)
+    fecha_actualizacion_est_cua = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.titulo_eva
+        return f"{self.nombres_est_cua} {self.apellidos_est_cua}"
+
+
+class Estudiante_Tercero(models.Model):
+    nombres_est_ter = models.CharField(max_length=100)
+    apellidos_est_ter = models.CharField(max_length=100)
+    cedula_est_ter = models.CharField(max_length=10, unique=True)
+    genero_est_ter = models.CharField(max_length=20)
+    nivel_escolar_est_ter = models.CharField(max_length=50)
+    estado_est_ter = models.CharField(max_length=10) 
+    fecha_registro_est_ter = models.DateTimeField(auto_now_add=True)
+    fecha_actualizacion_est_ter = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.nombres_est_ter} {self.apellidos_est_ter}"
+
+# ------------------EVALUACION CUARTO Y TERCERO----------------------
+
+class Evaluacion_Cuarto(models.Model):
+    titulo_eva_cua = models.CharField(max_length=200)
+    descripcion_eva_cua = models.TextField()
+    nivel_escolar_eva_cua = models.CharField(max_length=50, blank=True, null=True)
+    estado_eva_cua = models.BooleanField(default=True)
+    tipo_aprendizaje_eva_cua = models.TextField()  
+    fecha_creacion_eva_cua = models.DateTimeField(auto_now_add=True)
+    fecha_actualizacion_eva_cua = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.titulo_eva_cua
     
-
-class Resultado_Evaluacion(models.Model):
-    fk_estudiante = models.ForeignKey('Estudiante', on_delete=models.CASCADE)
-    fk_evaluacion = models.ForeignKey('Evaluacion', on_delete=models.CASCADE)
-    nota_res = models.DecimalField(max_digits=5, decimal_places=2)
-    fecha_res = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.fk_estudiante} - Nota: {self.nota_res}"
-
-
- #----------------------ESTUDIANTE------------------------
-
-class Estudiante(models.Model):
-    nombres_est = models.CharField(max_length=100)
-    apellidos_est = models.CharField(max_length=100)
-    cedula_est = models.CharField(max_length=10, unique=True)
-    genero_est = models.CharField(max_length=20)
-    nivel_escolar_est = models.CharField(max_length=50)
-    estado_est = models.CharField(max_length=10) 
-    fecha_registro_est = models.DateTimeField(auto_now_add=True)
-    fecha_actualizacion_est = models.DateTimeField(auto_now=True)
+class Evaluacion_Tercero(models.Model):
+    titulo_eva_ter = models.CharField(max_length=200)
+    descripcion_eva_ter = models.TextField()
+    nivel_escolar_eva_ter = models.CharField(max_length=50, blank=True, null=True)
+    estado_eva_ter = models.BooleanField(default=True)
+    tipo_aprendizaje_eva_ter = models.TextField()  
+    fecha_creacion_eva_ter = models.DateTimeField(auto_now_add=True)
+    fecha_actualizacion_eva_ter = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.nombres_est} {self.apellidos_est}"
+        return self.titulo_eva_ter
+
+# RESULTADO EVALUACIONES DE CUARTO Y TERCERO
+
+class Resultado_Evaluacion_Cuarto(models.Model):
+    fk_estudiante_cua = models.ForeignKey('Estudiante_Cuarto', on_delete=models.CASCADE)
+    fk_evaluacion_cua = models.ForeignKey('Evaluacion_Cuarto', on_delete=models.CASCADE)
+    nota_res_cua = models.DecimalField(max_digits=5, decimal_places=2)
+    fecha_res_cua = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.fk_estudiante_cua} - Nota: {self.nota_res_cua}"
+
+class Resultado_Evaluacion_Tercero(models.Model):
+    fk_estudiante_ter = models.ForeignKey('Estudiante_Tercero', on_delete=models.CASCADE)
+    fk_evaluacion_ter = models.ForeignKey('Evaluacion_Tercero', on_delete=models.CASCADE)
+    nota_res_ter = models.DecimalField(max_digits=5, decimal_places=2)
+    fecha_res_ter = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.fk_estudiante_ter} - Nota: {self.nota_res_ter}"
 
 #------------------------LOGIN------------------------------
 

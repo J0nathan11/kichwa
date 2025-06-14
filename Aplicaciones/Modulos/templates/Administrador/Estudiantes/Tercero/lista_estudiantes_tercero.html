@@ -24,7 +24,7 @@
 <div>
     <br>
     <div class="card-title text-center">
-        <h3><b>Listado de Estudiantes</b></h3>
+        <h3><b>Listado de Estudiantes Tercero</b></h3>
     </div>
 </div>
 <div style="width: 70%; margin-left: 170px;">
@@ -32,11 +32,13 @@
 </div>
 <br>
 <div class="text-center">
-    <a href="{% url 'agregar_estudiante' %}" class="btn btn-outline-info">
+    <a href="{% url 'agregar_estudiante_tercero' %}" class="btn btn-outline-info">
         <i class="fas fa-plus"></i> Agregar Estudiante
     </a>
 </div>
-<br>
+<div style="margin-left: 70px;">
+    <a href="{% url 'seleccion_estudiantes' %}" class="btn btn-outline-secondary"> VOLVER</a>
+</div>
 <div class="container" style="width: 90%;">
     <table class="table table-bordered table-striped table-hover" id="tbl-Estudiantes">
         <thead>
@@ -57,21 +59,21 @@
             {% for est in estudiantes %}
                 <tr>
                     <td>{{ est.id }}</td>
-                    <td>{{ est.nombres_est }}</td>
-                    <td>{{ est.apellidos_est }}</td>
-                    <td>{{ est.cedula_est }}</td>
-                    <td>{{ est.genero_est }}</td>
-                    <td>{{ est.nivel_escolar_est }}</td>
-                    <td>{{ est.estado_est }}</td>
-                    <td>{{ est.fecha_registro_est }}</td>
-                    <td>{{ est.fecha_actualizacion_est }}</td>
+                    <td>{{ est.nombres_est_ter }}</td>
+                    <td>{{ est.apellidos_est_ter }}</td>
+                    <td>{{ est.cedula_est_ter }}</td>
+                    <td>{{ est.genero_est_ter }}</td>
+                    <td>{{ est.nivel_escolar_est_ter }}</td>
+                    <td>{{ est.estado_est_ter }}</td>
+                    <td>{{ est.fecha_registro_est_ter }}</td>
+                    <td>{{ est.fecha_actualizacion_est_ter }}</td>
                     <td>
                         <div style="display: flex;">
-                            <a href="{% url 'editar_estudiante' est.id %}" class="btn btn-outline-warning btn-circle" title="Editar Estudiante">
+                            <a href="{% url 'editar_estudiante_tercero' est.id %}" class="btn btn-outline-warning btn-circle" title="Editar Estudiante">
                                 <i class="fas fa-edit"></i>
                             </a>
                             &nbsp;&nbsp;
-                            <a href="{% url 'eliminar_estudiante' est.id %}" class="btn btn-outline-danger" onclick="return confirm('¿Deseas eliminar este estudiante?')">
+                            <a href="{% url 'eliminar_estudiante_tercero' est.id %}" class="btn btn-outline-danger" onclick="return confirm('¿Deseas eliminar este estudiante?')">
                                 <i class="fas fa-trash-alt"></i>
                             </a>
                         </div>
@@ -79,7 +81,7 @@
                 </tr>
             {% empty %}
                 <tr>
-                    <td colspan="10">No hay estudiantes registrados.</td>
+                    <td colspan="10" class="text-center">No hay estudiantes registrados.</td>
                 </tr>
             {% endfor %}
         </tbody>

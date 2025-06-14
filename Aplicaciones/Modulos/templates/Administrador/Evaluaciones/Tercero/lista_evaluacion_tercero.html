@@ -34,7 +34,7 @@
 <br>
 <div class="text-center">
     {% if total_evaluaciones < 3 %}
-        <a href="{% url 'agregar_evaluacion' %}" class="btn btn-outline-info">
+        <a href="{% url 'agregar_evaluacion_tercero' %}" class="btn btn-outline-info">
             <i class="fas fa-plus"></i> Crear Evaluación
         </a>
     {% else %}
@@ -68,33 +68,32 @@
             {% for eva in evaluaciones %}
                 <tr>
                     <td>{{ eva.id }}</td>
-                    <td>{{ eva.titulo_eva }}</td>
-                    <td>{{ eva.descripcion_eva }}</td>
+                    <td>{{ eva.titulo_eva_ter }}</td>
+                    <td>{{ eva.descripcion_eva_ter }}</td>
                     <td>
                         {% for tipo in eva.tipos_lista %}
                             <span class="badge bg-info">{{ tipo }}</span>
                         {% endfor %}
                     </td>
-                    <td>{{ eva.fecha_creacion_eva }}</td>
-                    <td>{{ eva.fecha_actualizacion_eva }}</td>
-                    <td>{{ eva.estado_eva|yesno:"Activo,Inactivo" }}</td>
-                    <td>{{ eva.nivel_escolar_eva }}</td>
+                    <td>{{ eva.fecha_creacion_eva_ter|date:"d/m/Y H:i" }}</td>
+                    <td>{{ eva.fecha_actualizacion_eva_ter|date:"d/m/Y H:i" }}</td>
+                    <td>{{ eva.estado_eva_ter|yesno:"Activo,Inactivo" }}</td>
+                    <td>{{ eva.nivel_escolar_eva_ter }}</td>
                     <td>
                         <div style="display: flex;">
-                            <a href="{% url 'editar_evaluacion' eva.id %}" class="btn btn-outline-warning btn-circle" title="Editar Evaluación">
+                            <a href="{% url 'editar_evaluacion_tercero' eva.id %}" class="btn btn-outline-warning btn-circle" title="Editar Evaluación">
                                 <i class="fas fa-edit"></i>
                             </a>
                             &nbsp;&nbsp;
-                            <a href="{% url 'eliminar_evaluacion' eva.id %}" class="btn btn-outline-danger" onclick="return confirm('¿Deseas eliminar esta evaluación?')">
+                            <a href="{% url 'eliminar_evaluacion_tercero' eva.id %}" class="btn btn-outline-danger" onclick="return confirm('¿Deseas eliminar esta evaluación?')">
                                 <i class="fas fa-trash-alt"></i>
                             </a>
-                    
                         </div>
                     </td>
                 </tr>
             {% empty %}
                 <tr>
-                    <td colspan="8">No hay evaluaciones registradas.</td>
+                    <td colspan="9" class="text-center">No hay evaluaciones registradas.</td>
                 </tr>
             {% endfor %}
         </tbody>
