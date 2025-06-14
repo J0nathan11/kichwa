@@ -1261,6 +1261,12 @@ def eliminar_evaluacion_tercero(request, id):
 
 
 
+def seleccion_calificaiones(request):
+    if not request.session.get('profesor_id'):
+        return redirect('login_profesor')
+    
+    calificaciones = Profesor.objects.all()
+    return render(request, 'Administrador/Calificaciones/seleccion_calificaciones.html', {'calificaciones': calificaciones})
 
 
 
@@ -1268,54 +1274,38 @@ def eliminar_evaluacion_tercero(request, id):
 # ---------------------------------CALIFICACIONES---------------------
 from django.db.models import Max
 
-def lista_calificaciones(request):
+def lista_calificaciones_cuarto(request):
     if not request.session.get('profesor_id'):
         return redirect('login_profesor')
 
-    # Obtener todas las evaluaciones ordenadas por id
-    evaluaciones = Evaluacion.objects.all().order_by('id')
+    evaluaciones = Evaluacion_Cuarto.objects.all().order_by('id')
+    calificaciones = Resultado_Evaluacion_Cuarto.objects.select_related('fk_estudiante_cua', 'fk_evaluacion_cua').all()
 
-    # Obtener todas las calificaciones con relaciones para eficiencia
-    calificaciones = Resultado_Evaluacion.objects.select_related('fk_estudiante', 'fk_evaluacion').all()
+    estudiantes_ids = set(calificaciones.values_list('fk_estudiante_cua__id', flat=True))
 
-    # Obtener estudiantes que tienen calificaciones (ID únicos)
-    estudiantes_ids = set(calificaciones.values_list('fk_estudiante__id', flat=True))
-
-    # Crear lista de objetos Estudiante para esos IDs
     estudiantes = []
     for est_id in estudiantes_ids:
-        estudiante = calificaciones.filter(fk_estudiante=est_id).first().fk_estudiante
+        estudiante = calificaciones.filter(fk_estudiante_cua=est_id).first().fk_estudiante_cua
         estudiantes.append(estudiante)
 
-    # Crear diccionario de notas por estudiante y evaluación
     notas_por_estudiante = {}
     for cal in calificaciones:
-        est_id = cal.fk_estudiante.id
-        eva_id = cal.fk_evaluacion.id
+        est_id = cal.fk_estudiante_cua.id
+        eva_id = cal.fk_evaluacion_cua.id
         if est_id not in notas_por_estudiante:
             notas_por_estudiante[est_id] = {}
-        notas_por_estudiante[est_id][eva_id] = float(cal.nota_res)
+        notas_por_estudiante[est_id][eva_id] = float(cal.nota_res_cua)
 
-    # Calcular promedio por estudiante
     promedios = {}
     total_evaluaciones = evaluaciones.count()
-
     for est_id in estudiantes_ids:
         notas = notas_por_estudiante.get(est_id, {})
-        suma_notas = 0
-        for eva in evaluaciones:
-            nota = notas.get(eva.id, 0)  # Si no tiene nota, se considera 0
-            suma_notas += nota
-        if total_evaluaciones > 0:
-            promedios[est_id] = suma_notas / total_evaluaciones
-        else:
-            promedios[est_id] = None
+        suma_notas = sum(notas.get(eva.id, 0) for eva in evaluaciones)
+        promedios[est_id] = (suma_notas / total_evaluaciones) if total_evaluaciones > 0 else None
 
-
-    # Obtener última fecha de registro por estudiante
     fechas_ultimo_registro = {}
     for est_id in estudiantes_ids:
-        ultima_fecha = calificaciones.filter(fk_estudiante=est_id).aggregate(Max('fecha_res'))['fecha_res__max']
+        ultima_fecha = calificaciones.filter(fk_estudiante_cua=est_id).aggregate(Max('fecha_res_cua'))['fecha_res_cua__max']
         fechas_ultimo_registro[est_id] = ultima_fecha
 
     context = {
@@ -1325,105 +1315,53 @@ def lista_calificaciones(request):
         'promedios': promedios,
         'fechas_ultimo_registro': fechas_ultimo_registro,
     }
+    return render(request, 'Administrador/Calificaciones/lista_calificaciones_cuarto.html', context)
 
-    return render(request, 'Administrador/Calificaciones/lista_calificaciones.html', context)
+
+def lista_calificaciones_tercero(request):
+    if not request.session.get('profesor_id'):
+        return redirect('login_profesor')
+
+    evaluaciones = Evaluacion_Tercero.objects.all().order_by('id')
+    calificaciones = Resultado_Evaluacion_Tercero.objects.select_related('fk_estudiante_ter', 'fk_evaluacion_ter').all()
+
+    estudiantes_ids = set(calificaciones.values_list('fk_estudiante_ter__id', flat=True))
+
+    estudiantes = []
+    for est_id in estudiantes_ids:
+        estudiante = calificaciones.filter(fk_estudiante_ter=est_id).first().fk_estudiante_ter
+        estudiantes.append(estudiante)
+
+    notas_por_estudiante = {}
+    for cal in calificaciones:
+        est_id = cal.fk_estudiante_ter.id
+        eva_id = cal.fk_evaluacion_ter.id
+        if est_id not in notas_por_estudiante:
+            notas_por_estudiante[est_id] = {}
+        notas_por_estudiante[est_id][eva_id] = float(cal.nota_res_ter)
+
+    promedios = {}
+    total_evaluaciones = evaluaciones.count()
+    for est_id in estudiantes_ids:
+        notas = notas_por_estudiante.get(est_id, {})
+        suma_notas = sum(notas.get(eva.id, 0) for eva in evaluaciones)
+        promedios[est_id] = (suma_notas / total_evaluaciones) if total_evaluaciones > 0 else None
+
+    fechas_ultimo_registro = {}
+    for est_id in estudiantes_ids:
+        ultima_fecha = calificaciones.filter(fk_estudiante_ter=est_id).aggregate(Max('fecha_res_ter'))['fecha_res_ter__max']
+        fechas_ultimo_registro[est_id] = ultima_fecha
+
+    context = {
+        'evaluaciones': evaluaciones,
+        'estudiantes': estudiantes,
+        'notas_por_estudiante': notas_por_estudiante,
+        'promedios': promedios,
+        'fechas_ultimo_registro': fechas_ultimo_registro,
+    }
+    return render(request, 'Administrador/Calificaciones/lista_calificaciones_tercero.html', context)
 
 # -------------------CALIFICACIONES 3ro----------------------------
-def lista_calificaciones_3ro(request):
-    if not request.session.get('profesor_id'):
-        return redirect('login_profesor')
-
-    evaluaciones = Evaluacion.objects.all().order_by('id')
-    calificaciones = Resultado_Evaluacion.objects.select_related('fk_estudiante', 'fk_evaluacion').all()
-
-    # Filtrar calificaciones solo de estudiantes de 3ro
-    calificaciones_3ro = [cal for cal in calificaciones if cal.fk_estudiante.nivel_escolar_est == '3ro']
-
-    estudiantes_ids = set(cal.fk_estudiante.id for cal in calificaciones_3ro)
-    
-    # Obtener objetos únicos de estudiantes de 4to
-    estudiantes = list({cal.fk_estudiante.id: cal.fk_estudiante for cal in calificaciones_3ro}.values())
-
-
-    notas_por_estudiante = {}
-    for cal in calificaciones_3ro:
-        est_id = cal.fk_estudiante.id
-        eva_id = cal.fk_evaluacion.id
-        if est_id not in notas_por_estudiante:
-            notas_por_estudiante[est_id] = {}
-        notas_por_estudiante[est_id][eva_id] = float(cal.nota_res)
-
-    # Calcular promedio con evaluaciones aunque no tenga nota (promedio estricto)
-    promedios = {}
-    total_evaluaciones = evaluaciones.count()
-    for est_id in estudiantes_ids:
-        notas = notas_por_estudiante.get(est_id, {})
-        suma_notas = sum(notas.get(eva.id, 0) for eva in evaluaciones)
-        promedios[est_id] = suma_notas / total_evaluaciones if total_evaluaciones > 0 else None
-
-    fechas_ultimo_registro = {}
-    for est_id in estudiantes_ids:
-        ultima_fecha = Resultado_Evaluacion.objects.filter(fk_estudiante_id=est_id).aggregate(Max('fecha_res'))['fecha_res__max']
-        fechas_ultimo_registro[est_id] = ultima_fecha
-
-    context = {
-        'evaluaciones': evaluaciones,
-        'estudiantes': estudiantes,
-        'notas_por_estudiante': notas_por_estudiante,
-        'promedios': promedios,
-        'fechas_ultimo_registro': fechas_ultimo_registro,
-    }
-
-    return render(request, 'Administrador/Calificaciones/lista_calificaciones_3ro.html', context)
-
-
-# -------------------CALIFICACIONES 4to----------------------------
-def lista_calificaciones_4to(request):
-    if not request.session.get('profesor_id'):
-        return redirect('login_profesor')
-
-    evaluaciones = Evaluacion.objects.all().order_by('id')
-    calificaciones = Resultado_Evaluacion.objects.select_related('fk_estudiante', 'fk_evaluacion').all()
-
-    # Filtrar calificaciones solo de estudiantes de 4to
-    calificaciones_4to = [cal for cal in calificaciones if cal.fk_estudiante.nivel_escolar_est == '4to']
-
-    estudiantes_ids = set(cal.fk_estudiante.id for cal in calificaciones_4to)
-    
-    # Obtener objetos únicos de estudiantes de 4to
-    estudiantes = list({cal.fk_estudiante.id: cal.fk_estudiante for cal in calificaciones_4to}.values())
-
-
-    notas_por_estudiante = {}
-    for cal in calificaciones_4to:
-        est_id = cal.fk_estudiante.id
-        eva_id = cal.fk_evaluacion.id
-        if est_id not in notas_por_estudiante:
-            notas_por_estudiante[est_id] = {}
-        notas_por_estudiante[est_id][eva_id] = float(cal.nota_res)
-
-    # Calcular promedio con evaluaciones aunque no tenga nota (promedio estricto)
-    promedios = {}
-    total_evaluaciones = evaluaciones.count()
-    for est_id in estudiantes_ids:
-        notas = notas_por_estudiante.get(est_id, {})
-        suma_notas = sum(notas.get(eva.id, 0) for eva in evaluaciones)
-        promedios[est_id] = suma_notas / total_evaluaciones if total_evaluaciones > 0 else None
-
-    fechas_ultimo_registro = {}
-    for est_id in estudiantes_ids:
-        ultima_fecha = Resultado_Evaluacion.objects.filter(fk_estudiante_id=est_id).aggregate(Max('fecha_res'))['fecha_res__max']
-        fechas_ultimo_registro[est_id] = ultima_fecha
-
-    context = {
-        'evaluaciones': evaluaciones,
-        'estudiantes': estudiantes,
-        'notas_por_estudiante': notas_por_estudiante,
-        'promedios': promedios,
-        'fechas_ultimo_registro': fechas_ultimo_registro,
-    }
-
-    return render(request, 'Administrador/Calificaciones/lista_calificaciones_4to.html', context)
 
 #----------------------DESCARGA PDF-------------------------
 from django.template.loader import get_template
@@ -1555,41 +1493,40 @@ def ver_evaluacion_cuarto(request):
 
 #--------------------VER EVALUACION 10 PREGUNTAS-------------------------
 
-# VER EVALUACION
-def mostrar_evaluacion(request, evaluacion_id):
+def mostrar_evaluacion_tercero(request, evaluacion_id):
     estudiante_id = request.session.get('estudiante_id')
     if not estudiante_id:
         return redirect('login_estudiante')
 
-    estudiante = Estudiante.objects.filter(id=estudiante_id).first()
+    estudiante = Estudiante_Tercero.objects.filter(id=estudiante_id).first()
     if not estudiante:
         return redirect('login_estudiante')
 
-    evaluacion = get_object_or_404(Evaluacion, id=evaluacion_id)
-    tipos = evaluacion.tipo_aprendizaje_eva.split(',')
+    evaluacion = get_object_or_404(Evaluacion_Tercero, id=evaluacion_id)
+    tipos = evaluacion.tipo_aprendizaje_eva_ter.split(',')
 
     if request.method == 'POST':
         nota = request.POST.get('nota')
-        if nota is not None:
-            try:
-                nota_decimal = float(nota)
-            except ValueError:
-                nota_decimal = 0.0
+        try:
+            nota_decimal = float(nota)
+        except:
+            nota_decimal = 0.0
 
-            Resultado_Evaluacion.objects.create(
-                fk_estudiante=estudiante,
-                fk_evaluacion=evaluacion,
-                nota_res=nota_decimal,
-                fecha_res=timezone.now()
-            )
-            # En lugar de redirigir, enviamos el puntaje para mostrar resultado
-            return render(request, 'Administrador/Evaluaciones/evaluacion.html', {
-                'evaluacion': evaluacion,
-                'mostrar_resultado': True,
-                'puntaje': nota_decimal,
-            })
+        Resultado_Evaluacion_Tercero.objects.create(
+            fk_estudiante_ter=estudiante,
+            fk_evaluacion_ter=evaluacion,
+            nota_res_ter=nota_decimal,
+            fecha_res_ter=timezone.now()
+        )
 
-    # GET: Preparar preguntas normalmente
+
+        return render(request, 'Evaluacion/mostrar_evaluacion_tercero.html', {
+            'evaluacion': evaluacion,
+            'mostrar_resultado': True,
+            'puntaje': nota_decimal,
+        })
+
+    # Preparar preguntas
     modelos = {
         'objetos': Aprender_Objetos,
         'meses': Aprender_Meses,
@@ -1610,9 +1547,10 @@ def mostrar_evaluacion(request, evaluacion_id):
         if modelo:
             datos = list(modelo.objects.all())
             for d in datos:
-                correcta = getattr(d, f'palabra_{tipo[:3]}', d.__str__())
-                imagen = getattr(d, f'imagen_{tipo[:3]}', None)
-                otras_opciones = random.sample([getattr(x, f'palabra_{tipo[:3]}', x.__str__()) for x in datos if x != d], k=2) if len(datos) > 2 else []
+                base = tipo[:3]
+                correcta = getattr(d, f'palabra_{base}', str(d))
+                imagen = getattr(d, f'imagen_{base}', None)
+                otras_opciones = random.sample([getattr(x, f'palabra_{base}', str(x)) for x in datos if x != d], k=2) if len(datos) > 2 else []
                 opciones = [{'texto': o, 'es_correcta': False} for o in otras_opciones]
                 opciones.append({'texto': correcta, 'es_correcta': True})
                 random.shuffle(opciones)
@@ -1625,11 +1563,89 @@ def mostrar_evaluacion(request, evaluacion_id):
 
     preguntas_random = random.sample(preguntas_unificadas, min(10, len(preguntas_unificadas)))
 
-    return render(request, 'Administrador/Evaluaciones/evaluacion.html', {
+    return render(request, 'Evaluacion/mostrar_evaluacion_tercero.html', {
         'evaluacion': evaluacion,
         'preguntas': preguntas_random,
         'mostrar_resultado': False,
     })
+
+
+# EVALUACION CUARTO
+def mostrar_evaluacion_cuarto(request, evaluacion_id):
+    estudiante_id = request.session.get('estudiante_id')
+    if not estudiante_id:
+        return redirect('login_estudiante')
+
+    estudiante = Estudiante_Cuarto.objects.filter(id=estudiante_id).first()
+    if not estudiante:
+        return redirect('login_estudiante')
+
+    evaluacion = get_object_or_404(Evaluacion_Cuarto, id=evaluacion_id)
+    tipos = evaluacion.tipo_aprendizaje_eva_cua.split(',')
+
+    if request.method == 'POST':
+        nota = request.POST.get('nota')
+        try:
+            nota_decimal = float(nota)
+        except:
+            nota_decimal = 0.0
+
+        Resultado_Evaluacion_Cuarto.objects.create(
+            fk_estudiante_cua=estudiante,
+            fk_evaluacion_cua=evaluacion,
+            nota_res_cua=nota_decimal,
+            fecha_res_cua=timezone.now()
+        )
+
+
+        return render(request, 'Evaluacion/mostrar_evaluacion_cuarto.html', {
+            'evaluacion': evaluacion,
+            'mostrar_resultado': True,
+            'puntaje': nota_decimal,
+        })
+
+    modelos = {
+        'objetos': Aprender_Objetos,
+        'meses': Aprender_Meses,
+        'numeros': Aprender_Numeros,
+        'dias': Aprender_Dias,
+        'saludos': Aprender_Saludos,
+        'animales': Aprender_Animales,
+        'colores': Aprender_Colores,
+        'cuerpo_humano': Aprender_Cuerpo_Humano,
+        'parentesco': Aprender_Parentesco,
+        'elemento_naturaleza': Aprender_Elemento_Naturaleza,
+    }
+
+    preguntas_unificadas = []
+
+    for tipo in tipos:
+        modelo = modelos.get(tipo.strip())
+        if modelo:
+            datos = list(modelo.objects.all())
+            for d in datos:
+                base = tipo[:3]
+                correcta = getattr(d, f'palabra_{base}', str(d))
+                imagen = getattr(d, f'imagen_{base}', None)
+                otras_opciones = random.sample([getattr(x, f'palabra_{base}', str(x)) for x in datos if x != d], k=2) if len(datos) > 2 else []
+                opciones = [{'texto': o, 'es_correcta': False} for o in otras_opciones]
+                opciones.append({'texto': correcta, 'es_correcta': True})
+                random.shuffle(opciones)
+
+                preguntas_unificadas.append({
+                    'palabra_correcta': correcta,
+                    'imagen': imagen,
+                    'opciones': opciones,
+                })
+
+    preguntas_random = random.sample(preguntas_unificadas, min(10, len(preguntas_unificadas)))
+
+    return render(request, 'Evaluacion/mostrar_evaluacion_cuarto.html', {
+        'evaluacion': evaluacion,
+        'preguntas': preguntas_random,
+        'mostrar_resultado': False,
+    })
+
 
 
 

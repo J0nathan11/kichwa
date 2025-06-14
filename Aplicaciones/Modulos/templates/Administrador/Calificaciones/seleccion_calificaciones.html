@@ -1,0 +1,33 @@
+{% extends 'plantillaAdmin.html' %}
+
+{% block body %}
+<br><br><br>
+<div class="container mt-5">
+  <h2 class="text-center mb-4">Calificaciones de Tercero y Cuarto</h2>
+  <div class="row justify-content-center">
+
+    <!-- Card Tercero -->
+    <div class="col-md-4">
+      <div class="card shadow-lg border-0">
+        <div class="card-body text-center">
+          <h5 class="card-title">Tercero de Educación Básica</h5>
+          <p class="card-text">Explora las actividades y contenidos para el tercer año.</p>
+          <a href="{% url 'lista_calificaciones_tercero' %}" class="btn btn-primary">Ir a Tercero</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card Cuarto -->
+    <div class="col-md-4">
+      <div class="card shadow-lg border-0">
+        <div class="card-body text-center">
+          <h5 class="card-title">Cuarto de Educación Básica</h5>
+          <p class="card-text">Explora las actividades y contenidos para el cuarto año.</p>
+          <a href="{% url 'lista_calificaciones_cuarto' %}" class="btn btn-success">Ir a Cuarto</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

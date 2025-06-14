@@ -89,6 +89,8 @@ urlpatterns = [
     path('evaluacion/seleccion', views.seleccion_evaluacion, name='seleccion_evaluacion'),
     #----------------------------SELECCIOND DE ESTUDIANTES----------------
     path('estudiantes/seleccion', views.seleccion_estudiantes, name='seleccion_estudiantes'),
+    #---------------------------SELECCION DE CALIFICACIOES-------------------
+    path('calificaiones/seleccion', views.seleccion_calificaiones, name='seleccion_calificaciones'),
 
     #--------------------------EVALUACIONES CUARTO---------------------------
     path('evaluaciones/cuarto/', views.lista_evaluaciones_cuarto, name='lista_evaluaciones_cuarto'),
@@ -105,11 +107,9 @@ urlpatterns = [
 
 
     #-------------------------CALIFICACIONES-----------------------------
-    path('calificaciones/', views.lista_calificaciones, name='lista_calificaciones'),
     
-    path('lista_calificaciones_3ro/', views.lista_calificaciones_3ro, name='lista_calificaciones_3ro'),
-    path('lista_calificaciones_4to/', views.lista_calificaciones_4to, name='lista_calificaciones_4to'),
-
+    path('calificaciones/cuarto/', views.lista_calificaciones_cuarto, name='lista_calificaciones_cuarto'),
+    path('calificaciones/tercero/', views.lista_calificaciones_tercero, name='lista_calificaciones_tercero'),
     #---------------------------DESCARGA PDF----------------------
     path('calificaciones/pdf/', views.pdf_calificaciones_3ro, name='pdf_calificaciones_3ro'),
     
@@ -123,12 +123,14 @@ urlpatterns = [
     # -------------------------------EVALUACION------------------
     path('login_estudiante/', views.login_estudiante, name='login_estudiante'),
     # SELECCION DE EVALUACION
-    path('login-estudiante/', views.login_estudiante, name='login_estudiante'),
     path('ver_evaluaciones/tercero/', views.ver_evaluacion_tercero, name='ver_evaluacion_tercero'),
     path('ver_evaluaciones/cuarto/', views.ver_evaluacion_cuarto, name='ver_evaluacion_cuarto'),
+    # VER EVALUACINES 
+    path('evaluacion/tercero/<int:evaluacion_id>/', views.mostrar_evaluacion_tercero, name='mostrar_evaluacion_tercero'),
+    path('evaluacion/cuarto/<int:evaluacion_id>/', views.mostrar_evaluacion_cuarto, name='mostrar_evaluacion_cuarto'),
 
 
-    path('evaluacion/<int:evaluacion_id>/', views.mostrar_evaluacion, name='mostrar_evaluacion'),
+
 
     #---------------------------------APRENDER---------------------------
     path('aprender/',views.aprender, name='aprender'),

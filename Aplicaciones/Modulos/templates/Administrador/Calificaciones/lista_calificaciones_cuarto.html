@@ -1,0 +1,91 @@
+{% extends 'plantillaAdmin.html' %}
+{% load diccionario_extras %}
+
+{% block body %}
+<style>
+    #tbl-Calificaciones {
+        background-color: #a0ccf3;
+    }
+
+    #tbl-Calificaciones th {
+        background-color: #1f77b4;
+        color: white;
+    }
+
+    #tbl-Calificaciones td {
+        color: #333;
+    }
+
+    #tbl-Calificaciones tr:hover {
+        background-color: #d1e7f7;
+    }
+</style>
+
+<br><br><br><br>
+<div>
+    <br>
+    <div class="card-title text-center">
+        <h3><b>Listado de Calificaciones - Cuarto</b></h3>
+    </div>
+</div>
+<div style="width: 70%; margin-left: 170px;">
+    <hr style="height: 3px; background-color: #000; border: none;">
+</div>
+<br>
+<div class="container" style="width: 90%;">
+    <table class="table table-bordered table-striped table-hover" id="tbl-Calificaciones">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Cédula</th>
+                <th>Estudiante</th>
+                <th>Nivel Escolar</th>
+
+                {% for eva in evaluaciones %}
+                    <th>{{ eva.titulo_eva_cua }}</th>
+                {% endfor %}
+                <th>Promedio Total</th>
+                <th>Última Fecha de Registro</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for est in estudiantes %}
+                <tr>
+                    <td>{{ est.id }}</td>
+                    <td>{{ est.cedula_est_cua }}</td>
+                    <td>{{ est.nombres_est_cua }} {{ est.apellidos_est_cua }}</td>
+                    <td>{{ est.nivel_escolar_est_cua }}</td>
+
+                    {% for eva in evaluaciones %}
+                        {% with notas_por_estudiante|dict_get:est.id as notas_est %}
+                            {% with notas_est|dict_get:eva.id as nota %}
+                                <td>{{ nota|default:"0.00"|floatformat:2 }}</td>
+                            {% endwith %}
+                        {% endwith %}
+                    {% endfor %}
+
+                    <td>{{ promedios|dict_get:est.id|default:"-"|floatformat:2 }}</td>
+
+                    <td>
+                        {% with fechas_ultimo_registro|dict_get:est.id as fecha %}
+                            {% if fecha %}
+                                {{ fecha|date:"Y-m-d H:i" }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        {% endwith %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="{{ evaluaciones|length|add:'5' }}">No hay calificaciones registradas para Cuarto.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    let table = new DataTable('#tbl-Calificaciones');
+</script>
+{% endblock %}
