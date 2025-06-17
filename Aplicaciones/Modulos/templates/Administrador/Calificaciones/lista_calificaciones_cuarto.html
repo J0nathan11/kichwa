@@ -31,8 +31,11 @@
 <div style="width: 70%; margin-left: 170px;">
     <hr style="height: 3px; background-color: #000; border: none;">
 </div>
-<div style="margin-left: 65px;">
-    <a href="{% url 'seleccion_calificaciones' %}" class="btn btn-outline-secondary"> VOLVER</a>
+<div style="margin-left: 65px; margin-top: 10px;">
+    <a href="{% url 'seleccion_calificaciones' %}" class="btn btn-outline-secondary">VOLVER</a>
+    <a href="{% url 'reporte_pdf_calificaciones_cuarto' %}" target="_blank"  class="btn btn-danger">
+        <i class="fas fa-file-pdf"></i> PDF
+    </a>
 </div>
 <div class="container" style="width: 90%;">
     <table class="table table-bordered table-striped table-hover" id="tbl-Calificaciones">

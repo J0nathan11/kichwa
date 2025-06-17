@@ -1,0 +1,75 @@
+{% load diccionario_extras %}
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+        }
+        h2 {
+            text-align: center;
+            color: #1f4e79;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+        }
+        th, td {
+            border: 1px solid #777;
+            padding: 5px;
+            text-align: center;
+        }
+        th {
+            background-color: #bedef7;
+        }
+    </style>
+</head>
+<body>
+    <h2>ESCUELA SUMAK KAWSAY</h2>
+    <h2>Reporte de Calificaciones - Cuarto de Educación Básica</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Cédula</th>
+                <th>Estudiante</th>
+                <th>Nivel</th>
+                {% for eva in evaluaciones %}
+                    <th>{{ eva.titulo_eva_cua }}</th>
+                {% endfor %}
+                <th>Promedio</th>
+                <th>Última Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for est in estudiantes %}
+                <tr>
+                    <td>{{ est.id }}</td>
+                    <td>{{ est.cedula_est_cua }}</td>
+                    <td>{{ est.nombres_est_cua }} {{ est.apellidos_est_cua }}</td>
+                    <td>{{ est.nivel_escolar_est_cua }}</td>
+
+                    {% with notas_por_estudiante|dict_get:est.id as notas_est %}
+                        {% for eva in evaluaciones %}
+                            {% with notas_est|dict_get:eva.id as nota %}
+                                <td>{{ nota|floatformat:2 }}</td>
+                            {% endwith %}
+                        {% endfor %}
+                    {% endwith %}
+
+                    <td>{{ promedios|dict_get:est.id|floatformat:2 }}</td>
+                    <td>
+                        {% with fechas_ultimo_registro|dict_get:est.id as fecha %}
+                            {% if fecha %}
+                                {{ fecha|date:"Y-m-d H:i" }}
+                            {% else %} - {% endif %}
+                        {% endwith %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

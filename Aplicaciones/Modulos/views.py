@@ -1424,6 +1424,59 @@ def generar_pdf_calificaciones_tercero(request):
 
     return response
 
+# CUARTO
+def generar_pdf_calificaciones_cuarto(request):
+    estudiantes = Estudiante_Cuarto.objects.all()
+    evaluaciones = Evaluacion_Cuarto.objects.all()
+
+    notas_por_estudiante = {}
+    promedios = {}
+    fechas_ultimo_registro = {}
+
+    for est in estudiantes:
+        notas_est = {}
+        suma = 0
+        count = 0
+        ultima_fecha = None
+
+        for eva in evaluaciones:
+            nota_obj = Resultado_Evaluacion_Cuarto.objects.filter(
+                fk_estudiante_cua=est,
+                fk_evaluacion_cua=eva
+            ).last()
+
+            if nota_obj:
+                notas_est[eva.id] = nota_obj.nota_res_cua
+                suma += nota_obj.nota_res_cua
+                count += 1
+                if not ultima_fecha or nota_obj.fecha_res_cua > ultima_fecha:
+                    ultima_fecha = nota_obj.fecha_res_cua
+            else:
+                notas_est[eva.id] = 0.0
+
+        notas_por_estudiante[est.id] = notas_est
+        promedios[est.id] = suma / count if count else 0
+        fechas_ultimo_registro[est.id] = ultima_fecha
+
+    # Renderizar plantilla
+    template = get_template('Administrador/Calificaciones/Reportes/reporte_calificaciones_cuarto.html')
+    html = template.render({
+        'estudiantes': estudiantes,
+        'evaluaciones': evaluaciones,
+        'notas_por_estudiante': notas_por_estudiante,
+        'promedios': promedios,
+        'fechas_ultimo_registro': fechas_ultimo_registro,
+    })
+
+    # Generar PDF
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename="calificaciones_cuarto.pdf"'
+    pisa_status = pisa.CreatePDF(BytesIO(html.encode('utf-8')), dest=response)
+
+    if pisa_status.err:
+        return HttpResponse('Error al generar el PDF', status=500)
+
+    return response
 
 
 ############################### LADO DEL USUARIO #################################

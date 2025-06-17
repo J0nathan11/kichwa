@@ -112,7 +112,8 @@ urlpatterns = [
 
     #---------------------------DESCARGA PDF----------------------
     path('reporte_pdf_calificaciones_tercero/', views.generar_pdf_calificaciones_tercero, name='reporte_pdf_calificaciones_tercero'),
-    
+    path('reporte_pdf_calificaciones_cuarto/', views.generar_pdf_calificaciones_cuarto, name='reporte_pdf_calificaciones_cuarto'),
+
 
 
 
