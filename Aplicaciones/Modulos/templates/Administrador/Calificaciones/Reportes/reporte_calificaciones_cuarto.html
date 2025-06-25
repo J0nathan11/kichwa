@@ -1,4 +1,5 @@
 {% load diccionario_extras %}
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,9 +25,19 @@
         th {
             background-color: #bedef7;
         }
+        .logo {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 100px;
+            height: auto;
+        }
     </style>
 </head>
 <body>
+
+    <img src="{% static 'imagenes/escudo_ecuador.png' %}" alt="Logo" class="logo">
+
     <h2>ESCUELA SUMAK KAWSAY</h2>
     <h2>Reporte de Calificaciones - Cuarto de Educación Básica</h2>
     <table>
@@ -48,7 +59,7 @@
                 <tr>
                     <td>{{ est.id }}</td>
                     <td>{{ est.cedula_est_cua }}</td>
-                    <td>{{ est.nombres_est_cua }} {{ est.apellidos_est_cua }}</td>
+                    <td>{{ est.apellidos_est_cua }} {{ est.nombres_est_cua }}</td>
                     <td>{{ est.nivel_escolar_est_cua }}</td>
 
                     {% with notas_por_estudiante|dict_get:est.id as notas_est %}
@@ -59,7 +70,7 @@
                         {% endfor %}
                     {% endwith %}
 
-                    <td>{{ promedios|dict_get:est.id|floatformat:2 }}</td>
+                    <td style="background-color: #f7d8be;"><b>{{ promedios|dict_get:est.id|floatformat:2 }}</b></td>
                     <td>
                         {% with fechas_ultimo_registro|dict_get:est.id as fecha %}
                             {% if fecha %}

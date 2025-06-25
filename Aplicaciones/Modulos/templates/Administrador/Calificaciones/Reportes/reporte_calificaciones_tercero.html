@@ -28,6 +28,7 @@
     </style>
 </head>
 <body>
+    <h2>ESCUELA SUMAK KAWSAY</h2>
     <h2>Reporte de Calificaciones - Tercero de Educación Básica</h2>
     <table>
         <thead>
@@ -48,7 +49,7 @@
                 <tr>
                     <td>{{ est.id }}</td>
                     <td>{{ est.cedula_est_ter }}</td>
-                    <td>{{ est.nombres_est_ter }} {{ est.apellidos_est_ter }}</td>
+                    <td>{{ est.apellidos_est_ter }} {{ est.nombres_est_ter }}</td>
                     <td>{{ est.nivel_escolar_est_ter }}</td>
 
                     {% for eva in evaluaciones %}
@@ -59,7 +60,7 @@
                         {% endwith %}
                     {% endfor %}
 
-                    <td>{{ promedios|dict_get:est.id|floatformat:2 }}</td>
+                    <td><b>{{ promedios|dict_get:est.id|floatformat:2 }}</b></td>
                     <td>
                         {% with fechas_ultimo_registro|dict_get:est.id as fecha %}
                             {% if fecha %}

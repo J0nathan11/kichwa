@@ -1373,15 +1373,15 @@ def generar_pdf_calificaciones_tercero(request):
     estudiantes = Estudiante_Tercero.objects.all()
     evaluaciones = Evaluacion_Tercero.objects.all()
 
-    # Preparar notas y promedios igual que en la vista HTML
     notas_por_estudiante = {}
     promedios = {}
     fechas_ultimo_registro = {}
 
+    total_evaluaciones = evaluaciones.count()
+
     for est in estudiantes:
         notas_est = {}
         suma = 0
-        count = 0
         ultima_fecha = None
 
         for eva in evaluaciones:
@@ -1391,20 +1391,18 @@ def generar_pdf_calificaciones_tercero(request):
             ).last()
 
             if nota_obj:
-                # Usar el nombre correcto del campo de nota y fecha
-                notas_est[eva.id] = nota_obj.nota_res_ter
-                suma += float(nota_obj.nota_res_ter)
-                count += 1
+                nota_valor = float(nota_obj.nota_res_ter)
+                notas_est[eva.id] = nota_valor
+                suma += nota_valor
                 if not ultima_fecha or nota_obj.fecha_res_ter > ultima_fecha:
                     ultima_fecha = nota_obj.fecha_res_ter
             else:
                 notas_est[eva.id] = 0.0
 
         notas_por_estudiante[est.id] = notas_est
-        promedios[est.id] = suma / count if count else 0
+        promedios[est.id] = (suma / total_evaluaciones) if total_evaluaciones > 0 else 0
         fechas_ultimo_registro[est.id] = ultima_fecha
 
-    # Cargar plantilla
     template = get_template('Administrador/Calificaciones/Reportes/reporte_calificaciones_tercero.html')
     html = template.render({
         'estudiantes': estudiantes,
@@ -1433,10 +1431,11 @@ def generar_pdf_calificaciones_cuarto(request):
     promedios = {}
     fechas_ultimo_registro = {}
 
+    total_evaluaciones = evaluaciones.count()
+
     for est in estudiantes:
         notas_est = {}
         suma = 0
-        count = 0
         ultima_fecha = None
 
         for eva in evaluaciones:
@@ -1446,16 +1445,16 @@ def generar_pdf_calificaciones_cuarto(request):
             ).last()
 
             if nota_obj:
-                notas_est[eva.id] = nota_obj.nota_res_cua
-                suma += nota_obj.nota_res_cua
-                count += 1
+                nota_valor = float(nota_obj.nota_res_cua)
+                notas_est[eva.id] = nota_valor
+                suma += nota_valor
                 if not ultima_fecha or nota_obj.fecha_res_cua > ultima_fecha:
                     ultima_fecha = nota_obj.fecha_res_cua
             else:
                 notas_est[eva.id] = 0.0
 
         notas_por_estudiante[est.id] = notas_est
-        promedios[est.id] = suma / count if count else 0
+        promedios[est.id] = (suma / total_evaluaciones) if total_evaluaciones > 0 else 0
         fechas_ultimo_registro[est.id] = ultima_fecha
 
     # Renderizar plantilla
@@ -1477,7 +1476,6 @@ def generar_pdf_calificaciones_cuarto(request):
         return HttpResponse('Error al generar el PDF', status=500)
 
     return response
-
 
 ############################### LADO DEL USUARIO #################################
 

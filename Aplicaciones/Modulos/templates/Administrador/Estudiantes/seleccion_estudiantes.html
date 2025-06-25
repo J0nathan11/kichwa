@@ -2,36 +2,52 @@
 {% load static %}
 {% block body %}
 <head>
-    <link rel="stylesheet" href="{% static 'css/estilosSeleccionar.css' %}">
+  <link rel="stylesheet" href="{% static 'css/estilosSeleccionar.css' %}">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
+    .page-wrapper {
+      display: flex;
+      flex-direction: column;
+      min-height: 82vh;
+    }
+
+  </style>
 </head>
-
 <br><br><br>
-<div class="container mt-5">
-  <h2 class="titulo-principal">Gestión de Estudiantes por Nivel</h2>
-  <div class="row justify-content-center">
+<div class="page-wrapper">
+  <div class="content">
+    <div class="container mt-5">
+      <h2 class="titulo-principal">Gestión de Estudiantes por Nivel</h2>
+      <div class="row justify-content-center">
 
-    <!-- Card Tercero -->
-    <div class="col-md-4">
-      <div class="card shadow-lg border-0">
-        <div class="card-body text-center">
-          <h5 class="card-title">3° Educación Básica</h5>
-          <p class="card-text">Registrar y gestionar información de estudiantes del tercer año.</p>
-          <a href="{% url 'lista_estudiantes_tercero' %}" class="btn btn-primary btn-nivel">Acceder a Tercero</a>
+        <!-- Card Tercero -->
+        <div class="col-md-4 mb-4">
+          <div class="card shadow-lg border-0">
+            <div class="card-body text-center">
+              <h5 class="card-title">3° Educación Básica</h5>
+              <p class="card-text">Registrar y gestionar información de estudiantes del tercer año.</p>
+              <a href="{% url 'lista_estudiantes_tercero' %}" class="btn btn-primary btn-nivel">Acceder a Tercero</a>
+            </div>
+          </div>
         </div>
+
+        <!-- Card Cuarto -->
+        <div class="col-md-4 mb-4">
+          <div class="card shadow-lg border-0">
+            <div class="card-body text-center">
+              <h5 class="card-title">4° Educación Básica</h5>
+              <p class="card-text">Registrar y gestionar información de estudiantes del cuarto año.</p>
+              <a href="{% url 'lista_estudiantes_cuarto' %}" class="btn btn-success btn-nivel">Acceder a Cuarto</a>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
-
-    <!-- Card Cuarto -->
-    <div class="col-md-4">
-      <div class="card shadow-lg border-0">
-        <div class="card-body text-center">
-          <h5 class="card-title">4° Educación Básica</h5>
-          <p class="card-text">Registrar y gestionar información de estudiantes del cuarto año.</p>
-          <a href="{% url 'lista_estudiantes_cuarto' %}" class="btn btn-success btn-nivel">Acceder a Cuarto</a>
-        </div>
-      </div>
-    </div>
-
   </div>
 </div>
 {% endblock %}
