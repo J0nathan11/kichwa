@@ -1366,6 +1366,8 @@ def lista_calificaciones_tercero(request):
 from django.template.loader import get_template
 from django.http import HttpResponse
 from xhtml2pdf import pisa
+import os
+from django.conf import settings
 from io import BytesIO
 from .models import Estudiante_Tercero, Evaluacion_Tercero, Resultado_Evaluacion_Tercero
 
@@ -1457,7 +1459,11 @@ def generar_pdf_calificaciones_cuarto(request):
         promedios[est.id] = (suma / total_evaluaciones) if total_evaluaciones > 0 else 0
         fechas_ultimo_registro[est.id] = ultima_fecha
 
-    # Renderizar plantilla
+    # Obtener ruta absoluta de la imagen
+    logo_path = os.path.join(settings.BASE_DIR, 'static', 'imagenes', 'escudo_ecuador.png')
+    logo_url = f'file://{logo_path}'
+
+    # Renderizar plantilla con logo incluido
     template = get_template('Administrador/Calificaciones/Reportes/reporte_calificaciones_cuarto.html')
     html = template.render({
         'estudiantes': estudiantes,
@@ -1465,6 +1471,7 @@ def generar_pdf_calificaciones_cuarto(request):
         'notas_por_estudiante': notas_por_estudiante,
         'promedios': promedios,
         'fechas_ultimo_registro': fechas_ultimo_registro,
+        'logo_url': logo_url,  # PASAMOS LA RUTA DE LA IMAGEN
     })
 
     # Generar PDF

@@ -7,6 +7,11 @@
         </a>
     </div>
 {% else %}
+    <!-- TÍTULO DINÁMICO DE PREGUNTA -->
+    <h3 id="numero-pregunta" class="text-center mt-4" style="font-size: 1.8rem; color: #1a49a1;">
+        Pregunta 1
+    </h3>
+
     <div id="evaluacion-container">
         {% for pregunta in preguntas %}
         <div class="card mb-4 pregunta" style="display: none; border-radius: 20px; background-color: #c7dbff; box-shadow: 0 4px 8px rgba(42, 110, 203, 0.2);" data-pregunta-index="{{ forloop.counter0 }}">
@@ -63,6 +68,8 @@
             preguntas.forEach(p => p.style.display = 'none');
             if (preguntas[index]) {
                 preguntas[index].style.display = 'block';
+                // Actualiza el texto de "Pregunta X"
+                document.getElementById('numero-pregunta').textContent = `Pregunta ${index + 1}`;
             }
         }
 
