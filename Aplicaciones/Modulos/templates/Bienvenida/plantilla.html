@@ -101,7 +101,7 @@
                       <a class="nav-link" href="{% url 'login_profesor' %}">Profesor</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="vehicle.html">Transporte</a>
+                      <a class="nav-link" href="{% url 'login_estudiante' %}">Evaluación</a>
                     </li>
                   </ul>
                   <form class="form-inline my-2 my-lg-0 ml-0 ml-lg-4 mb-3 mb-lg-0">
@@ -133,11 +133,6 @@
                   Apreder | Yachay
                 </span>
                 <img src="{% static 'plantilla/adward/images/flecha-derecha.png' %}" alt="">
-              </a>
-              <a href="{% url 'login_estudiante' %}" class="call_to-btn btn_white-border" >
-                <span style="color: black;">
-                  Evaluación
-                </span>
               </a>
             </div>
           </div>
@@ -171,11 +166,40 @@
     {% endblock %}
   </div>
 
-  <!-- footer section -->
-  <section class="container-fluid footer_section">
-    <p>
-      Copyright &copy; 2025 All Rights Reserved By
-      <a href="https://html.design/">Free Html Templates</a>
-    </p>
-  </section>
-  <!-- footer section -->
+  <style>
+  .footer_section {
+    background-color:#165283;
+    color: #f1f1f1;
+    padding: 30px 15px;
+    text-align: center;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .footer_section h4 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #ffd369;
+  }
+
+  .footer_section p {
+    margin: 5px 0;
+    font-size: 14px;
+  }
+
+  .footer_section .creditos {
+    font-weight: 500;
+    color: #ffffff;
+    font-size: 13px;
+  }
+
+  .footer_section .creditos strong {
+    color: #ffd369;
+  }
+</style>
+
+<section class="container-fluid footer_section">
+  <h4>SUMAK KAWSAY &copy; 2025 - Sistema de Aprendizaje Kichwa</h4>
+  <p class="creditos">
+    Desarrollado por <strong>Oña J.</strong> y <strong>Tiban B.</strong>
+  </p>
+</section>

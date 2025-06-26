@@ -1,4 +1,4 @@
-{% extends 'plantillaModulos.html' %}
+{% extends 'plantillaEvaluacion.html' %}
 {% load static %}
 
 {% block body %}
@@ -6,9 +6,9 @@
     <h2 class="text-center mb-3" style="color: #2a6ecb; font-size: 2.8rem; font-weight: bold;">
         {{ evaluacion.titulo_eva_ter }} 🎉
     </h2>
-    <p class="text-center mb-4" style="color: #154a86; font-size: 1.3rem;">
+    <!--<p class="text-center mb-4" style="color: #154a86; font-size: 1.3rem;">
         {{ evaluacion.descripcion_eva_ter }}
-    </p>
+    </p>-->
 
     {% include 'Evaluacion/fragmento_evaluacion.html' %}
 </div>

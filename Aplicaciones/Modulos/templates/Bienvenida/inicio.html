@@ -1,141 +1,144 @@
 {% extends "./plantilla.html" %}
 {% load static %}
+
 {% block body %}
 
+<!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
 <style>
-  .video-container {
-    position: relative;
-    width: 80%;  
-    max-width: 800px; 
-    height: 450px;  
-    background-color: #000;
+  .swiper {
+    width: 50%;
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+
+  .swiper-slide {
+    background: #fff;
     border-radius: 15px;
-    overflow: hidden;
-    margin: 30px auto; 
     text-align: center;
-  }
-
-  .video-container video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: none; 
-  }
-
-  .play-button {
-    background-color: rgba(255, 255, 255, 0.5);
-    color: #000;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     padding: 20px;
-    border-radius: 50%;
-    font-size: 40px;
-    cursor: pointer;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 2;
+    transition: transform 0.3s ease;
   }
 
-  .play-button:hover {
-    background-color: rgba(255, 255, 255, 0.7);
+  .swiper-slide img {
+    max-height: 200px;
+    border-radius: 12px;
+    display: block;
+    margin: auto;
   }
 
   .video-title {
-    text-align: center;
-    font-size: 28px;
+    font-size: 22px;
     font-weight: bold;
-    margin-bottom: 15px;
     color: #ff4081;
-    position: relative;
-    animation: moverArribaAbajo 3s ease-in-out infinite;
+    margin-top: 15px;
+    animation: moverArribaAbajo 5s ease-in-out infinite;
   }
 
-  /* Definición de la animación */
   @keyframes moverArribaAbajo {
-    0% {
-      transform: translateY(-10px); 
-    }
-    50% {
-      transform: translateY(10px);  
-    }
-    100% {
-      transform: translateY(-10px);  
-    }
+    0% { transform: translateY(-10px); }
+    50% { transform: translateY(10px); }
+    100% { transform: translateY(-10px); }
+  }
+
+  .swiper-button-next,
+  .swiper-button-prev {
+    color: #ff4081;
+  }
+
+  .swiper-pagination-bullet-active {
+    background: #ff4081;
   }
 </style>
 
 <section class="vehicle_section layout_padding">
   <div class="container">
-    <h2 class="main-heading text-center">
-      ¡Explora y Aprende!
-    </h2>
-    <p class="text-center">
-      Elige una opción divertida para jugar, aprender colores y conocer animales.
-    </p>
+    <h2 class="main-heading text-center">¡Explora y Aprende!</h2>
+    <p class="text-center">Elige una opción divertida para jugar, aprender colores y conocer animales.</p>
 
-    <div class="layout_padding-top">
-      <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
-        <div class="carousel-inner">
+    <!-- Swiper Carrusel 3D -->
+    <div class="swiper mySwiper mt-2">
+      <div class="swiper-wrapper">
 
-          <div class="carousel-item active text-center">
-            <div class="vehicle_img-box">
-              <div class="video-title">¡Vamos a Jugar!</div>
-              <a href=""><img src="{% static 'imagenes/logo_juegos.png' %}" height="400px" alt="Juegos"></a>
-            </div>
-          </div>
-
-          <div class="carousel-item text-center">
-            <div class="vehicle_img-box">
-              <div class="video-title">¡Aprendamos los Colores!</div>
-              <a href=""><img src="{% static 'imagenes/logo_colores.png' %}" alt="Colores"></a>
-            </div>
-          </div>
-
-          <div class="carousel-item text-center">
-            <div class="vehicle_img-box">
-              <div class="video-title">¡Conozcamos los Animales!</div>
-              <a href=""><img src="{% static 'imagenes/logo_animales.png' %}" alt="Animales"></a>
-            </div>
-          </div>
-
+        <div class="swiper-slide">
+          <div class="video-title">¡TULLPUKUNA!</div>
+          <a href="#"><img src="{% static 'imagenes/logo_colores.png' %}" alt="Colores"></a>
         </div>
 
-        <!-- Botones del carrusel -->
-        <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Anterior</span>
-        </a>
-        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Siguiente</span>
-        </a>
+        <div class="swiper-slide">
+          <div class="video-title">¡WIWAKUNA!</div>
+          <a href="#"><img src="{% static 'imagenes/logo_animales.png' %}" alt="Animales"></a>
+        </div>
+
+        <div class="swiper-slide">
+          <div class="video-title">¡PACHAMAMAPA NIPAKUNA!</div>
+          <a href="#"><img src="{% static 'imagenes/elementos_naturaleza.jpg' %}" alt="Elementos Naturaleza"></a>
+        </div>
+
+        <div class="swiper-slide">
+          <div class="video-title">¡TIYAKKUNA!</div>
+          <br>
+          <a href="#"><img src="{% static 'imagenes/objetos.gif' %}" alt="Objetos"></a>
+        </div>
+
+        <div class="swiper-slide">
+          <div class="video-title">¡YUPAYKUNA!</div>
+          <a href="#"><img src="{% static 'imagenes/numeros.gif' %}" alt="Numeros"></a>
+        </div>
+
+        <div class="swiper-slide">
+          <div class="video-title">¡HUNKAYPA PUNCHAKUNA!</div>
+          <br>
+          <a href="#"><img src="{% static 'imagenes/semanas.jpg' %}" alt="Dias de la semana"></a>
+        </div>
+
+        <div class="swiper-slide">
+          <div class="video-title">¡WATAPA PUNCHAKUNA !</div>
+          <a href="#"><img src="{% static 'imagenes/meses.gif' %}" alt="Meses del Año"></a>
+        </div>
+
       </div>
+
+      <!-- Controles -->
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-pagination"></div>
     </div>
   </div>
 </section>
 
-<div class="video-title">
-  ¡Aprendamos Números en Kichwa!
-</div>
-
-<div class="video-container">
-
-  <button class="play-button" onclick="reproducirVideo()">▶</button>
-
-  <video id="video" controls>
-    <source src="{% static 'videos/Números en Kichwa.mp4' %}" type="video/mp4">
-    Tu navegador no soporta la reproducción de video.
-  </video>
-</div>
-
+<!-- Swiper JS y Configuración -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
-  function reproducirVideo() {
-    document.querySelector('.video-container video').style.display = 'block';
-    document.querySelector('.play-button').style.display = 'none';
-
-    var video = document.getElementById('video');
-    video.play();
-  }
+  var swiper = new Swiper(".mySwiper", {
+    effect: "coverflow",
+    grabCursor: true,
+    centeredSlides: true,
+    slidesPerView: "auto",
+    initialSlide: 1,
+    loop: true,
+    coverflowEffect: {
+      rotate: 50,
+      stretch: 0,
+      depth: 200,
+      modifier: 1,
+      slideShadows: true,
+    },
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+    },
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+    autoplay: {
+      delay: 3500,
+      disableOnInteraction: false,
+    },
+  });
 </script>
 
 {% endblock %}
