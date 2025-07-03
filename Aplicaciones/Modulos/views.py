@@ -848,7 +848,31 @@ def seleccion_estudiantes(request):
 
 
 # -----------------------ESTUDIANTES CUARTO-----------------------
+# VALIDACION CEDULA
+def validar_cedula_ecuatoriana(cedula):
+    if not cedula.isdigit() or len(cedula) != 10:
+        return False
 
+    provincia = int(cedula[0:2])
+    if provincia < 1 or provincia > 24:
+        return False
+
+    coeficientes = [2, 1, 2, 1, 2, 1, 2, 1, 2]
+    suma = 0
+    for i in range(9):
+        val = int(cedula[i]) * coeficientes[i]
+        if val >= 10:
+            val -= 9
+        suma += val
+
+    digito_verificador = 10 - (suma % 10)
+    if digito_verificador == 10:
+        digito_verificador = 0
+
+    return digito_verificador == int(cedula[9])
+
+
+# LISTADO
 def lista_estudiantes_cuarto(request):
     if not request.session.get('profesor_id'):
         return redirect('login_profesor')
@@ -871,7 +895,9 @@ def agregar_estudiante_cuarto(request):
         nivel = request.POST.get('nivel_escolar_est')
         estado = request.POST.get('estado_est')
 
-        if Estudiante_Cuarto.objects.filter(cedula_est_cua=cedula).exists():
+        if not validar_cedula_ecuatoriana(cedula):
+            error_cedula = "La cédula ingresada no es válida."
+        elif Estudiante_Cuarto.objects.filter(cedula_est_cua=cedula).exists():
             error_cedula = f'La cédula "{cedula}" ya está registrada.'
         else:
             Estudiante_Cuarto.objects.create(
@@ -905,8 +931,10 @@ def editar_estudiante_cuarto(request, id_est):
         nivel = request.POST.get('nivel_escolar_est')
         estado = request.POST.get('estado_est')
 
-        if Estudiante_Cuarto.objects.filter(cedula_est_cua=cedula).exclude(id=id_est).exists():
-            error_cedula = f'La cédula "{cedula}" ya está registrada en otro estudiante.'
+        if not validar_cedula_ecuatoriana(cedula):
+            error_cedula = "La cédula ingresada no es válida."
+        elif Estudiante_Cuarto.objects.filter(cedula_est_cua=cedula).exclude(id=id_est).exists():
+            error_cedula = f'La cédula \"{cedula}\" ya está registrada en otro estudiante.'
         else:
             estudiante.nombres_est_cua = nombres
             estudiante.apellidos_est_cua = apellidos
@@ -959,8 +987,10 @@ def agregar_estudiante_tercero(request):
         nivel = request.POST.get('nivel_escolar_est')
         estado = request.POST.get('estado_est')
 
-        if Estudiante_Tercero.objects.filter(cedula_est_ter=cedula).exists():
-            error_cedula = f'La cédula "{cedula}" ya está registrada.'
+        if not validar_cedula_ecuatoriana(cedula):
+            error_cedula = "La cédula ingresada no es válida."
+        elif Estudiante_Tercero.objects.filter(cedula_est_ter=cedula).exists():
+            error_cedula = f'La cédula \"{cedula}\" ya está registrada.'
         else:
             Estudiante_Tercero.objects.create(
                 nombres_est_ter=nombres,
@@ -993,8 +1023,10 @@ def editar_estudiante_tercero(request, id_est):
         nivel = request.POST.get('nivel_escolar_est')
         estado = request.POST.get('estado_est')
 
-        if Estudiante_Tercero.objects.filter(cedula_est_ter=cedula).exclude(id=id_est).exists():
-            error_cedula = f'La cédula "{cedula}" ya está registrada en otro estudiante.'
+        if not validar_cedula_ecuatoriana(cedula):
+            error_cedula = "La cédula ingresada no es válida."
+        elif Estudiante_Tercero.objects.filter(cedula_est_ter=cedula).exclude(id=id_est).exists():
+            error_cedula = f'La cédula \"{cedula}\" ya está registrada en otro estudiante.'
         else:
             estudiante.nombres_est_ter = nombres
             estudiante.apellidos_est_ter = apellidos

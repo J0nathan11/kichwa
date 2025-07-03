@@ -16,7 +16,14 @@
 
     <div class="card shadow p-5" style="width: 100%; max-width: 400px; border-radius: 15px;">
         <h2 class="text-center mb-4 text-primary" style="font-family: 'Comic Sans MS', cursive; color: #FF5733;">¡Bienvenido!</h2>
-        
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger mt-3" role="alert"
+                     style="font-family: 'Comic Sans MS', cursive; color: #fff; background-color: #FF5733; border-radius: 10px;">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
         <form method="POST" action="{% url 'login_profesor' %}" id="frm_login_profesor">
             {% csrf_token %}
             
@@ -46,14 +53,7 @@
             </a>
         </form>
 
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-danger mt-3" role="alert"
-                     style="font-family: 'Comic Sans MS', cursive; color: #fff; background-color: #FF5733; border-radius: 10px;">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
+        
     </div>
 
     <div class="d-none d-md-block" style="max-width: 450px; margin-left: 20px;">

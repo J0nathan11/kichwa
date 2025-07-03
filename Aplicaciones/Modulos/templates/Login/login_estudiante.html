@@ -15,7 +15,14 @@
 <div class="d-flex justify-content-center align-items-center" style="min-height: 400px;">
     <div class="card shadow p-5" style="width: 100%; max-width: 400px; border-radius: 15px;">
         <h2 class="text-center mb-4 text-primary" style="font-family: 'Comic Sans MS', cursive; color: #FF5733;">¡Bienvenido!</h2>
-        
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger mt-3" role="alert"
+                     style="font-family: 'Comic Sans MS', cursive; color: #fff; background-color: #FF5733; border-radius: 10px;">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
         <form method="POST" id="frm_login_estudiante">
             {% csrf_token %}
             
@@ -38,7 +45,7 @@
             <div class="mb-3">
                 <label for="cedula" class="form-label" style="font-family: 'Comic Sans MS', cursive; color: #4164b1;">Cédula</label>
                 <input type="text" name="cedula" id="cedula" class="form-control form-control-lg"
-                       placeholder="Escribe tu cédula" required
+                       placeholder="Escribe tu cédula" maxlength="10" required
                        value="{{ request.POST.cedula|default:'' }}"
                        style="border-radius: 10px; border: 2px solid #3cc043; font-size: 14px;">
             </div>
@@ -53,14 +60,7 @@
             </a>
         </form>
 
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-danger mt-3" role="alert"
-                     style="font-family: 'Comic Sans MS', cursive; color: #fff; background-color: #FF5733; border-radius: 10px;">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
+        
     </div>
 
     <div class="d-none d-md-block" style="max-width: 450px; margin-left: 20px;">
@@ -74,13 +74,30 @@
         rules: {
             nombres: { required: true },
             apellidos: { required: true },
-            cedula: { required: true, digits: true }
+            cedula: { required: true, minlength: 10, maxlength: 10 },
         },
         messages: {
             nombres: { required: "Por favor ingresa tus nombres" },
             apellidos: { required: "Por favor ingresa tus apellidos" },
-            cedula: { required: "Por favor ingresa tu cédula", digits: "Solo números permitidos" }
+            cedula: {
+                required: "Ingrese la cédula",
+                minlength: "La cédula debe tener 10 dígitos",
+                maxlength: "La cédula debe tener 10 dígitos"
+            },
         }
+    });
+
+    // Solo números para cédula
+    document.getElementById('cedula').addEventListener('input', function () {
+        this.value = this.value.replace(/[^0-9]/g, '');
+    });
+
+    // Solo letras para nombres y apellidos
+    document.getElementById('nombres').addEventListener('input', function () {
+        this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+    });
+    document.getElementById('apellidos').addEventListener('input', function () {
+        this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
     });
 </script>
 {% endblock %}
