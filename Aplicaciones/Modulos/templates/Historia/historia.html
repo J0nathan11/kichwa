@@ -1,0 +1,85 @@
+{% extends "plantillaModulos.html" %}
+{% load static %}
+
+{% block body %}
+
+<style>
+  .quienes-somos-section {
+    background: #f0f4f8;
+    padding: 60px 20px;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .quienes-somos-section h2 {
+    text-align: center;
+    color: #1a1a2e;
+    font-size: 32px;
+    margin-bottom: 40px;
+    font-weight: bold;
+  }
+
+  .card-info {
+    background-color: rgb(255, 255, 255);
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    padding: 30px;
+    margin-bottom: 30px;
+    transition: transform 0.3s ease;
+  }
+
+  .card-info:hover {
+    transform: translateY(-5px);
+  }
+
+  .card-info h3 {
+    color: #ff4081;
+    font-size: 24px;
+    margin-bottom: 15px;
+  }
+
+  .card-info p {
+    font-size: 16px;
+    color: #444;
+    text-align: justify;
+  }
+</style>
+
+<section class="quienes-somos-section">
+  <div class="container">
+    <h2>¿Quiénes Somos?</h2>
+
+    <div class="row">
+      <!-- Historia -->
+      <div class="col-md-4">
+        <div class="card-info">
+          <h3>📖 Historia</h3>
+          <p>
+            El sistema de aprendizaje "Sumak Kawsay" nació como una iniciativa educativa para promover la lengua y cultura Kichwa en niños. Inspirados por nuestras raíces, desarrollamos una plataforma amigable, dinámica y culturalmente significativa.
+          </p>
+        </div>
+      </div>
+
+      <!-- Misión -->
+      <div class="col-md-4">
+        <div class="card-info">
+          <h3>🎯 Misión</h3>
+          <p>
+            Brindar una experiencia de aprendizaje interactiva, lúdica y accesible para niños, fortaleciendo sus conocimientos del idioma Kichwa y valores culturales, a través del uso de tecnologías modernas y recursos didácticos.
+          </p>
+        </div>
+      </div>
+
+      <!-- Visión -->
+      <div class="col-md-4">
+        <div class="card-info">
+          <h3>👁️ Visión</h3>
+          <p>
+            Ser un referente en la educación intercultural bilingüe en Latacunga, promoviendo la preservación del idioma Kichwa mediante herramientas digitales innovadoras y adaptadas a las nuevas generaciones.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

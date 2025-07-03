@@ -105,7 +105,6 @@ urlpatterns = [
     path('evaluaciones/tercero/eliminar/<int:id>/', views.eliminar_evaluacion_tercero, name='eliminar_evaluacion_tercero'),
 
 
-
     #-------------------------CALIFICACIONES-----------------------------
     path('calificaciones/cuarto/', views.lista_calificaciones_cuarto, name='lista_calificaciones_cuarto'),
     path('calificaciones/tercero/', views.lista_calificaciones_tercero, name='lista_calificaciones_tercero'),
@@ -113,10 +112,6 @@ urlpatterns = [
     #---------------------------DESCARGA PDF----------------------
     path('reporte_pdf_calificaciones_tercero/', views.generar_pdf_calificaciones_tercero, name='reporte_pdf_calificaciones_tercero'),
     path('reporte_pdf_calificaciones_cuarto/', views.generar_pdf_calificaciones_cuarto, name='reporte_pdf_calificaciones_cuarto'),
-
-
-
-
 
 
     ###################### LADO DEL USUSARIO #######################
@@ -129,8 +124,6 @@ urlpatterns = [
     # VER EVALUACINES 
     path('evaluacion/tercero/<int:evaluacion_id>/', views.mostrar_evaluacion_tercero, name='mostrar_evaluacion_tercero'),
     path('evaluacion/cuarto/<int:evaluacion_id>/', views.mostrar_evaluacion_cuarto, name='mostrar_evaluacion_cuarto'),
-
-
 
 
     #---------------------------------APRENDER---------------------------
@@ -183,5 +176,9 @@ urlpatterns = [
     path('login/', views.login_profesor, name='login_profesor'),
     path('bienvenida/', views.profesor_bienvenida, name='profesor_bienvenida'),
     path('logout/', views.logout_profesor, name='logout_profesor'),
+
+    #--------------------HISTORIA---------------------
+    path('historia/', views.historia, name='historia'),
+
 
 ]
