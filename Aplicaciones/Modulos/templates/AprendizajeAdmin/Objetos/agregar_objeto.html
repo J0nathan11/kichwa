@@ -34,6 +34,13 @@
                           <div class="form-group">
                             <label for="audio_kichwa_obj">Audio en Kichwa:</label>
                             <input type="file" name="audio_kichwa_obj" id="audio_kichwa_obj" class="form-control" accept="audio/*">
+                            <!-- Vista previa del audio -->
+                            <div class="mt-2 text-center">
+                                <audio id="previewNuevoAudio" controls style="display: none;">
+                                    <source id="sourceNuevoAudio" src="#" type="audio/mpeg">
+                                    Tu navegador no soporta audio.
+                                </audio>
+                            </div>        
                         </div>
 
                         <div class="text-center mt-4">
@@ -86,6 +93,26 @@
         this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s()]/g, '');
     });
 </script>
+<script>
+    document.getElementById('audio_kichwa_obj').addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        const previewAudio = document.getElementById('previewNuevoAudio');
+        const source = document.getElementById('sourceNuevoAudio');
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                source.src = e.target.result;
+                previewAudio.load(); // Recargar el nuevo audio
+                previewAudio.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            previewAudio.style.display = 'none';
+        }
+    });
+</script>
+
 
 <br>
 {% endblock %}
