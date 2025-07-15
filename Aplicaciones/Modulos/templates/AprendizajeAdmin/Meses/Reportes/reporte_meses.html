@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+        }
+        h2 {
+            text-align: center;
+            color: #1f4e79;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+        }
+        th, td {
+            border: 1px solid #777;
+            padding: 5px;
+            text-align: center;
+        }
+        th {
+            background-color: #bedef7;
+        }
+        img {
+            max-width: 100px;
+            height: auto;
+        }
+        .total {
+            text-align: right;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>UNIDAD EDUCATIVA COMUNITARIA INTERCULTURAL BILINGÜE “SUMAK KAWSAY”</h2>
+    <h2>Reporte de Palabras en Kichwa - Meses</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Palabra</th>
+                <th>Imagen</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in meses %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.palabra_mes }}</td>
+                    <td>
+                        {% if item.imagen_mes %}
+                            <img src="{{ item.imagen_mes.url }}" alt="Imagen Mes" height="100px">
+                        {% else %}
+                            No disponible
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <p class="total">Total de meses registrados: {{ total_meses }}</p>
+
+</body>
+</html>

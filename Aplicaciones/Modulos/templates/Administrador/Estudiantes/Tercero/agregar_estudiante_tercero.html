@@ -92,15 +92,15 @@
     });
 
     // Solo números para cédula
-    document.getElementById('cedula_est_cua').addEventListener('input', function () {
+    document.getElementById('cedula_est_ter').addEventListener('input', function () {
         this.value = this.value.replace(/[^0-9]/g, '');
     });
 
     // Solo letras para nombres y apellidos
-    document.getElementById('nombres_est_cua').addEventListener('input', function () {
+    document.getElementById('nombres_est_ter').addEventListener('input', function () {
         this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
     });
-    document.getElementById('apellidos_est_cua').addEventListener('input', function () {
+    document.getElementById('apellidos_est_ter').addEventListener('input', function () {
         this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
     });
 </script>

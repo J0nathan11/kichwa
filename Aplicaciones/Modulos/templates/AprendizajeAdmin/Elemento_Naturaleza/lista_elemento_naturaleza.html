@@ -38,6 +38,16 @@
     </a>
 </div>
 <br>
+<div class="text-center">
+    <a href="{% url 'reporte_elementos' %}" class="btn btn-outline-danger" target="_blank">
+        <i class="fas fa-file-pdf"></i> Descargar PDF
+    </a>
+</div>
+
+<div class="text-end" style="margin-right: 150px; margin-bottom: 10px;">
+    <strong>Total de elememtos de la naturaleza registrados: {{ elementos|length }}</strong>
+</div>
+
 <div class="container" style="width: 80%; margin-right: 150px;">
     <table class="table table-bordered table-striped table-hover" id="tbl-Aprender">
         <thead>

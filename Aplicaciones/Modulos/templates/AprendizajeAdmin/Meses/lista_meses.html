@@ -3,20 +3,20 @@
 {% block body %}
 <style>
     #tbl-Aprender {
-        background-color: #a0ccf3; /* Color de fondo de la tabla */
+        background-color: #a0ccf3; 
     }
 
     #tbl-Aprender th {
-        background-color: #1f77b4; /* Color de fondo de los encabezados */
-        color: white; /* Color del texto en los encabezados */
+        background-color: #1f77b4; 
+        color: white; 
     }
 
     #tbl-Aprender td {
-        color: #333; /* Color del texto en las celdas */
+        color: #333; 
     }
 
     #tbl-Aprender tr:hover {
-        background-color: #d1e7f7; /* Color al pasar el mouse sobre las filas */
+        background-color: #d1e7f7; 
     }
 </style>
 
@@ -38,6 +38,15 @@
     </a>
 </div>
 <br>
+<div class="text-center">
+    <a href="{% url 'reporte_meses' %}" class="btn btn-outline-danger" target="_blank">
+        <i class="fas fa-file-pdf"></i> Descargar PDF
+    </a>
+</div>
+
+<div class="text-end" style="margin-right: 150px; margin-bottom: 10px;">
+    <strong>Total de meses registrados: {{ meses|length }}</strong>
+</div>
 <div class="container" style="width: 80%; margin-right: 150px;">
     <table class="table table-bordered table-striped table-hover" id="tbl-Aprender">
         <thead>

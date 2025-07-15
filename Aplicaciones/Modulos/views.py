@@ -74,6 +74,28 @@ def configuracion_profesor(request):
 
 
 ######################## LADO DEL ADMINISTRADOR #############################
+# PDF Modelos de Aprendizaje
+from django.conf import settings
+from django.templatetags.static import static
+from django.utils.encoding import smart_str
+import os
+from urllib.parse import unquote
+
+def link_callback(uri, rel):
+
+    uri = unquote(uri)
+    # Convierte rutas estáticas y de medios en rutas absolutas en disco
+    if uri.startswith(settings.MEDIA_URL):
+        path = os.path.join(settings.MEDIA_ROOT, uri.replace(settings.MEDIA_URL, ""))
+    elif uri.startswith(settings.STATIC_URL):
+        path = os.path.join(settings.STATIC_ROOT, uri.replace(settings.STATIC_URL, ""))
+    else:
+        return uri  # URL completa http(s)
+    
+    if not os.path.isfile(path):
+        raise Exception(f'Media URI must exist: {path}')
+    return path
+
 # -----------------OBJETOS---------------------
 def lista_objetos(request):
     if not request.session.get('profesor_id'):
@@ -149,6 +171,27 @@ def eliminar_objeto(request, id):
     messages.success(request, "Palabra eliminada correctamente.")
     return redirect('lista_objetos')
 
+# PDF
+def generar_pdf_objetos(request):
+    objetos = Aprender_Objetos.objects.all()
+    total_objetos = objetos.count()
+
+    template = get_template('AprendizajeAdmin/Objetos/Reportes/reporte_objetos.html')
+    html = template.render({'objetos': objetos, 'total_objetos': total_objetos}, request)
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename="reporte_objetos.pdf"'
+
+    pisa_status = pisa.CreatePDF(
+        BytesIO(html.encode('utf-8')),
+        dest=response,
+        link_callback=link_callback
+    )
+
+    if pisa_status.err:
+        return HttpResponse('Error al generar el PDF', status=500)
+
+    return response
 
 # ------------------------------- MESES ----------------------------------
 def lista_meses(request):
@@ -236,6 +279,31 @@ def eliminar_mes(request, id):
     messages.success(request, "Palabra eliminada correctamente.")
     return redirect('lista_meses')
 
+# PDF
+def generar_pdf_meses(request):
+    meses = Aprender_Meses.objects.all()
+    total_meses = meses.count()
+
+    template = get_template('AprendizajeAdmin/Meses/Reportes/reporte_meses.html')
+    html = template.render({
+        'meses': meses,
+        'total_meses': total_meses
+    }, request)
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename="reporte_meses.pdf"'
+
+    pisa_status = pisa.CreatePDF(
+        BytesIO(html.encode('utf-8')),
+        dest=response,
+        link_callback=link_callback
+    )
+
+    if pisa_status.err:
+        return HttpResponse('Error al generar el PDF', status=500)
+
+    return response
+
 # -------------------------------- NUMEROS -----------------------------
 def lista_numeros(request):
     if not request.session.get('profesor_id'):
@@ -310,6 +378,28 @@ def eliminar_numero(request, id):
     numero.delete()
     messages.success(request, "Número eliminado correctamente.")
     return redirect('lista_numeros')
+
+# PDF
+def generar_pdf_numeros(request):
+    numeros = Aprender_Numeros.objects.all()
+    total_numeros = numeros.count()
+
+    template = get_template('AprendizajeAdmin/Numeros/Reportes/reporte_numeros.html')
+    html = template.render({'numeros': numeros, 'total_numeros': total_numeros}, request)
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename="reporte_numeros.pdf"'
+
+    pisa_status = pisa.CreatePDF(
+        BytesIO(html.encode('utf-8')),
+        dest=response,
+        link_callback=link_callback
+    )
+
+    if pisa_status.err:
+        return HttpResponse('Error al generar el PDF', status=500)
+
+    return response
 
 # ---------------------------- DIAS -------------------------------
 def lista_dias(request):
@@ -386,6 +476,31 @@ def eliminar_dia(request, id):
     messages.success(request, "Día eliminado correctamente.")
     return redirect('lista_dias')
 
+# PDF
+def generar_pdf_dias(request):
+    dias = Aprender_Dias.objects.all()
+    total_dias = dias.count()
+
+    template = get_template('AprendizajeAdmin/Dias/Reportes/reporte_dias.html')
+    html = template.render({
+        'dias': dias,
+        'total_dias': total_dias
+    }, request)
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename="reporte_dias.pdf"'
+
+    pisa_status = pisa.CreatePDF(
+        BytesIO(html.encode('utf-8')),
+        dest=response,
+        link_callback=link_callback
+    )
+
+    if pisa_status.err:
+        return HttpResponse('Error al generar el PDF', status=500)
+
+    return response
+
 #------------------------- SALUDOS ------------------------------
 def lista_saludos(request):
     if not request.session.get('profesor_id'):
@@ -460,6 +575,28 @@ def eliminar_saludo(request, id):
     saludo.delete()
     messages.success(request, "Saludo eliminado correctamente.")
     return redirect('lista_saludos')
+
+# PDF
+def generar_pdf_saludos(request):
+    saludos = Aprender_Saludos.objects.all()
+    total_saludos = saludos.count()
+
+    template = get_template('AprendizajeAdmin/Saludos/Reportes/reporte_saludos.html')
+    html = template.render({'saludos': saludos, 'total_saludos': total_saludos}, request)
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename="reporte_saludos.pdf"'
+
+    pisa_status = pisa.CreatePDF(
+        BytesIO(html.encode('utf-8')),
+        dest=response,
+        link_callback=link_callback
+    )
+
+    if pisa_status.err:
+        return HttpResponse('Error al generar el PDF', status=500)
+
+    return response
 
 #----------------------------------ANIMALES--------------------------------
 def lista_animales(request):
@@ -536,6 +673,31 @@ def eliminar_animal(request, id):
     messages.success(request, "Animal eliminado correctamente.")
     return redirect('lista_animales')
 
+# PDF
+def generar_pdf_animales(request):
+    animales = Aprender_Animales.objects.all()
+    total_animales = animales.count()
+
+    template = get_template('AprendizajeAdmin/Animales/Reportes/reporte_animales.html')
+    html = template.render({
+        'animales': animales,
+        'total_animales': total_animales
+    }, request)
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename="reporte_animales.pdf"'
+
+    pisa_status = pisa.CreatePDF(
+        BytesIO(html.encode('utf-8')),
+        dest=response,
+        link_callback=link_callback
+    )
+
+    if pisa_status.err:
+        return HttpResponse('Error al generar el PDF', status=500)
+
+    return response
+
 #------------------------------COLORES---------------------------------
 def lista_colores(request):
     if not request.session.get('profesor_id'):
@@ -609,6 +771,31 @@ def eliminar_color(request, id):
     color.delete()
     messages.success(request, "Color eliminado correctamente.")
     return redirect('lista_colores')
+
+# PDF
+def generar_pdf_colores(request):
+    colores = Aprender_Colores.objects.all()
+    total_colores = colores.count()
+
+    template = get_template('AprendizajeAdmin/Colores/Reportes/reporte_colores.html')
+    html = template.render({
+        'colores': colores,
+        'total_colores': total_colores
+    }, request)
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename="reporte_colores.pdf"'
+
+    pisa_status = pisa.CreatePDF(
+        BytesIO(html.encode('utf-8')),
+        dest=response,
+        link_callback=link_callback
+    )
+
+    if pisa_status.err:
+        return HttpResponse('Error al generar el PDF', status=500)
+
+    return response
 
 #-------------------------CUERPO HUMANO-----------------------
 def lista_cuerpo_humano(request):
@@ -684,6 +871,31 @@ def eliminar_cuerpo_humano(request, id):
     messages.success(request, "Parte del cuerpo eliminada correctamente.")
     return redirect('lista_cuerpo_humano')
 
+# PDF
+def generar_pdf_cuerpo_humano(request):
+    partes = Aprender_Cuerpo_Humano.objects.all()
+    total_partes = partes.count()
+
+    template = get_template('AprendizajeAdmin/Cuerpo_Humano/Reportes/reporte_cuerpo.html')
+    html = template.render({
+        'partes': partes,
+        'total_partes': total_partes
+    }, request)
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename="reporte_cuerpo_humano.pdf"'
+
+    pisa_status = pisa.CreatePDF(
+        BytesIO(html.encode('utf-8')),
+        dest=response,
+        link_callback=link_callback
+    )
+
+    if pisa_status.err:
+        return HttpResponse('Error al generar el PDF', status=500)
+
+    return response
+
 #-----------------------PARENTESCO-----------------------
 def lista_parentesco(request):
     if not request.session.get('profesor_id'):
@@ -757,6 +969,28 @@ def eliminar_parentesco(request, id):
     parentesco.delete()
     messages.success(request, "Parentesco eliminado correctamente.")
     return redirect('lista_parentesco')
+
+# PDF
+def generar_pdf_parentescos(request):
+    parentescos = Aprender_Parentesco.objects.all()
+    total_parentescos = parentescos.count()
+
+    template = get_template('AprendizajeAdmin/Parentesco/Reportes/reporte_parentescos.html')
+    html = template.render({'parentescos': parentescos, 'total_parentescos': total_parentescos}, request)
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename="reporte_parentescos.pdf"'
+
+    pisa_status = pisa.CreatePDF(
+        BytesIO(html.encode('utf-8')),
+        dest=response,
+        link_callback=link_callback
+    )
+
+    if pisa_status.err:
+        return HttpResponse('Error al generar el PDF', status=500)
+
+    return response
 
 #------------------------ELEMENTOS NATURALEZA-------------------
 def lista_elemento_naturaleza(request):
@@ -837,6 +1071,30 @@ def eliminar_elemento_naturaleza(request, id):
     messages.success(request, "Elemento de la naturaleza eliminado correctamente.")
     return redirect('lista_elemento_naturaleza')
 
+# PDF
+def generar_pdf_elementos(request):
+    elementos = Aprender_Elemento_Naturaleza.objects.all()
+    total_elementos = elementos.count()
+
+    template = get_template('AprendizajeAdmin/Elemento_Naturaleza/Reportes/reporte_elementos.html')
+    html = template.render({
+        'elementos': elementos,
+        'total_elementos': total_elementos
+    }, request)
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename="reporte_elementos_naturaleza.pdf"'
+
+    pisa_status = pisa.CreatePDF(
+        BytesIO(html.encode('utf-8')),
+        dest=response,
+        link_callback=link_callback
+    )
+
+    if pisa_status.err:
+        return HttpResponse('Error al generar el PDF', status=500)
+
+    return response
 
 #----------------------SELECCION DE ESTUDIANTE------------
 def seleccion_estudiantes(request):

@@ -13,60 +13,72 @@ urlpatterns = [
     path('objetos/agregar/', views.agregar_objeto, name='agregar_objeto'),
     path('objetos/editar/<int:id>/', views.editar_objeto, name='editar_objeto'),
     path('objeto/eliminar/<int:id>/', views.eliminar_objeto, name='eliminar_objeto'),
+    path('reporte_objetos/', views.generar_pdf_objetos, name='reporte_objetos'),
 
     #-------------------------MESES------------------------
     path('meses/', views.lista_meses, name='lista_meses'),
     path('meses/agregar/', views.agregar_mes, name='agregar_mes'),
     path('mes/editar/<int:id>/', views.editar_mes, name='editar_mes'),
     path('mes/eliminar/<int:id>/', views.eliminar_mes, name='eliminar_mes'),
+    path('reporte_meses/', views.generar_pdf_meses, name='reporte_meses'),
 
     #-------------------------NUMEROS---------------------------
     path('numeros/', views.lista_numeros, name='lista_numeros'),
     path('numeros/agregar/', views.agregar_numero, name='agregar_numero'),
     path('numero/editar/<int:id>/', views.editar_numero, name='editar_numero'),
     path('numero/eliminar/<int:id>/', views.eliminar_numero, name='eliminar_numero'),
+    path('reporte_numeros/', views.generar_pdf_numeros, name='reporte_numeros'),
 
     #-------------------------DIAS-----------------------
     path('dias/', views.lista_dias, name='lista_dias'),
     path('dia/agregar', views.agregar_dia, name='agregar_dia'),
     path('dia/editar/<int:id>/', views.editar_dia, name='editar_dia'),
     path('dia/eliminar/<int:id>/', views.eliminar_dia, name='eliminar_dia'),
+    path('reporte_dias/', views.generar_pdf_dias, name='reporte_dias'),
+
 
     #--------------------------SALUDOS----------------------
     path('saludos/', views.lista_saludos, name='lista_saludos'),
     path('saludo/agregar', views.agregar_saludo, name='agregar_saludo'),
     path('saludo/editar/<int:id>/', views.editar_saludo, name='editar_saludo'),
     path('saludo/eliminar/<int:id>/', views.eliminar_saludo, name='eliminar_saludo'),
+    path('reporte_saludos/', views.generar_pdf_saludos, name='reporte_saludos'),
 
     #--------------------------ANIMALES-------------------------------
     path('animales/', views.lista_animales, name='lista_animales'),
     path('animal/agregar', views.agregar_animal, name='agregar_animal'),
     path('animales/editar/<int:id>/', views.editar_animal, name='editar_animal'),
     path('animales/eliminar/<int:id>/', views.eliminar_animal, name='eliminar_animal'),
+    path('reporte_animales/', views.generar_pdf_animales, name='reporte_animales'),
 
     #--------------------------COLORES---------------------------
     path('colores/', views.lista_colores, name='lista_colores'),
     path('color/agregar', views.agregar_color, name='agregar_color'),
     path('color/editar/<int:id>/', views.editar_color, name='editar_color'),
     path('color/eliminar/<int:id>/', views.eliminar_color, name='eliminar_color'),
+    path('reporte_colores/', views.generar_pdf_colores, name='reporte_colores'),
 
     #---------------------------CUERPO HUMANO----------------------
     path('cuerpo_humano/', views.lista_cuerpo_humano, name='lista_cuerpo_humano'),
     path('cuerpo_humano/agregar/', views.agregar_cuerpo_humano, name='agregar_cuerpo_humano'),
     path('cuerpo_humano/editar/<int:id>/', views.editar_cuerpo_humano, name='editar_cuerpo_humano'),
     path('cuerpo_humano/eliminar/<int:id>/', views.eliminar_cuerpo_humano, name='eliminar_cuerpo_humano'),
+    path('reporte_cuerpo_humano/', views.generar_pdf_cuerpo_humano, name='reporte_cuerpo_humano'),
 
     #------------------------------PARENTESCO---------------------------------
     path('parentesco/', views.lista_parentesco, name='lista_parentesco'),
     path('parentesco/agregar', views.agregar_parentesco, name='agregar_parentesco'),
     path('parentesco/editar/<int:id>/', views.editar_parentesco, name='editar_parentesco'),
     path('parentesco/eliminar/<int:id>/', views.eliminar_parentesco, name='eliminar_parentesco'),
+    path('reporte_parentescos/', views.generar_pdf_parentescos, name='reporte_parentescos'),
 
     #----------------------------ELEMENTOS NATURALEZA--------------------------
     path('elemento_naturaleza/', views.lista_elemento_naturaleza, name='lista_elemento_naturaleza'),
     path('elemnto_naturaleza/agregar', views.agregar_elemento_naturaleza, name='agregar_elemento_naturaleza'),
     path('elemento_naturaleza/editar/<int:id>/', views.editar_elemento_naturaleza, name='editar_elemento_naturaleza'),
     path('elemento_naturaleza/eliminar/<int:id>/', views.eliminar_elemento_naturaleza, name='eliminar_elemento_naturaleza'),
+    path('reporte_elementos/', views.generar_pdf_elementos, name='reporte_elementos'),
+
 
     #---------------------------ESTUDIANTES CUARTO-----------------------------
     path('estudiantes_cuarto/', views.lista_estudiantes_cuarto, name='lista_estudiantes_cuarto'),
