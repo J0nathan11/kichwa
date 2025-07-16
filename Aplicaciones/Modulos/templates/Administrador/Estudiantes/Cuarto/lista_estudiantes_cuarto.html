@@ -35,9 +35,11 @@
     <a href="{% url 'agregar_estudiante_cuarto' %}" class="btn btn-outline-info">
         <i class="fas fa-plus"></i> Agregar Estudiante
     </a>
-</div>
-<div style="margin-left: 70px;">
+    <br><br>
     <a href="{% url 'seleccion_estudiantes' %}" class="btn btn-outline-secondary"> VOLVER</a>
+</div>
+<div class="text-end" style="margin-right: 150px; margin-bottom: 10px;">
+    <strong>Total de estudiantes registrados: {{ estudiantes|length }}</strong>
 </div>
 <div class="container" style="width: 90%;">
     <table class="table table-bordered table-striped table-hover" id="tbl-Estudiantes">

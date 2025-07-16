@@ -37,8 +37,8 @@
         <br><br>
     <a href="{% url 'seleccion_estudiantes' %}" class="btn btn-outline-secondary"> VOLVER</a>
 </div>
-<div style="margin-left: 60px;">
-    <a href="" class="btn btn-outline-danger"><i class="fas fa-trash-alt"></i> Eliminar Todo</a>
+<div class="text-end" style="margin-right: 150px; margin-bottom: 10px;">
+    <strong>Total de estudiantes registrados: {{ estudiantes|length }}</strong>
 </div>
 <div class="container" style="width: 90%;">
     <table class="table table-bordered table-striped table-hover" id="tbl-Estudiantes">

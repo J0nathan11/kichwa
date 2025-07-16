@@ -1,8 +1,24 @@
-{% extends "plantillaAdmin.html" %}
+{% extends 'plantillaAdmin.html' %}
 {% load static %}
 {% block body %}
+<head>
+  <link rel="stylesheet" href="{% static 'css/estilosSeleccionar.css' %}">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
+    .page-wrapper {
+      display: flex;
+      flex-direction: column;
+      min-height: 82vh;
+    }
+  </style>
+</head>
 <br><br><br>
-<div class="container mt-5">
+<div class="page-wrapper">
+  <div class="container mt-5">
   <div class="card shadow-lg border-0 rounded p-4" style="background-color: #e6f7ff;">
     <div class="card-body text-center">
       <i class="fas fa-chalkboard-teacher fa-3x mb-3 text-primary"></i>
@@ -28,5 +44,6 @@
       </a>
     </div>
   </div>
+</div>
 </div>
 {% endblock %}
