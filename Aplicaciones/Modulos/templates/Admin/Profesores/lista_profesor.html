@@ -1,0 +1,117 @@
+{% extends 'plantillaAdministrador.html' %}
+{% load static %}
+{% block body %}
+
+<head>
+    <link rel="stylesheet" href="{% static 'css/estilosListaProfesor.css' %}">
+</head>
+
+<br><br><br><br>
+<div>
+    <div class="card-title text-center">
+        <h3><b>Listado de Profesores Registrados</b></h3>
+    </div>
+</div>
+<div style="width: 70%; margin-left: 170px;">
+    <hr style="height: 3px; background-color: #000; border: none;">
+</div>
+<br>
+<div class="text-center">
+    <a href="{% url 'agregar_profesor' %}" class="btn btn-outline-info">
+        <i class="fas fa-plus"></i> Agregar Profesor
+    </a>
+</div>
+<br>
+<div class="text-end" style="margin-right: 150px; margin-bottom: 10px;">
+    <strong>Total de profesores registrados: {{ profesores|length }}</strong>
+</div>
+<div class="container" style="width: 90%;">
+    <table class="table table-bordered table-striped table-hover" id="tbl-Profesores">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Foto</th>
+                <th>Nombre Completo</th>
+                <th>Cédula</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Sexo</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in profesores %}
+                <tr>
+                    <td>{{ p.id }}</td>
+                    <td>
+                        {% if p.foto %}
+                            <img src="{{ p.foto.url }}" width="100" height="80" alt="Foto Profesor">
+                        {% else %}
+                            No disponible
+                        {% endif %}
+                    </td>
+                    <td>{{ p.nombres }} {{ p.apellidos }}</td>
+                    <td>{{ p.cedula }}</td>
+                    <td>{{ p.email }}</td>
+                    <td>{{ p.telefono }}</td>
+                    <td>{{ p.sexo }}</td>
+                    <td class="text-center">
+                        <label class="switch">
+                            <input type="checkbox" class="toggle-estado" data-id="{{ p.id }}" {% if p.estado %}checked{% endif %}>
+                            <span class="slider round"></span>
+                        </label>
+                    </td>
+
+                    <td>
+                        <div style="display: flex;">
+                            <a href="{% url 'editar_profesor' p.id %}" class="btn btn-outline-warning btn-circle" title="Editar Profesor">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            &nbsp;&nbsp;
+                            <a href="{% url 'eliminar_profesor' p.id %}" class="btn btn-outline-danger" onclick="return confirm('¿Deseas eliminar este profesor?')">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+
+                        </div>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="9">No hay profesores registrados.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    let table = new DataTable('#tbl-Profesores');
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('.toggle-estado').change(function() {
+        const id = $(this).data('id');
+        const csrf = '{{ csrf_token }}';
+
+        $.ajax({
+            url: "{% url 'ajax_cambiar_estado_profesor' %}",
+            method: "POST",
+            data: {
+                id: id,
+                csrfmiddlewaretoken: csrf
+            },
+            success: function(response) {
+                console.log("Estado cambiado:", response.estado);
+            },
+            error: function() {
+                alert("Error al cambiar el estado del profesor.");
+            }
+        });
+    });
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'plantillaAdministrador.html' %}
+{% load static %}
+{% block body %}
+<head>
+  <link rel="stylesheet" href="{% static 'css/estilosSeleccionar.css' %}">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
+    .page-wrapper {
+      display: flex;
+      flex-direction: column;
+      min-height: 82vh;
+    }
+  </style>
+</head>
+
+<br><br><br>
+<div class="page-wrapper">
+  <div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded p-4" style="background-color: #e6f7ff;">
+      <div class="card-body text-center">
+        <i class="fas fa-user-shield fa-3x mb-3 text-primary"></i>
+
+        <h1 class="font-weight-bold">
+          ¡Bienvenido Administrador {{ usuario.get_full_name|default:usuario.username }}!
+        </h1>
+
+        <p class="lead mt-3">
+          Puedes gestionar a los profesores de forma segura.
+        </p>
+
+        <a href="{% url 'lista_profesor' %}" class="btn btn-primary mt-4">
+          Ver Docentes <i class="fas fa-arrow-right ms-2"></i>
+        </a>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

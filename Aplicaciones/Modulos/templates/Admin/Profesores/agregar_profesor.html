@@ -1,0 +1,164 @@
+{% extends 'plantillaAdministrador.html' %}
+{% load static %}
+
+{% block body %}
+<br><br>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center" style="background-color: #286ea8;">
+                    <h4 style="color: white;">Agregar Profesor</h4>
+                </div>
+                <div class="card-body Mensaje-error" style="background-color: #bddde4">
+                    <form action="{% url 'agregar_profesor' %}" method="POST" enctype="multipart/form-data" id="frm_profesor">
+                        {% csrf_token %}
+
+                        <div class="form-group">
+                            <label for="nombres">Nombres:</label>
+                            <input type="text" name="nombres" id="nombres" class="form-control" required placeholder="Ingrese Nombre del Profesor">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="apellidos">Apellidos:</label>
+                            <input type="text" name="apellidos" id="apellidos" class="form-control" required placeholder="Ingrese Apellido del Profesor">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cedula">Cédula:</label>
+                            <input type="text" name="cedula" id="cedula" class="form-control" maxlength="10" required  placeholder="Ingrese el número de Cédula">
+                            {% if error_cedula %}
+                            <small class="form-text text-danger">{{ error_cedula }}</small>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="telefono">Teléfono:</label>
+                            <input type="text" name="telefono" id="telefono" class="form-control" maxlength="15" placeholder="Ingrese el número de teléfono">
+                            {% if error_telefono %}
+                            <small class="form-text text-danger">{{ error_telefono }}</small>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Correo Electrónico:</label>
+                            <input type="email" name="email" id="email" class="form-control" required placeholder="Ingrese el correo electrónico">
+                            {% if error_email %}
+                            <small class="form-text text-danger">{{ error_email }}</small>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="usuario">Nombre de Usuario:</label>
+                            <input type="text" name="usuario" id="usuario" class="form-control" required placeholder="Ingrese un nombre de usuario">
+                            {% if error_usuario %}
+                            <samll class="form-text text-danger">{{ error_usuario }}</samll>
+                        {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contrasena">Contraseña:</label>
+                            <input type="password" name="contrasena" id="contrasena" class="form-control" required placeholder="Ingrese una contraseña">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="sexo">Sexo:</label>
+                            <select name="sexo" id="sexo" class="form-control" required>
+                                <option value="">Seleccione</option>
+                                <option value="Masculino">Masculino</option>
+                                <option value="Femenino">Femenino</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="estado">Estado:</label>
+                            <select name="estado" id="estado" class="form-control" required>
+                                <option value="">Seleccione</option>
+                                <option value="ACTIVO">ACTIVO</option>
+                                <option value="INACTIVO">INACTIVO</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="foto">Foto:</label>
+                            <input type="file" name="foto" id="foto" class="form-control" accept="image/*">
+                            <div class="mt-3 text-center">
+                                <img id="preview_foto" src="#" alt="Vista previa" class="img-thumbnail" style="display:none; max-width: 120px; max-height: 120px;">
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-outline-primary">Guardar</button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <a href="{% url 'lista_profesor' %}" class="btn btn-outline-secondary">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#frm_profesor").validate({
+        rules: {
+            nombres: { required: true },
+            apellidos: { required: true },
+            cedula: { required: true, minlength: 10, maxlength: 10 },
+            email: { required: true },
+            usuario: { required: true },
+            contrasena: { required: true },
+            sexo: { required: true },
+            estado: { required: true }
+        },
+        messages: {
+            nombres: { required: "Ingrese los nombres" },
+            apellidos: { required: "Ingrese los apellidos" },
+            cedula: {
+                required: "Ingrese la cédula",
+                minlength: "La cédula debe tener 10 dígitos",
+                maxlength: "La cédula debe tener 10 dígitos"
+            },
+            email: { required: "Ingrese el correo electrónico" },
+            usuario: { required: "Ingrese el nombre de usuario" },
+            contrasena: { required: "Ingrese una contraseña" },
+            sexo: { required: "Seleccione el sexo" },
+            estado: { required: "Seleccione el estado" }
+        }
+    });
+
+    document.getElementById('cedula').addEventListener('input', function () {
+        this.value = this.value.replace(/[^0-9]/g, '');
+    });
+
+    document.getElementById('telefono').addEventListener('input', function () {
+        this.value = this.value.replace(/[^0-9]/g, '');
+    });
+
+    document.getElementById('nombres').addEventListener('input', function () {
+        this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+    });
+
+    document.getElementById('apellidos').addEventListener('input', function () {
+        this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+    });
+
+    document.getElementById('foto').addEventListener('change', function (event) {
+        const input = event.target;
+        const preview = document.getElementById('preview_foto');
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            preview.src = '#';
+            preview.style.display = 'none';
+        }
+    });
+</script>
+
+<br>
+{% endblock %}

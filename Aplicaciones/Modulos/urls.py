@@ -6,6 +6,14 @@ urlpatterns = [
 
     ########################### LADO DEL ADMINISTRADOR ##############################
 
+    #---------------PROFESORES----------------
+    path('superadmin/profesor/', views.lista_profesor, name='lista_profesor'),
+    path('ajax/cambiar_estado_profesor/', views.ajax_cambiar_estado_profesor, name='ajax_cambiar_estado_profesor'),
+    path('superadmin/profesor/agregar/', views.agregar_profesor, name='agregar_profesor'),
+    path('profesor/editar/<int:id>/', views.editar_profesor, name='editar_profesor'),
+    path('profesor/eliminar/<int:id>/', views.eliminar_profesor, name='eliminar_profesor'),
+
+
     # APRENDER
 
     #-----------------------OBJETOS--------------------
@@ -188,6 +196,11 @@ urlpatterns = [
     path('login/', views.login_profesor, name='login_profesor'),
     path('bienvenida/', views.profesor_bienvenida, name='profesor_bienvenida'),
     path('logout/', views.logout_profesor, name='logout_profesor'),
+
+    # ---------------ADMIN-----------------------
+    path('login_admin/', views.login_admin, name='login_admin'),
+    path('admin_bienvenida/', views.admin_bienvenida, name='admin_bienvenida'),
+    path('logout_admin/', views.logout_admin, name='logout_admin'),
 
     #--------------------HISTORIA---------------------
     path('historia/', views.historia, name='historia'),

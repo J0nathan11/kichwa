@@ -169,6 +169,8 @@ class Profesor(models.Model):
     telefono = models.CharField(max_length=15, blank=True, null=True)
     email = models.EmailField(unique=True)
     sexo = models.CharField(max_length=10)
+    estado = models.BooleanField(default=True)
+
 
     def __str__(self):
         return f"{self.nombres} {self.apellidos}"

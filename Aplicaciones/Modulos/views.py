@@ -5,11 +5,227 @@ from .models import Aprender_Parentesco, Aprender_Elemento_Naturaleza, Estudiant
 from .models import Evaluacion_Cuarto, Evaluacion_Tercero, Resultado_Evaluacion_Cuarto, Resultado_Evaluacion_Tercero
 from django.contrib import messages
 import re
-# 
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth import authenticate, login
+
+
+def login_admin(request):
+    if request.method == 'POST':
+        usuario = request.POST.get('usuario')
+        contrasena = request.POST.get('contrasena')
+
+        user = authenticate(request, username=usuario, password=contrasena)
+
+        if user is not None and user.is_superuser:
+            login(request, user)
+            return redirect('admin_bienvenida')
+        else:
+            messages.error(request, 'Usuario o contraseña incorrectos')
+
+    return render(request, 'Login/login_admin.html')
+
+
+# SOLO ADMIN
+@login_required(login_url='login_admin')
+@user_passes_test(lambda u: u.is_superuser, login_url='login_admin')
+def admin_bienvenida(request):
+    return render(request, 'Admin/admin_bienvenida.html', {
+        'usuario': request.user
+    })
+
+
+from django.contrib.auth import logout
+
+def logout_admin(request):
+    logout(request)
+    return redirect('login_admin')
+
+
+#-------------------------SUPER ADMINISTRADOR------------
+# LISTA PROFESORES
+def lista_profesor(request):
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        return redirect('login_admin')  # Solo admins acceden
+
+    profesores = Profesor.objects.all()
+    return render(request, 'Admin/Profesores/lista_profesor.html', {
+        'profesores': profesores
+    })
+
+# CAMBIAR ESTADO DEL PROFESOR 
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+@login_required(login_url='login_admin')
+@user_passes_test(lambda u: u.is_superuser, login_url='login_admin')
+@csrf_exempt
+def ajax_cambiar_estado_profesor(request):
+    if request.method == 'POST':
+        id = request.POST.get('id')
+        profesor = get_object_or_404(Profesor, id=id)
+        profesor.estado = not profesor.estado
+        profesor.save()
+        return JsonResponse({'estado': profesor.estado})
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+# -----------VALIDACIONES -------------
+import re
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
+
+# VALIDACION TELEFONO
+def validar_telefono_ecuador(numero):
+    return bool(re.fullmatch(r'09\d{8}', numero))
+
+# VALIDACION CORREO
+def validar_correo(correo):
+    try:
+        validate_email(correo)
+        return True
+    except ValidationError:
+        return False
+
+# AGREGAR PROFESOR
+def agregar_profesor(request):
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        return redirect('login_admin')
+
+    error_cedula = None
+    error_usuario = None
+    error_email = None
+    error_telefono = None
+
+    if request.method == 'POST':
+        nombres = request.POST.get('nombres').strip()
+        apellidos = request.POST.get('apellidos').strip()
+        cedula = request.POST.get('cedula').strip()
+        telefono = request.POST.get('telefono').strip()
+        email = request.POST.get('email').strip()
+        sexo = request.POST.get('sexo')
+        estado = True if request.POST.get('estado') == 'ACTIVO' else False
+        usuario = request.POST.get('usuario').strip()
+        contrasena = request.POST.get('contrasena')
+        foto = request.FILES.get('foto')
+
+        # Validaciones
+        if not validar_cedula_ecuatoriana(cedula):
+            error_cedula = "La cédula ingresada no es válida."
+        elif Profesor.objects.filter(cedula=cedula).exists():
+            error_cedula = f"La cédula '{cedula}' ya está registrada."
+        elif Profesor.objects.filter(usuario=usuario).exists():
+            error_usuario = f"El usuario '{usuario}' ya está registrado."
+        elif Profesor.objects.filter(email=email).exists():
+            error_email = f"El correo '{email}' ya está registrado."
+        elif not validar_telefono_ecuador(telefono):
+            error_telefono = "El número de teléfono debe comenzar con 09 y tener 10 dígitos."
+        elif not validar_correo(email):
+            error_email = "El correo electrónico ingresado no es válido."
+        else:
+            profesor = Profesor(
+                nombres=nombres,
+                apellidos=apellidos,
+                cedula=cedula,
+                telefono=telefono,
+                email=email,
+                sexo=sexo,
+                estado=estado,
+                usuario=usuario,
+                contrasena=contrasena  
+            )
+            if foto:
+                profesor.foto = foto
+
+            profesor.save()
+            messages.success(request, 'Profesor agregado correctamente.')
+            return redirect('lista_profesor')
+
+    return render(request, 'Admin/Profesores/agregar_profesor.html', {
+        'error_cedula': error_cedula,
+        'error_usuario': error_usuario,
+        'error_email': error_email,
+        'error_telefono': error_telefono
+    })
+
+# EDITAR PROFESOR
+def editar_profesor(request, id):
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        return redirect('login_admin')
+
+    profesor = get_object_or_404(Profesor, id=id)
+
+    error_cedula = None
+    error_usuario = None
+    error_email = None
+    error_telefono = None
+
+    if request.method == 'POST':
+        nombres = request.POST.get('nombres').strip()
+        apellidos = request.POST.get('apellidos').strip()
+        cedula = request.POST.get('cedula').strip()
+        telefono = request.POST.get('telefono').strip()
+        email = request.POST.get('email').strip()
+        sexo = request.POST.get('sexo')
+        estado = True if request.POST.get('estado') == 'ACTIVO' else False
+        usuario = request.POST.get('usuario').strip()
+        contrasena = request.POST.get('contrasena')
+        foto = request.FILES.get('foto')
+
+        # Validaciones
+        if not validar_cedula_ecuatoriana(cedula):
+            error_cedula = "La cédula ingresada no es válida."
+        elif Profesor.objects.exclude(id=id).filter(cedula=cedula).exists():
+            error_cedula = f"La cédula '{cedula}' ya está registrada."
+        elif Profesor.objects.exclude(id=id).filter(usuario=usuario).exists():
+            error_usuario = f"El usuario '{usuario}' ya está registrado."
+        elif Profesor.objects.exclude(id=id).filter(email=email).exists():
+            error_email = f"El correo '{email}' ya está registrado."
+        elif not validar_telefono_ecuador(telefono):
+            error_telefono = "El número de teléfono debe comenzar con 09 y tener 10 dígitos."
+        elif not validar_correo(email):
+            error_email = "El correo electrónico ingresado no es válido."
+        else:
+            # Actualizar datos
+            profesor.nombres = nombres
+            profesor.apellidos = apellidos
+            profesor.cedula = cedula
+            profesor.telefono = telefono
+            profesor.email = email
+            profesor.sexo = sexo
+            profesor.estado = estado
+            profesor.usuario = usuario
+            profesor.contrasena = contrasena  # en texto plano como solicitaste
+
+            if foto:
+                profesor.foto = foto
+
+            profesor.save()
+            messages.success(request, 'Datos del profesor actualizados correctamente.')
+            return redirect('lista_profesor')
+
+    return render(request, 'Admin/Profesores/editar_profesor.html', {
+        'profesor': profesor,
+        'error_cedula': error_cedula,
+        'error_usuario': error_usuario,
+        'error_email': error_email,
+        'error_telefono': error_telefono
+    })
+
+# ELIMINAR
+def eliminar_profesor(request, id):
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        return redirect('login_admin')
+
+    profesor = get_object_or_404(Profesor, id=id)
+    profesor.delete()
+    messages.success(request, "Profesor eliminado correctamente.")
+    return redirect('lista_profesor') 
+
+# ----------------------PAGUINA DE INICIO----------------------
 def inicio(request):
     return render(request,'Bienvenida/inicio.html')
 
-#---------------------------LOGIN------------------------
+#---------------------------LOGIN PROFESOR------------------------
 def login_profesor(request):
     if request.method == 'POST':
         usuario = request.POST.get('usuario')
@@ -20,12 +236,17 @@ def login_profesor(request):
         except Profesor.DoesNotExist:
             profesor = None
 
-        if profesor and profesor.contrasena == contrasena:
-            request.session['profesor_id'] = profesor.id
-            request.session['profesor_usuario'] = profesor.usuario
-            return redirect('profesor_bienvenida')  
+        if profesor:
+            if profesor.contrasena != contrasena:
+                messages.error(request, 'Contraseña incorrecta.')
+            elif not profesor.estado:
+                messages.error(request, 'Su cuenta está inactiva. Comuníquese con el administrador.')
+            else:
+                request.session['profesor_id'] = profesor.id
+                request.session['profesor_usuario'] = profesor.usuario
+                return redirect('profesor_bienvenida')
         else:
-            messages.error(request, 'Usuario o contraseña incorrectos.')
+            messages.error(request, 'El usuario no existe.')
 
     return render(request, 'Login/login_profesor.html')
 

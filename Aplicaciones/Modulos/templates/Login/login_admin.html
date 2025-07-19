@@ -5,7 +5,7 @@
 <div class="text-center mb-3">
     <div class="p-3 rounded shadow-sm d-inline-block mx-auto" style="background-color: rgba(241, 241, 232, 0.733);">
         <h4 style="font-family: 'Comic Sans MS', cursive; color: #2a6ecb; margin: 0;">
-            Ingresa y observa el resultado de los alumnos
+            Ingreso exclusivo para el Administrador
         </h4>
     </div>
 </div>
@@ -15,30 +15,30 @@
 <div class="d-flex justify-content-center align-items-center" style="min-height: 400px;">
 
     <div class="card shadow p-5" style="width: 100%; max-width: 400px; border-radius: 15px;">
-        <h2 class="text-center mb-4 text-primary" style="font-family: 'Comic Sans MS', cursive;">¡Bienvenido!</h2>
+        <h2 class="text-center mb-4 text-primary" style="font-family: 'Comic Sans MS', cursive;">¡Panel del Administrador!</h2>
+
         {% if messages %}
             {% for message in messages %}
                 <div class="alert alert-danger mt-3" role="alert"
-                     style="font-family: 'Comic Sans MS', cursive; color: #fff; background-color: #FF5733; border-radius: 10px;">
+                     style="font-family: 'Comic Sans MS', cursive; background-color: #FF5733; color: white; border-radius: 10px;">
                     {{ message }}
                 </div>
             {% endfor %}
         {% endif %}
-        <form method="POST" action="{% url 'login_profesor' %}" id="frm_login_profesor">
+
+        <form method="POST" action="{% url 'login_admin' %}">
             {% csrf_token %}
-            
             <div class="mb-3">
                 <label for="usuario" class="form-label" style="font-family: 'Comic Sans MS', cursive; color: #4164b1;">Usuario</label>
                 <input type="text" name="usuario" id="usuario" class="form-control form-control-lg"
-                       placeholder="Escribe tu usuario" required
-                       value="{{ request.POST.usuario }}"
+                       placeholder="Nombre de usuario" required
                        style="border-radius: 10px; border: 2px solid #3cc043; font-size: 14px;">
             </div>
 
             <div class="mb-3">
                 <label for="contrasena" class="form-label" style="font-family: 'Comic Sans MS', cursive; color: #4164b1;">Contraseña</label>
                 <input type="password" name="contrasena" id="contrasena" class="form-control form-control-lg"
-                       placeholder="Escribe tu contraseña" required
+                       placeholder="Contraseña" required
                        style="border-radius: 10px; border: 2px solid #3cc043; font-size: 14px;">
             </div>
 
@@ -46,39 +46,12 @@
                     style="border-radius: 10px; font-family: 'Comic Sans MS', cursive;">
                 Ingresar
             </button>
-
-            <a href="{% url 'login_admin' %}" class="btn btn-info w-100 mt-2"
-            style="border-radius: 10px; font-family: 'Comic Sans MS', cursive; text-decoration: none;">
-                Iniciar como Administrador
-            </a>
-
-
-            <a href="{% url 'inicio' %}" class="btn btn-secondary w-100 mt-2"
-               style="border-radius: 10px; font-family: 'Comic Sans MS', cursive; text-decoration: none;">
-                Salir
-            </a>
         </form>
 
-        
-    </div>
-
-    <div class="d-none d-md-block" style="max-width: 450px; margin-left: 20px;">
-        <img src="{% static 'imagenes/profesora.png' %}" alt="Imagen educativa"
-             class="img-fluid" style="border-radius: 15px; max-height: 420px; object-fit: cover;">
+        <a href="{% url 'login_profesor' %}" class="btn btn-secondary w-100 mt-2"
+           style="border-radius: 10px; font-family: 'Comic Sans MS', cursive; text-decoration: none;">
+            Salir
+        </a>
     </div>
 </div>
-
-<script>
-    $("#frm_login_profesor").validate({
-        rules: {
-            usuario: { required: true },
-            contrasena: { required: true }
-        },
-        messages: {
-            usuario: { required: "Por favor ingrese el nombre del usuario" },
-            contrasena: { required: "Por favor ingrese la contraseña" }
-        }
-    });
-</script>
-
 {% endblock %}
