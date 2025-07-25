@@ -1,89 +1,119 @@
-{% extends "./plantilla.html" %}
+{% extends "plantillaModulos.html" %}
 {% load static %}
 
 {% block body %}
+<link rel="stylesheet" href="{% static 'css/estilosInicio.css' %}">
 
-<!-- Swiper CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<div style="text-align: center;">
+  <h2 class="titulo-bienvenida">
+    ¡Bienvenido/a estudiante!
+    <img src="{% static 'imagenes/inicio/ardilla.gif' %}" alt="ardilla" class="gif-ardilla">
+  </h2>
+</div>
 
-<!-- Estilos personalizados -->
-<link rel="stylesheet" href="{% static 'css/inicioGaleria.css' %}">
+<div class="zona-bienvenida">
 
-<section class="vehicle_section layout_padding">
-  <div class="container">
-
-    <h2 class="main-heading text-center">🎉 ¡Galería de fotos divertida!</h2>
-
-    <!-- Swiper Carrusel 3D -->
-    <div class="swiper mySwiper mt-2">
-      <div class="swiper-wrapper">
-
-        <div class="swiper-slide">
-          <a href="#"><img src="{% static 'imagenes/fotos_escuela/foto1.png' %}" alt="Colores"></a>
-        </div>
-
-        <div class="swiper-slide">
-          <a href="#"><img src="{% static 'imagenes/fotos_escuela/escuela.png' %}" alt="Escuela"></a>
-        </div>
-
-        <div class="swiper-slide">
-          <a href="#"><img src="{% static 'imagenes/fotos_escuela/foto2.png' %}" alt="Naturaleza"></a>
-        </div>
-
-        <div class="swiper-slide">
-          <a href="#"><img src="{% static 'imagenes/fotos_escuela/foto3.png' %}" alt="Objetos"></a>
-        </div>
-
-        <div class="swiper-slide">
-          <a href="#"><img src="{% static 'imagenes/fotos_escuela/foto4.png' %}" alt="Números"></a>
-        </div>
-
-        <div class="swiper-slide">
-          <a href="#"><img src="{% static 'imagenes/fotos_escuela/foto5.png' %}" alt="Juegos"></a>
-        </div>
-
-      </div>
-
-      <!-- Controles -->
-      <div class="swiper-button-next"></div>
-      <div class="swiper-button-prev"></div>
-      <div class="swiper-pagination"></div>
-    </div>
+  <!-- Figuras animadas -->
+  <div class="contenedor-figuras">
+    <div class="figura" id="figura1"><img src="{% static 'imagenes/inicio/mikey_mouse.gif' %}"></div>
+    <div class="figura" id="figura2"><img src="{% static 'imagenes/inicio/pato_donal.gif' %}"></div>
+    <div class="figura" id="figura3"><img src="{% static 'imagenes/inicio/doraemon.gif' %}"></div>
+    <div class="figura" id="figura4"><img src="{% static 'imagenes/inicio/pitufo.gif' %}"></div>
   </div>
-</section>
 
-<!-- Swiper JS -->
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <!-- Galería -->
+  <div class="galeria-imagenes">
+    <img class="galeria-item activo" src="{% static 'imagenes/fotos_escuela/escuela.png' %}">
+    <img class="galeria-item" src="{% static 'imagenes/fotos_escuela/foto1.png' %}">
+    <img class="galeria-item" src="{% static 'imagenes/fotos_escuela/foto2.png' %}">
+    <img class="galeria-item" src="{% static 'imagenes/fotos_escuela/foto3.png' %}">
+  </div>
 
-<!-- Configuración Swiper -->
+</div>
+
 <script>
-  var swiper = new Swiper(".mySwiper", {
-    effect: "coverflow",
-    grabCursor: true,
-    centeredSlides: true,
-    slidesPerView: "auto",
-    initialSlide: 1,
-    loop: true,
-    coverflowEffect: {
-      rotate: 50,
-      stretch: 0,
-      depth: 200,
-      modifier: 1,
-      slideShadows: true,
-    },
-    pagination: {
-      el: ".swiper-pagination",
-      clickable: true,
-    },
-    navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev",
-    },
-    autoplay: {
-      delay: 3500,
-      disableOnInteraction: false,
-    },
-  });
+  function colision(rect1, rect2, margen = 10) {
+    return !(
+      rect1.left + rect1.width + margen < rect2.left ||
+      rect1.left > rect2.left + rect2.width + margen ||
+      rect1.top + rect1.height + margen < rect2.top ||
+      rect1.top > rect2.top + rect2.height + margen
+    );
+  }
+
+  function moverAleatorio(figura, posiciones) {
+    const zona = document.querySelector(".contenedor-figuras");
+    const zonaWidth = zona.clientWidth;
+    const zonaHeight = zona.clientHeight;
+
+    const figuraWidth = figura.offsetWidth;
+    const figuraHeight = figura.offsetHeight;
+
+    const margen = 20;
+    const maxIntentos = 500;
+    let intentos = 0;
+    let nuevaPos;
+
+    do {
+      const left = Math.floor(Math.random() * (zonaWidth - figuraWidth - margen));
+      const top = Math.floor(Math.random() * (zonaHeight - figuraHeight - margen));
+
+      const nuevaCaja = {
+        left: left,
+        top: top,
+        width: figuraWidth,
+        height: figuraHeight
+      };
+
+      const colisiona = posiciones.some(pos => colision(nuevaCaja, pos, margen));
+      if (!colisiona) {
+        nuevaPos = nuevaCaja;
+        break;
+      }
+
+      intentos++;
+    } while (intentos < maxIntentos);
+
+    if (nuevaPos) {
+      posiciones.push(nuevaPos);
+      figura.style.left = nuevaPos.left + "px";
+      figura.style.top = nuevaPos.top + "px";
+      figura.style.opacity = 0;
+      setTimeout(() => figura.style.opacity = 1, 300);
+    }
+  }
+
+  function iniciarMovimiento() {
+    const figuras = document.querySelectorAll(".figura");
+    const posiciones = [];
+
+    figuras.forEach((figura, index) => {
+      setTimeout(() => moverAleatorio(figura, posiciones), index * 300);
+    });
+
+    setInterval(() => {
+      const nuevasPosiciones = [];
+      figuras.forEach((figura, index) => {
+        setTimeout(() => moverAleatorio(figura, nuevasPosiciones), index * 300);
+      });
+    }, 8000);
+  }
+
+  function rotarImagenes() {
+    const imagenes = document.querySelectorAll('.galeria-item');
+    let index = 0;
+
+    setInterval(() => {
+      imagenes.forEach(img => img.classList.remove("activo"));
+      index = (index + 1) % imagenes.length;
+      imagenes[index].classList.add("activo");
+    }, 4000);
+  }
+
+  window.onload = () => {
+    iniciarMovimiento();
+    rotarImagenes();
+  };
 </script>
 
 {% endblock %}
