@@ -42,7 +42,7 @@
 
     background-image:
       linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), /* capa blanca semitransparente */
-      url("{% static 'plantilla/adward/images/fondo1.gif' %}");           /* fondo GIF */
+      url("{% static 'plantilla/adward/images/fondo_aprender.jpg' %}");           /* fondo GIF */
 
     background-repeat: no-repeat;
     background-position: center center;
@@ -112,9 +112,9 @@
 <body>
 
   <!-- Header / Navbar -->
-  <nav class="navbar navbar-expand-lg">
+  <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container">
-      <a class="navbar-brand d-flex align-items-center" href="{% url 'inicio' %}">
+      <a class="navbar-brand d-flex align-items-center" href="{% url 'aprender' %}">
         <img src="{% static 'plantilla/adward/images/logo.png' %}" alt="Logo" width="50" class="me-2">
         <span>SUMAK KAWSAY</span>
       </a>
@@ -123,17 +123,16 @@
       </button>
       <div class="collapse navbar-collapse" id="menu">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="{% url 'inicio' %}">Inicio</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'historia' %}">Historia</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'login_profesor' %}">Profesor</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'login_estudiante' %}">Evaluación</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'aprender' %}">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="">Progreso</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'logout_estudiante_aprender' %}">Salir</a></li>
         </ul>
       </div>
     </div>
   </nav>
 
   <!-- Contenido dinámico -->
-  <div class="container my-4">
+  <div class="container mt-5 pt-5">
     {% block body %}
     {% endblock %}
   </div>

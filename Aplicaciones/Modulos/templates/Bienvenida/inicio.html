@@ -6,56 +6,14 @@
 <!-- Swiper CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
-<style>
-  .swiper {
-    width: 60%;
-    padding-top: 60px;
-    padding-bottom: 50px;
-  }
-
-  .swiper-slide {
-    background: #fff;
-    border-radius: 15px;
-    text-align: center;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    padding: 20px;
-    transition: transform 0.3s ease;
-  }
-
-  .swiper-slide img {
-    max-height: 250px;
-    border-radius: 12px;
-    display: block;
-    margin: auto;
-  }
-
-  .video-title {
-    font-size: 22px;
-    font-weight: bold;
-    color: #ff4081;
-    margin-top: 15px;
-    animation: moverArribaAbajo 5s ease-in-out infinite;
-  }
-
-  @keyframes moverArribaAbajo {
-    0% { transform: translateY(-10px); }
-    50% { transform: translateY(10px); }
-    100% { transform: translateY(-10px); }
-  }
-
-  .swiper-button-next,
-  .swiper-button-prev {
-    color: #ff4081;
-  }
-
-  .swiper-pagination-bullet-active {
-    background: #ff4081;
-  }
-</style>
+<!-- Estilos personalizados -->
+<link rel="stylesheet" href="{% static 'css/inicioGaleria.css' %}">
 
 <section class="vehicle_section layout_padding">
   <div class="container">
-    <h2 class="main-heading text-center">¡Galeria de fotos!</h2>
+
+    <h2 class="main-heading text-center">🎉 ¡Galería de fotos divertida!</h2>
+
     <!-- Swiper Carrusel 3D -->
     <div class="swiper mySwiper mt-2">
       <div class="swiper-wrapper">
@@ -65,11 +23,11 @@
         </div>
 
         <div class="swiper-slide">
-          <a href="#"><img src="{% static 'imagenes/fotos_escuela/escuela.png' %}" alt="Animales"></a>
+          <a href="#"><img src="{% static 'imagenes/fotos_escuela/escuela.png' %}" alt="Escuela"></a>
         </div>
 
         <div class="swiper-slide">
-          <a href="#"><img src="{% static 'imagenes/fotos_escuela/foto2.png' %}" alt="Elementos Naturaleza"></a>
+          <a href="#"><img src="{% static 'imagenes/fotos_escuela/foto2.png' %}" alt="Naturaleza"></a>
         </div>
 
         <div class="swiper-slide">
@@ -77,12 +35,13 @@
         </div>
 
         <div class="swiper-slide">
-          <a href="#"><img src="{% static 'imagenes/fotos_escuela/foto4.png' %}" alt="Numeros"></a>
+          <a href="#"><img src="{% static 'imagenes/fotos_escuela/foto4.png' %}" alt="Números"></a>
         </div>
 
         <div class="swiper-slide">
-          <a href="#"><img src="{% static 'imagenes/fotos_escuela/foto5.png' %}" alt="Numeros"></a>
+          <a href="#"><img src="{% static 'imagenes/fotos_escuela/foto5.png' %}" alt="Juegos"></a>
         </div>
+
       </div>
 
       <!-- Controles -->
@@ -93,8 +52,10 @@
   </div>
 </section>
 
-<!-- Swiper JS y Configuración -->
+<!-- Swiper JS -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<!-- Configuración Swiper -->
 <script>
   var swiper = new Swiper(".mySwiper", {
     effect: "coverflow",

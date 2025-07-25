@@ -112,7 +112,7 @@
 <body>
 
   <!-- Header / Navbar -->
-  <nav class="navbar navbar-expand-lg">
+  <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container">
       <a class="navbar-brand d-flex align-items-center" href="{% url 'inicio' %}">
         <img src="{% static 'plantilla/adward/images/logo.png' %}" alt="Logo" width="50" class="me-2">
@@ -133,7 +133,7 @@
   </nav>
 
   <!-- Contenido dinámico -->
-  <div class="container my-4">
+  <div class="container mt-5 pt-5">
     {% block body %}
     {% endblock %}
   </div>

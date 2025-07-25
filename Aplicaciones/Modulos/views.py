@@ -2024,6 +2024,10 @@ def login_estudiante(request):
 
     return render(request, 'Login/login_estudiante.html')
 
+def logout_estudiante(request):
+    request.session.flush()
+    return redirect('login_estudiante')
+
 # --------------VER TIPO EVALUACION -----------------
 def ver_evaluacion_tercero(request):
     estudiante_id = request.session.get('estudiante_id')
@@ -2221,63 +2225,99 @@ def mostrar_evaluacion_cuarto(request, evaluacion_id):
 #-------------------------------ARENDER  ---------------------
 # MESES
 def ver_meses(request):
+    if not request.session.get('estudiante_nombre') or not request.session.get('estudiante_apellido'):
+        return redirect('login_estudiante_aprender')
+
     meses = Aprender_Meses.objects.all()
     return render(request, 'Aprender/meses.html', {'meses': meses})
 
 # OBJETOS
 def ver_objetos(request):
+    if not request.session.get('estudiante_nombre') or not request.session.get('estudiante_apellido'):
+        return redirect('login_estudiante_aprender')
+    
     objetos = Aprender_Objetos.objects.all()
     return render(request, 'Aprender/objetos.html', {'objetos': objetos})
 
 # NUMEROS
 def ver_numeros(request):
+    if not request.session.get('estudiante_nombre') or not request.session.get('estudiante_apellido'):
+        return redirect('login_estudiante_aprender')
+    
     numeros = Aprender_Numeros.objects.all()
     return render(request, 'Aprender/numeros.html', {'numeros': numeros})
 
 # DIAS DE LA SEMANA
 def ver_dias(request):
+    if not request.session.get('estudiante_nombre') or not request.session.get('estudiante_apellido'):
+        return redirect('login_estudiante_aprender')
+    
     dias = Aprender_Dias.objects.all()
     return render(request, 'Aprender/dias.html', {'dias': dias})
 
 # ANIMALES
 def ver_animales(request):
+    if not request.session.get('estudiante_nombre') or not request.session.get('estudiante_apellido'):
+        return redirect('login_estudiante_aprender')
+    
     animales = Aprender_Animales.objects.all()
     return render(request, 'Aprender/animales.html', {'animales': animales})
 
 # SALUDOS
 def ver_saludos(request):
+    if not request.session.get('estudiante_nombre') or not request.session.get('estudiante_apellido'):
+        return redirect('login_estudiante_aprender')
+    
     saludos = Aprender_Saludos.objects.all()
     return render(request, 'Aprender/saludos.html', {'saludos': saludos})
 
 # COLORES
 def ver_colores(request):
+    if not request.session.get('estudiante_nombre') or not request.session.get('estudiante_apellido'):
+        return redirect('login_estudiante_aprender')
+
     colores = Aprender_Colores.objects.all()
     return render(request, 'Aprender/colores.html', {'colores': colores})
 
 # CUERPO HUMANO
 def ver_cuerpo_humano(request):
+    if not request.session.get('estudiante_nombre') or not request.session.get('estudiante_apellido'):
+        return redirect('login_estudiante_aprender')
+    
     cuerpo_humano = Aprender_Cuerpo_Humano.objects.all()
     return render(request, 'Aprender/cuerpo_humano.html', {'cuerpo_humano': cuerpo_humano})
 
 # PARENTESCO
 def ver_parentesco(request):
+    if not request.session.get('estudiante_nombre') or not request.session.get('estudiante_apellido'):
+        return redirect('login_estudiante_aprender')
+    
     parentescos = Aprender_Parentesco.objects.all()
     return render(request, 'Aprender/parentesco.html', {'parentescos': parentescos})
 
 # ELEMENTO NATURALEZA
 def ver_elemento_naturaleza(request):
+    if not request.session.get('estudiante_nombre') or not request.session.get('estudiante_apellido'):
+        return redirect('login_estudiante_aprender')
+    
     elemento_naturaleza = Aprender_Elemento_Naturaleza.objects.all()
     return render(request, 'Aprender/elemento_naturaleza.html', {'elemento_naturaleza': elemento_naturaleza})
 
 #-----------------------JUGAR ------------------------------
 # MESES
 def jugar_meses(request):
+    if not request.session.get('estudiante_nombre') or not request.session.get('estudiante_apellido'):
+        return redirect('login_estudiante_aprender')
+    
     meses = Aprender_Meses.objects.all()
     return render(request, 'Juegos/jugar_meses.html', {'meses': meses})
 
 # OBJETOS
 import random
 def jugar_objetos(request):
+    if not request.session.get('estudiante_nombre') or not request.session.get('estudiante_apellido'):
+        return redirect('login_estudiante_aprender')
+    
     objetos = list(Aprender_Objetos.objects.all())
     random.shuffle(objetos)
     objetos = objetos[:10]  # Selecciona 10 aleatorios
@@ -2286,53 +2326,130 @@ def jugar_objetos(request):
 
 # NUMEROS
 def jugar_numeros(request):
+    if not request.session.get('estudiante_nombre') or not request.session.get('estudiante_apellido'):
+        return redirect('login_estudiante_aprender')
+    
     numeros = Aprender_Numeros.objects.all()
     return render(request, 'Juegos/jugar_numeros.html', {'numeros': numeros})
 
 # DIAS DE LA SEMANA
 def jugar_dias(request):
+    if not request.session.get('estudiante_nombre') or not request.session.get('estudiante_apellido'):
+        return redirect('login_estudiante_aprender')
+    
     dias = Aprender_Dias.objects.all()
     return render(request, 'Juegos/jugar_dias.html', {'dias': dias})
 
 # ANIMALES
 def jugar_animales(request):
+    if not request.session.get('estudiante_nombre') or not request.session.get('estudiante_apellido'):
+        return redirect('login_estudiante_aprender')
+    
     todos = list(Aprender_Animales.objects.all())
     seleccionados = random.sample(todos, min(15, len(todos)))  # 15 al azar o menos si hay pocos
     return render(request, 'Juegos/jugar_animales.html', {'animales': seleccionados})
 
 # COLORES
 def jugar_colores(request):
+    if not request.session.get('estudiante_nombre') or not request.session.get('estudiante_apellido'):
+        return redirect('login_estudiante_aprender')
+    
     colores = Aprender_Colores.objects.all()
     return render(request, 'Juegos/jugar_colores.html', {'colores': colores})
 
 # SALUDOS
 def jugar_saludos(request):
+    if not request.session.get('estudiante_nombre') or not request.session.get('estudiante_apellido'):
+        return redirect('login_estudiante_aprender')
+    
     saludos = list(Aprender_Saludos.objects.all())  
     random.shuffle(saludos) 
     return render(request, 'Juegos/jugar_saludos.html', {'saludos': saludos})
 
 # CUERPO HUMANO
 def jugar_cuerpo_humano(request):
+    if not request.session.get('estudiante_nombre') or not request.session.get('estudiante_apellido'):
+        return redirect('login_estudiante_aprender')
+    
     cuerpo_humano = Aprender_Cuerpo_Humano.objects.all()
     return render(request, 'Juegos/jugar_cuerpo_humano.html', {'cuerpo_humano': cuerpo_humano})
 
 # PARENTESCO
 def jugar_parentesco(request):
+    if not request.session.get('estudiante_nombre') or not request.session.get('estudiante_apellido'):
+        return redirect('login_estudiante_aprender')
+    
     parentescos = list(Aprender_Parentesco.objects.all())
     random.shuffle(parentescos)
     return render(request, 'Juegos/jugar_parentesco.html', {'parentescos': parentescos})
 
 # ELEMENTOS NATURALEZA
 def jugar_elementos_naturaleza(request):
+    if not request.session.get('estudiante_nombre') or not request.session.get('estudiante_apellido'):
+        return redirect('login_estudiante_aprender')
+    
     elementos = Aprender_Elemento_Naturaleza.objects.all()
     return render(request, 'Juegos/jugar_elementos_naturaleza.html', {'elementos': elementos})
 
 
-#--------------------------APRENDER DIFERENTES MODULOS-------------------------------
-def aprender(request):
-    aprender_items = Aprender_Objetos.objects.all() 
-    return render(request, 'Aprender/aprender.html', {'aprender_items': aprender_items})
+#--------------------------APRENDER LOGIN ESTUDIANTES-------------------------------
+def login_estudiante_aprender(request):
+    if request.method == 'POST':
+        nombres = request.POST.get('nombres').strip()
+        apellidos = request.POST.get('apellidos').strip()
+        cedula = request.POST.get('cedula').strip()
 
+        # Buscar en Estudiante_Cuarto
+        try:
+            estudiante = Estudiante_Cuarto.objects.get(
+                nombres_est_cua=nombres,
+                apellidos_est_cua=apellidos,
+                cedula_est_cua=cedula
+            )
+            if estudiante.estado_est_cua.upper() != 'ACTIVO':
+                messages.error(request, 'Tu cuenta está inactiva. Contacta al docente.')
+            else:
+                request.session['estudiante_nombre'] = estudiante.nombres_est_cua
+                request.session['estudiante_apellido'] = estudiante.apellidos_est_cua
+                return redirect('aprender')
+        except Estudiante_Cuarto.DoesNotExist:
+            pass
+
+        # Buscar en Estudiante_Tercero
+        try:
+            estudiante = Estudiante_Tercero.objects.get(
+                nombres_est_ter=nombres,
+                apellidos_est_ter=apellidos,
+                cedula_est_ter=cedula
+            )
+            if estudiante.estado_est_ter.upper() != 'ACTIVO':
+                messages.error(request, 'Tu cuenta está inactiva. Contacta al docente.')
+            else:
+                request.session['estudiante_nombre'] = estudiante.nombres_est_ter
+                request.session['estudiante_apellido'] = estudiante.apellidos_est_ter
+                return redirect('aprender')
+        except Estudiante_Tercero.DoesNotExist:
+            messages.error(request, 'Datos incorrectos. Intenta nuevamente.')
+
+    return render(request, 'Login/login_EstudianteAprender.html')
+
+
+# PAGUNA INICIO ALUMNO AL APRENDIZAJE
+def aprender(request):
+    if not request.session.get('estudiante_nombre') or not request.session.get('estudiante_apellido'):
+        return redirect('login_estudiante_aprender')
+
+    aprender_items = Aprender_Objetos.objects.all()
+    nombre_completo = f"{request.session['estudiante_nombre']} {request.session['estudiante_apellido']}"
+    return render(request, 'Aprender/aprender.html', {
+        'aprender_items': aprender_items,
+        'nombre_completo': nombre_completo
+    })
+
+# SALIR
+def logout_estudiante_aprender(request):
+    request.session.flush()
+    return redirect('login_estudiante_aprender')
 #---------------------HISTORIA--------------------
 def historia(request):
     return render(request, 'Historia/historia.html')

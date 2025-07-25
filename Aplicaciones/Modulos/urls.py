@@ -138,6 +138,8 @@ urlpatterns = [
 
     # -------------------------------EVALUACION------------------
     path('login_estudiante/', views.login_estudiante, name='login_estudiante'),
+    path('logout_estudiante/', views.logout_estudiante, name='logout_estudiante'),
+    
     # SELECCION DE EVALUACION
     path('ver_evaluaciones/tercero/', views.ver_evaluacion_tercero, name='ver_evaluacion_tercero'),
     path('ver_evaluaciones/cuarto/', views.ver_evaluacion_cuarto, name='ver_evaluacion_cuarto'),
@@ -147,7 +149,9 @@ urlpatterns = [
 
 
     #---------------------------------APRENDER---------------------------
+    path('login-estudiante-aprender/', views.login_estudiante_aprender, name='login_estudiante_aprender'),
     path('aprender/',views.aprender, name='aprender'),
+    path('logout_estudiante_aprender/', views.logout_estudiante_aprender, name='logout_estudiante_aprender'),
     
     # APRENDER MESES
     path('modulos/meses/', views.ver_meses, name='ver_meses'),

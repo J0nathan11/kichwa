@@ -1,121 +1,130 @@
-{% extends "plantillaModulos.html" %}
+{% extends "plantillaProgreso.html" %}
 {% load static %}
 {% block body %}
 <head>
-    <link rel="stylesheet" href="{% static 'css/estilosAprender.css' %}">
+    <link rel="stylesheet" href="{% static 'css/trenAprender.css' %}">
 </head>
-<br>
 
-<div class="text-center mb-4">
-    <div class="fondo_titulo">
-        <h1 class="titulo-aprender">🎓 ¡Yachaychik puchu | Aprendamos hoy!</h1>
+<div class="contenido-principal">
+
+    <!-- ✅ Bienvenida del estudiante -->
+    <div class="titulo-bienvenida">
+        🎓 ¡Bienvenido/a estudiante {{ nombre_completo|title }}!
+    </div>
+
+    <!-- PÁJAROS DECORATIVOS -->
+    <div class="contenedor-pajaros">
+        <img src="{% static 'imagenes/pajaro.gif' %}" class="pajaro izquierda" alt="Pájaro Izquierdo">
+        <img src="{% static 'imagenes/pajaro.gif' %}" class="pajaro derecha" alt="Pájaro Derecho">
+         <img src="{% static 'imagenes/avion1.gif' %}" alt="Avión" class="elemento-cielo avion">
+    </div>
+
+
+    <!-- ✅ Contenedor general del tren -->
+    <div class="contenedor-tren-animado">
+
+        <!-- Árbol izquierdo fijo -->
+        <img class="decoracion-arbol izquierdo" src="{% static 'imagenes/arbol.gif' %}" alt="Árbol izquierdo">
+
+        <!-- Árbol derecho fijo -->
+        <img class="decoracion-arbol derecho" src="{% static 'imagenes/arbol.gif' %}" alt="Árbol derecho">
+
+        <!-- 🚂 Tren animado -->
+        <div class="contenedor-tren">
+
+            <!-- LOCOMOTORA -->
+            <div class=" vagon_tren">
+                <img src="{% static 'imagenes/tren.gif' %}" alt="Locomotora" style="height: 190px; width: 250px; border-color: blue;">
+            </div>
+
+            <!-- VAGONES -->
+            <div class="vagon" style="border-color: rgb(233, 26, 26);">
+                <a href="{% url 'ver_animales' %}">
+                    <img src="{% static 'imagenes/animales.gif' %}" alt="Animales">
+                    <div class="titulo-vagon">🐾 Animales<br><small>Wiwakuna</small></div>
+                </a>
+            </div>
+
+             <!-- VAGONES -->
+            <div class="vagon"  style="border-color: rgb(18, 170, 39);">
+                <a href="{% url 'ver_animales' %}">
+                    <img src="{% static 'imagenes/animales.gif' %}" alt="Animales">
+                    <div class="titulo-vagon">🐾 Animales<br><small>Wiwakuna</small></div>
+                </a>
+            </div>
+
+             <!-- VAGONES -->
+            <div class="vagon" style="border-color: rgb(10, 69, 177);">
+                <a href="{% url 'ver_animales' %}">
+                    <img src="{% static 'imagenes/animales.gif' %}" alt="Animales">
+                    <div class="titulo-vagon">🐾 Animales<br><small>Wiwakuna</small></div>
+                </a>
+            </div>
+
+             <!-- VAGONES -->
+            <div class="vagon" style="border-color: rgb(255, 40, 208);">
+                <a href="{% url 'ver_animales' %}">
+                    <img src="{% static 'imagenes/animales.gif' %}" alt="Animales">
+                    <div class="titulo-vagon">🐾 Animales<br><small>Wiwakuna</small></div>
+                </a>
+            </div>
+
+             <!-- VAGONES -->
+            <div class="vagon" style="border-color: rgb(255, 240, 29);">
+                <a href="{% url 'ver_animales' %}">
+                    <img src="{% static 'imagenes/animales.gif' %}" alt="Animales">
+                    <div class="titulo-vagon">🐾 Animales<br><small>Wiwakuna</small></div>
+                </a>
+            </div>
+
+             <!-- VAGONES -->
+            <div class="vagon" style="border-color: rgb(47, 205, 253);">
+                <a href="{% url 'ver_animales' %}">
+                    <img src="{% static 'imagenes/animales.gif' %}" alt="Animales">
+                    <div class="titulo-vagon">🐾 Animales<br><small>Wiwakuna</small></div>
+                </a>
+            </div>
+
+             <!-- VAGONES -->
+            <div class="vagon" style="border-color: rgb(217, 28, 255);">
+                <a href="{% url 'ver_animales' %}">
+                    <img src="{% static 'imagenes/animales.gif' %}" alt="Animales">
+                    <div class="titulo-vagon">🐾 Animales<br><small>Wiwakuna</small></div>
+                </a>
+            </div>
+
+             <!-- VAGONES -->
+            <div class="vagon" style="border-color: rgb(241, 133, 31);">
+                <a href="{% url 'ver_animales' %}">
+                    <img src="{% static 'imagenes/animales.gif' %}" alt="Animales">
+                    <div class="titulo-vagon">🐾 Animales<br><small>Wiwakuna</small></div>
+                </a>
+            </div>
+
+             <!-- VAGONES -->
+            <div class="vagon" style="border-color: rgb(146, 102, 5);">
+                <a href="{% url 'ver_animales' %}">
+                    <img src="{% static 'imagenes/animales.gif' %}" alt="Animales">
+                    <div class="titulo-vagon">🐾 Animales<br><small>Wiwakuna</small></div>
+                </a>
+            </div>
+
+             <!-- VAGONES -->
+            <div class="vagon">
+                <a href="{% url 'ver_animales' %}">
+                    <img src="{% static 'imagenes/animales.gif' %}" alt="Animales">
+                    <div class="titulo-vagon">🐾 Animales<br><small>Wiwakuna</small></div>
+                </a>
+            </div>
+
+        </div>
+
+        <!-- RIEL debajo del tren -->
+        <div class="riel">
+            <img src="{% static 'imagenes/riel.png' %}" alt="Riel">
+        </div>
+
     </div>
 </div>
-
-<div class="container">
-    <div class="row justify-content-center">
-        <!-- Animales -->
-        <div class="col-md-4 mb-4">
-            <a href="{% url 'ver_animales' %}" style="text-decoration: none;">
-                <div class="menu-card">
-                    <img src="{% static 'imagenes/animales.gif' %}" alt="Animales" class="menu-img">
-                    <div class="menu-title">🐾 Animales | WIWAKUNA</div>
-                </div>
-            </a>
-        </div>
-
-        <!-- Meses -->
-        <div class="col-md-4 mb-4">
-            <a href="{% url 'ver_meses' %}" style="text-decoration: none;">
-                <div class="menu-card">
-                    <img src="{% static 'imagenes/meses.gif' %}" alt="Meses" class="menu-img">
-                    <div class="menu-title">📅 Meses | KILLA</div>
-                </div>
-            </a>
-        </div>
-
-        <!-- Números -->
-        <div class="col-md-4 mb-4">
-            <a href="{% url 'ver_numeros' %}" style="text-decoration: none;">
-                <div class="menu-card">
-                    <img src="{% static 'imagenes/numeros.gif' %}" alt="Números" class="menu-img">
-                    <div class="menu-title">🔢 Números | YUPAYKUNA</div>
-                </div>
-            </a>
-        </div>
-
-        <!-- Objetos -->
-        <div class="col-md-4 mb-4">
-            <a href="{% url 'ver_objetos' %}" style="text-decoration: none;">
-                <div class="menu-card">
-                    <img src="{% static 'imagenes/objetos.gif' %}" alt="Objetos" class="menu-img">
-                    <div class="menu-title">📦  Objetos | QIRU-KUNA</div>
-                </div>
-            </a>
-        </div>
-
-        <!-- Dias de a Semana -->
-        <div class="col-md-4 mb-4">
-            <a href="{% url 'ver_dias' %}" style="text-decoration: none;">
-                <div class="menu-card">
-                    <img src="{% static 'imagenes/semanas.jpg' %}" alt="Dias de la Semana" class="menu-img">
-                    <div class="menu-title">📅 HUNKAYPA PUNCHAKUNA</div>
-                </div>
-            </a>
-        </div>
-
-        <!-- Los Saludos -->
-        <div class="col-md-4 mb-4">
-            <a href="{% url 'ver_saludos' %}" style="text-decoration: none;">
-                <div class="menu-card">
-                    <img src="{% static 'imagenes/saludos.gif' %}" alt="Dias de la Semana" class="menu-img">
-                    <div class="menu-title">👋 NAPAYKUNA | Saludos </div>
-                </div>
-            </a>
-        </div>
-
-        <!-- Colores -->
-        <div class="col-md-4 mb-4">
-            <a href="{% url 'ver_colores' %}" style="text-decoration: none;">
-                <div class="menu-card">
-                    <img src="{% static 'imagenes/colores.gif' %}" alt="Dias de la Semana" class="menu-img">
-                    <div class="menu-title">🎨 TULLPUKUNA | Colores </div>
-                </div>
-            </a>
-        </div>
-
-        <!-- Cuerpo humano -->
-        <div class="col-md-4 mb-4">
-            <a href="{% url 'ver_cuerpo_humano' %}" style="text-decoration: none;">
-                <div class="menu-card">
-                    <img src="{% static 'imagenes/cuerpo_humano.png' %}" alt="Dias de la Semana" class="menu-img">
-                    <div class="menu-title">👁️ RUNAPA UKKU  </div>
-                </div>
-            </a>
-        </div>
-
-        <!-- Parentesco -->
-        <div class="col-md-4 mb-4">
-            <a href="{% url 'ver_parentesco' %}" style="text-decoration: none;">
-                <div class="menu-card">
-                    <img src="{% static 'imagenes/parentesco.jpeg' %}" alt="Dias de la Semana" class="menu-img">
-                    <div class="menu-title">👨‍👩‍👧‍👦 AYLLU SHUTIKUNA  </div>
-                </div>
-            </a>
-        </div>
-
-         <!-- Elemento Naturaleza -->
-        <div class="col-md-4 mb-4">
-            <a href="{% url 'ver_elemento_naturaleza' %}" style="text-decoration: none;">
-                <div class="menu-card">
-                    <img src="{% static 'imagenes/elementos_naturaleza.jpg' %}" alt="Dias de la Semana" class="menu-img">
-                    <div class="menu-title">🌳 PACHAMAMAPA NIPAKUNA  </div>
-                </div>
-            </a>
-        </div>
-
-    </div>
-</div>
-
 <br>
 {% endblock %}

@@ -1,0 +1,74 @@
+/* Fondo general animado */
+body {
+  
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Título principal */
+h2.main-heading {
+  font-size: 36px;
+  color: #ff4081;
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+  animation: saltarTexto 2s infinite alternate;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* Animación del título */
+@keyframes saltarTexto {
+  from { transform: translateY(0); }
+  to { transform: translateY(-10px); }
+}
+
+/* Contenedor del carrusel */
+.swiper {
+  width: 60%;
+  padding-top: 60px;
+  padding-bottom: 50px;
+}
+
+/* Diapositivas */
+.swiper-slide {
+  background: #fff8dc;
+  border: 5px solid #ffd700;
+  text-align: center;
+  border-radius: 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  transition: transform 0.3s ease;
+}
+
+/* Efecto al pasar el mouse */
+.swiper-slide:hover {
+  transform: scale(1.05) rotate(1deg);
+}
+
+/* Imagen dentro de cada slide */
+.swiper-slide img {
+  max-height: 250px;
+  border-radius: 15px;
+  display: block;
+  margin: auto;
+  border: 4px dashed #ffa500;
+  padding: 5px;
+  background: white;
+  transition: transform 0.2s;
+}
+
+/* Al hacer clic */
+.swiper-slide img:active {
+  transform: scale(0.95) rotate(-2deg);
+}
+
+/* Botones de navegación */
+.swiper-button-next,
+.swiper-button-prev {
+  color: #ff4081;
+}
+
+/* Punto activo en paginación */
+.swiper-pagination-bullet-active {
+  background: #ff4081;
+}
