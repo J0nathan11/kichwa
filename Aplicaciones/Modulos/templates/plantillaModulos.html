@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -42,7 +43,7 @@
 
     background-image:
       linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), /* capa blanca semitransparente */
-      url("{% static 'plantilla/adward/images/foto5.png' %}");           /* fondo GIF */
+      url("{% static 'plantilla/adward/images/fondo_inicio.jpg' %}");           /* fondo GIF */
 
     background-repeat: no-repeat;
     background-position: center center;
@@ -123,7 +124,8 @@
       </button>
       <div class="collapse navbar-collapse" id="menu">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="{% url 'inicio' %}">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'inicio' %}">{% trans "Inicio" %}</a></li>
+
           <li class="nav-item"><a class="nav-link" href="{% url 'historia' %}">Historia</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'login_profesor' %}">Profesor</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'login_estudiante' %}">Evaluación</a></li>

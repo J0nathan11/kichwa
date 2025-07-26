@@ -1,48 +1,25 @@
 {% extends "plantillaModulos.html" %}
 {% load static %}
-
+{% load i18n %}
 {% block body %}
 
-<style>
-  .quienes-somos-section {
-    background: #f0f4f8;
-    padding: 60px 20px;
-    font-family: 'Segoe UI', sans-serif;
-  }
+<link rel="stylesheet" href="{% static 'css/estilosHistoria.css' %}">
 
-  .quienes-somos-section h2 {
-    text-align: center;
-    color: #1a1a2e;
-    font-size: 32px;
-    margin-bottom: 40px;
-    font-weight: bold;
-  }
+<br><br><br>
+<div class="contenedor-idioma-niños">
+  <form action="{% url 'set_language' %}" method="post">
+    {% csrf_token %}
+    <input name="next" type="hidden" value="{{ request.path }}">
 
-  .card-info {
-    background-color: rgb(255, 255, 255);
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    padding: 30px;
-    margin-bottom: 30px;
-    transition: transform 0.3s ease;
-  }
+    <label for="language" class="label-idioma">🌍 Elige tu idioma:</label>
+    <select name="language" id="language" class="select-idioma">
+      <option value="es" {% if request.LANGUAGE_CODE == 'es' %}selected{% endif %}>🇪🇸 Español</option>
+      <option value="qu" {% if request.LANGUAGE_CODE == 'qu' %}selected{% endif %}>🌄 Kichwa</option>
+    </select>
 
-  .card-info:hover {
-    transform: translateY(-5px);
-  }
-
-  .card-info h3 {
-    color: #ff4081;
-    font-size: 24px;
-    margin-bottom: 15px;
-  }
-
-  .card-info p {
-    font-size: 16px;
-    color: #444;
-    text-align: justify;
-  }
-</style>
+    <button type="submit" class="btn-idioma">🎈 Cambiar idioma</button>
+  </form>
+</div>
 
 <section class="quienes-somos-section">
   <div class="container">
@@ -81,5 +58,5 @@
     </div>
   </div>
 </section>
-
+<br>
 {% endblock %}

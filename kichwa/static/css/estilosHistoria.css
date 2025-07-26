@@ -1,0 +1,91 @@
+  .quienes-somos-section {
+    background: #f0f4f8;
+    padding: 60px 20px;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .quienes-somos-section h2 {
+    text-align: center;
+    color: #1a1a2e;
+    font-size: 32px;
+    margin-bottom: 40px;
+    font-weight: bold;
+  }
+
+  .card-info {
+    background-color: rgb(255, 255, 255);
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    padding: 30px;
+    margin-bottom: 30px;
+    transition: transform 0.3s ease;
+  }
+
+  .card-info:hover {
+    transform: translateY(-5px);
+  }
+
+  .card-info h3 {
+    color: #ff4081;
+    font-size: 24px;
+    margin-bottom: 15px;
+  }
+
+  .card-info p {
+    font-size: 16px;
+    color: #444;
+    text-align: justify;
+  }
+  
+.contenedor-idioma-niños {
+  position: absolute;
+  top: 90px;
+  right: 20px;
+  z-index: 999;
+  background-color: #fff5dc;
+  border: 3px dashed #f2c94c;
+  border-radius: 15px;
+  padding: 10px 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-family: 'Comic Sans MS', cursive;
+}
+
+.label-idioma {
+  font-size: 16px;
+  font-weight: bold;
+  color: #4c4c4c;
+  margin-right: 10px;
+}
+
+.select-idioma {
+  background-color: #fdf6e3;
+  border: 2px solid #ffd166;
+  border-radius: 10px;
+  padding: 5px 10px;
+  font-size: 15px;
+  font-weight: bold;
+  color: #1d3557;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.select-idioma option {
+  font-size: 14px;
+}
+
+.btn-idioma {
+  background-color: #06d6a0;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  padding: 6px 15px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.btn-idioma:hover {
+  background-color: #118ab2;
+  transform: scale(1.05);
+}

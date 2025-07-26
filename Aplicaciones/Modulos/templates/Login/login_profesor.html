@@ -1,10 +1,29 @@
 {% extends "plantillaModulos.html" %}
 {% load static %}
+{% load i18n %}
 {% block body %}
+
+<link rel="stylesheet" href="{% static 'css/estilosLogin.css' %}">
+
+<div class="contenedor-idioma-niños">
+  <form action="{% url 'set_language' %}" method="post">
+    {% csrf_token %}
+    <input name="next" type="hidden" value="{{ request.path }}">
+
+    <label for="language" class="label-idioma">🌍 Idioma:</label>
+    <select name="language" id="language" class="select-idioma">
+      <option value="es" {% if request.LANGUAGE_CODE == 'es' %}selected{% endif %}>🇪🇸 Español</option>
+      <option value="qu" {% if request.LANGUAGE_CODE == 'qu' %}selected{% endif %}>🌄 Kichwa</option>
+    </select>
+
+    <button type="submit" class="btn-idioma">🎈 Cambiar idioma</button>
+  </form>
+</div>
+
 <div class="text-center mb-3">
     <div class="p-3 rounded shadow-sm d-inline-block mx-auto" style="background-color: rgba(241, 241, 232, 0.733);">
         <h4 style="font-family: 'Comic Sans MS', cursive; color: #2a6ecb; margin: 0;">
-            Ingresa y observa el resultado de los alumnos
+            Ingreso como Profesor
         </h4>
     </div>
 </div>
