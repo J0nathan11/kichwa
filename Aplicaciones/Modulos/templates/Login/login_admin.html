@@ -16,14 +16,14 @@
       <option value="qu" {% if request.LANGUAGE_CODE == 'qu' %}selected{% endif %}>🌄 Kichwa</option>
     </select>
 
-    <button type="submit" class="btn-idioma">🎈 Cambiar idioma</button>
+    <button type="submit" class="btn-idioma">🎈 {% trans "Cambiar idioma" %}</button>
   </form>
 </div>
 
 <div class="text-center mb-3">
     <div class="p-3 rounded shadow-sm d-inline-block mx-auto" style="background-color: rgba(241, 241, 232, 0.733);">
         <h4 style="font-family: 'Comic Sans MS', cursive; color: #2a6ecb; margin: 0;">
-            Ingreso como Administrador
+            {% trans "Ingreso como Administrador" %}
         </h4>
     </div>
 </div>
@@ -33,7 +33,7 @@
 <div class="d-flex justify-content-center align-items-center" style="min-height: 400px;">
 
     <div class="card shadow p-5" style="width: 100%; max-width: 400px; border-radius: 15px;">
-        <h2 class="text-center mb-4 text-primary" style="font-family: 'Comic Sans MS', cursive;">¡Panel del Administrador!</h2>
+        <h2 class="text-center mb-4 text-primary" style="font-family: 'Comic Sans MS', cursive;">{% trans "Panel del Administrador" %}</h2>
 
         {% if messages %}
             {% for message in messages %}
@@ -44,27 +44,28 @@
             {% endfor %}
         {% endif %}
 
-        <form method="POST" action="{% url 'login_admin' %}">
+        <form method="POST" action="{% url 'login_admin' %}" id="frm_login_admin">
             {% csrf_token %}
             <div class="mb-3">
-                <label for="usuario" class="form-label" style="font-family: 'Comic Sans MS', cursive; color: #4164b1;">Usuario</label>
+                <label for="usuario" class="form-label" style="font-family: 'Comic Sans MS', cursive; color: #4164b1;">{% trans "Usuario" %}</label>
                 <input type="text" name="usuario" id="usuario" class="form-control form-control-lg"
-                       placeholder="Nombre de usuario" required
-                       style="border-radius: 10px; border: 2px solid #3cc043; font-size: 14px;">
+                    placeholder="{% trans 'Usuario' %}" required
+                    style="border-radius: 10px; border: 2px solid #3cc043; font-size: 14px;">
             </div>
 
             <div class="mb-3">
-                <label for="contrasena" class="form-label" style="font-family: 'Comic Sans MS', cursive; color: #4164b1;">Contraseña</label>
+                <label for="contrasena" class="form-label" style="font-family: 'Comic Sans MS', cursive; color: #4164b1;">{% trans "Contraseña" %}</label>
                 <input type="password" name="contrasena" id="contrasena" class="form-control form-control-lg"
-                       placeholder="Contraseña" required
-                       style="border-radius: 10px; border: 2px solid #3cc043; font-size: 14px;">
+                    placeholder="{% trans 'Contraseña' %}" required
+                    style="border-radius: 10px; border: 2px solid #3cc043; font-size: 14px;">
             </div>
 
             <button type="submit" class="btn btn-warning w-100"
                     style="border-radius: 10px; font-family: 'Comic Sans MS', cursive;">
-                Ingresar
+                {% trans "Ingresar" %}
             </button>
         </form>
+
 
         <a href="{% url 'login_profesor' %}" class="btn btn-secondary w-100 mt-2"
            style="border-radius: 10px; font-family: 'Comic Sans MS', cursive; text-decoration: none;">
@@ -72,5 +73,19 @@
         </a>
     </div>
 </div>
+
+<script>
+    $("#frm_login_admin").validate({
+        rules: {
+            usuario: { required: true },
+            contrasena: { required: true }
+        },
+        messages: {
+            usuario: { required: "{% trans 'Por favor ingrese el usuario' %}" },
+            contrasena: { required: "{% trans 'Por favor ingrese la contraseña' %}" }
+        }
+    });
+</script>
+
 <br>
 {% endblock %}

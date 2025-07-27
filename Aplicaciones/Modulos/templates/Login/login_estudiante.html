@@ -16,14 +16,14 @@
       <option value="qu" {% if request.LANGUAGE_CODE == 'qu' %}selected{% endif %}>🌄 Kichwa</option>
     </select>
 
-    <button type="submit" class="btn-idioma">🎈 Cambiar idioma</button>
+    <button type="submit" class="btn-idioma">🎈 {% trans "Cambiar idioma" %}</button>
   </form>
 </div>
 
 <div class="text-center mb-3">
     <div class="p-3 rounded shadow-sm d-inline-block mx-auto" style="background-color: rgba(241, 241, 232, 0.733);">
         <h4 style="font-family: 'Comic Sans MS', cursive; color: #2a6ecb; margin: 0;">
-            Ingreso del Estudiante
+            {% trans "Ingreso del Estudiante" %}
         </h4>
     </div>
 </div>
@@ -32,7 +32,7 @@
 
 <div class="d-flex justify-content-center align-items-center" style="min-height: 400px;">
     <div class="card shadow p-5" style="width: 100%; max-width: 400px; border-radius: 15px;">
-        <h2 class="text-center mb-4 text-primary" style="font-family: 'Comic Sans MS', cursive;">¡Bienvenido!</h2>
+        <h2 class="text-center mb-4 text-primary" style="font-family: 'Comic Sans MS', cursive;">{% trans "¡Bienvenido!" %}</h2>
         {% if messages %}
             {% for message in messages %}
                 <div class="alert alert-danger mt-3" role="alert"
@@ -45,36 +45,34 @@
             {% csrf_token %}
             
             <div class="mb-3">
-                <label for="nombres" class="form-label" style="font-family: 'Comic Sans MS', cursive; color: #4164b1;">Nombres</label>
+                <label for="nombres" class="form-label" style="font-family: 'Comic Sans MS', cursive; color: #4164b1;">{% trans "Nombres" %}</label>
                 <input type="text" name="nombres" id="nombres" class="form-control form-control-lg"
-                       placeholder="Escribe tus nombres" required
+                       placeholder="{% trans 'Escribe tus Nombres' %}" required
                        value="{{ request.POST.nombres|default:'' }}"
                        style="border-radius: 10px; border: 2px solid #3cc043; font-size: 14px;">
             </div>
 
             <div class="mb-3">
-                <label for="apellidos" class="form-label" style="font-family: 'Comic Sans MS', cursive; color: #4164b1;">Apellidos</label>
+                <label for="apellidos" class="form-label" style="font-family: 'Comic Sans MS', cursive; color: #4164b1;">{% trans "Apellidos" %}</label>
                 <input type="text" name="apellidos" id="apellidos" class="form-control form-control-lg"
-                       placeholder="Escribe tus apellidos" required
+                       placeholder="{% trans 'Escribe tus Apellidos' %}" required
                        value="{{ request.POST.apellidos|default:'' }}"
                        style="border-radius: 10px; border: 2px solid #3cc043; font-size: 14px;">
             </div>
 
             <div class="mb-3">
-                <label for="cedula" class="form-label" style="font-family: 'Comic Sans MS', cursive; color: #4164b1;">Cédula</label>
+                <label for="cedula" class="form-label" style="font-family: 'Comic Sans MS', cursive; color: #4164b1;">{% trans "Cédula" %}</label>
                 <input type="text" name="cedula" id="cedula" class="form-control form-control-lg"
-                       placeholder="Escribe tu cédula" maxlength="10" required
+                       placeholder="{% trans 'Ingrese la Cédula' %}" maxlength="10" required
                        value="{{ request.POST.cedula|default:'' }}"
                        style="border-radius: 10px; border: 2px solid #3cc043; font-size: 14px;">
             </div>
 
             <button type="submit" class="btn btn-warning w-100"
-                    style="border-radius: 10px; font-family: 'Comic Sans MS', cursive;">
-                Ingresar
+                    style="border-radius: 10px; font-family: 'Comic Sans MS', cursive;">{% trans "Ingresar" %}
             </button>
             <a href="{% url 'inicio' %}" class="btn btn-secondary w-100 mt-2"
-               style="border-radius: 10px; font-family: 'Comic Sans MS', cursive; text-decoration: none;">
-                Salir
+               style="border-radius: 10px; font-family: 'Comic Sans MS', cursive; text-decoration: none;">{% trans "Salir" %}
             </a>
         </form>
 
@@ -95,10 +93,10 @@
             cedula: { required: true, minlength: 10, maxlength: 10 },
         },
         messages: {
-            nombres: { required: "Por favor ingresa tus nombres" },
-            apellidos: { required: "Por favor ingresa tus apellidos" },
+            nombres: { required: "{% trans 'Por favor ingresa tus Nombres' %}" },
+            apellidos: { required: "{% trans 'Por favor ingresa tus Apellidos' %}" },
             cedula: {
-                required: "Ingrese la cédula",
+                required: "{% trans 'Por favor ingresa la Cédula' %}",
                 minlength: "La cédula debe tener 10 dígitos",
                 maxlength: "La cédula debe tener 10 dígitos"
             },

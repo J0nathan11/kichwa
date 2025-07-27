@@ -17,9 +17,109 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: .\Aplicaciones\Modulos\templates\Bienvenida\inicio.html:9
-msgid "¡Bienvenido/a estudiante!"
-msgstr "Yuyaykuna ñukanchik yachachik!"
+msgid "¡Juntos aprendemos kichwa!"
+msgstr "¡Tantalla kichwa shimita yachakunchik!"
 
 #: .\Aplicaciones\Modulos\templates\plantillaModulos.html:9
 msgid "Inicio"
-msgstr "Ñawpaq"
+msgstr "Kallari"
+
+msgid "Historia"
+msgstr "Wiñaykawsay"
+
+msgid "Profesor"
+msgstr "Yachachik"
+
+msgid "Evaluación"
+msgstr "Yachay tupu"
+
+msgid "¡Vamos a aprender!"
+msgstr "Yachay"
+
+msgid "Aprender"
+msgstr "Yachay"
+
+msgid "Sistema de Aprendizaje Kichwa"
+msgstr "Kichwa shimi llika yachay"
+
+msgid "Desarrollado por"
+msgstr "Wiñachishka"
+
+#: .\Aplicaciones\Modulos\templates\Login\login_estudiante.html:9
+
+msgid "Modulos de Aprendizaje"
+msgstr "Yachaypak kamukuna"
+
+msgid "Ingreso del Estudiante"
+msgstr "Yachachik yaykuy"
+
+msgid "¡Bienvenido!"
+msgstr "Allí shamushka"
+
+msgid "Nombres"
+msgstr "Shuti"
+
+msgid "Apellidos"
+msgstr "Ayllushuti"
+
+msgid "Cédula"
+msgstr "Wacharishka pankaku"
+
+msgid "Ingresar"
+msgstr "Yaykuna"
+
+msgid "Salir"
+msgstr "Llukshina"
+
+msgid "Escribe tus Nombres"
+msgstr "Kanpak shutikunata killkay"
+
+msgid "Escribe tus Apellidos"
+msgstr "Kanpak ayllushutita killkay"
+
+msgid "Ingrese la Cédula"
+msgstr "Pankakupak yupayta killkay"
+
+msgid "Por favor ingresa tus Nombres"
+msgstr "Kanpak shutikunata killkay"
+
+msgid "Por favor ingresa tus Apellidos"
+msgstr "Kanpak ayllushutita killkay"
+
+msgid "Por favor ingresa la Cédula"
+msgstr "Pankakupak yupayta killkay"
+
+msgid "Cambiar idioma"
+msgstr "Shimita shukmanyachina"
+
+#: .\Aplicaciones\Modulos\templates\Login\login_profesor.html:9
+
+msgid "Ingreso como Profesor"
+msgstr "Yachachikshina yaykurik"
+
+msgid "Usuario"
+msgstr "Kikinyachik"
+
+msgid "Contraseña"
+msgstr "Harkachik"
+
+msgid "Iniciar como Administrador"
+msgstr "Imashina kallariy Pushakkamay"
+
+msgid "Escribe tu usuario"
+msgstr "Kanpak Kikinyachik"
+
+msgid "Escribe tu contraseña"
+msgstr "Kanpak Harkachik"
+
+msgid "Por favor ingrese el usuario"
+msgstr "Kanpak Kikinyachik"
+
+msgid "Por favor ingrese la contraseña"
+msgstr "Kanpak Harkachik"
+
+msgid "Ingreso como Administrador"
+msgstr "Pushakshina yaykurik "
+
+msgid "Panel del Administrador"
+msgstr "Pushakkamaypak rikuchik pirka"

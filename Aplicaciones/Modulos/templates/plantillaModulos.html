@@ -125,10 +125,9 @@
       <div class="collapse navbar-collapse" id="menu">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item"><a class="nav-link" href="{% url 'inicio' %}">{% trans "Inicio" %}</a></li>
-
-          <li class="nav-item"><a class="nav-link" href="{% url 'historia' %}">Historia</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'login_profesor' %}">Profesor</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'login_estudiante' %}">Evaluación</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'aprender' %}">{% trans "Aprender" %}</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'login_profesor' %}">{% trans "Profesor" %}</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'login_estudiante' %}">{% trans "Evaluación" %}</a></li>
         </ul>
       </div>
     </div>
@@ -173,9 +172,9 @@
 </style>
 
 <section class="container-fluid footer_section">
-  <h4>SUMAK KAWSAY &copy; 2025 - Sistema de Aprendizaje Kichwa</h4>
+  <h4>SUMAK KAWSAY &copy; 2025 - {% trans "Sistema de Aprendizaje Kichwa" %}</h4>
   <p class="creditos">
-    Desarrollado por <strong>Oña J.</strong> y <strong>Tiban B.</strong>
+    {% trans "Desarrollado por" %} <strong>Oña J.</strong> y <strong>Tiban B.</strong>
   </p>
 </section>
 

@@ -11,13 +11,13 @@
     {% csrf_token %}
     <input name="next" type="hidden" value="{{ request.path }}">
 
-    <label for="language" class="label-idioma">🌍 Elige tu idioma:</label>
+    <label for="language" class="label-idioma">🌍 Idioma:</label>
     <select name="language" id="language" class="select-idioma">
       <option value="es" {% if request.LANGUAGE_CODE == 'es' %}selected{% endif %}>🇪🇸 Español</option>
       <option value="qu" {% if request.LANGUAGE_CODE == 'qu' %}selected{% endif %}>🌄 Kichwa</option>
     </select>
 
-    <button type="submit" class="btn-idioma">🎈 Cambiar idioma</button>
+    <button type="submit" class="btn-idioma">🎈 {% trans "Cambiar idioma" %}</button>
   </form>
 </div>
 
@@ -25,7 +25,7 @@
 
 <br><br>
 <div class="contenedor-bienvenida-animado">
-  <h2 class="titulo-bienvenida animar-titulo">
+  <h2 class="titulo-bienvenida animar-titulo" style="text-align: justify;">
     {% trans "¡Juntos aprendemos kichwa!" %}
     <img src="{% static 'imagenes/inicio/ardilla.gif' %}" alt="ardilla" class="gif-ardilla">
   </h2>
@@ -34,7 +34,7 @@
 <div class="contenedor-boton-aprender">
   <form action="{% url 'aprender' %}">
     <button type="submit" class="btn-aprender" onclick="lanzarConfeti(event)">
-      🎒 ¡Vamos a aprender!
+      🎒 {% trans "¡Vamos a aprender!" %}
     </button>
   </form>
 </div>
