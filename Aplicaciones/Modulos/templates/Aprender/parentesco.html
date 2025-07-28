@@ -1,5 +1,6 @@
 {% extends "plantillaProgreso.html" %}
 {% load static %}
+{% load i18n %}
 {% block body %}
 <head>
     <link rel="stylesheet" href="{% static 'css/estilosAprender.css' %}">
@@ -9,11 +10,11 @@
 
 <div class="text-center mb-4">
     <div class="fondo_titulo">
-        <h1 class="titulo-kichwa">👨‍👩‍👧‍👦 ¡ Parentesco Familiar | AYLLU ! 👵👴</h1>
+        <h1 class="titulo-kichwa">👨‍👩‍👧‍👦 {% trans "¡La Familia!" %} 👵👴</h1>
     </div>
 </div>
 <div class="text-center">
-    <a href="{% url 'aprender' %}" class="btn-volver">VOLVER</a>
+    <a href="{% url 'aprender' %}" class="btn-volver">{% trans "VOLVER" %}</a>
 </div>
 
 <br>
@@ -37,7 +38,7 @@
                 {% if par.audio_kichwa_par %}
                 <div class="text-center mt-2">
                     <button class="btn-audio" onclick="document.getElementById('audio_{{ forloop.counter }}').play()">
-                        🔊 Escuchar
+                        🔊 {% trans "Escuchar" %}
                     </button>
                     <audio id="audio_{{ forloop.counter }}">
                         <source src="{{ par.audio_kichwa_par.url }}" type="audio/mpeg">
@@ -55,6 +56,9 @@
     </div>
 </div>
 
+<div style="width: 70%; margin-left: 170px;">
+    <hr style="height: 3px; background-color: #000; border: none;">
+</div>
 
 <div class="container">
     <div class="row justify-content-center">
@@ -62,7 +66,7 @@
             <a href="{% url 'jugar_parentesco' %}" style="text-decoration: none;">
                 <div class="menu-card">
                     <img src="{% static 'imagenes/jugar.gif' %}" alt="Jugar Parentesco" class="menu-img">
-                    <div class="menu-title">🎮  JUGAR CON EL PARENTESCO</div>
+                    <div class="menu-title">🎮 {% trans "Jugar" %}</div>
                 </div>
             </a>
         </div>

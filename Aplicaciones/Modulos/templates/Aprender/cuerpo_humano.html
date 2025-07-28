@@ -1,5 +1,6 @@
 {% extends "plantillaProgreso.html" %}
 {% load static %}
+{% load i18n %}
 {% block body %}
 <head>
     <link rel="stylesheet" href="{% static 'css/estilosAprender.css' %}">
@@ -9,11 +10,11 @@
 
 <div class="text-center mb-4">
     <div class="fondo_titulo">
-        <h1 class="titulo-kichwa">🧍‍♂️ ¡Aprende el CUERPO HUMANO en Kichwa! 🧍‍♀️</h1>
+        <h1 class="titulo-kichwa">🧍‍♂️ {% trans "¡Aprende el Cuerpo Humano en Kichwa!" %} 🧍‍♀️</h1>
     </div>
 </div>
 <div class="text-center">
-    <a href="{% url 'aprender' %}" class="btn-volver">VOLVER</a>
+    <a href="{% url 'aprender' %}" class="btn-volver">{% trans "VOLVER" %}</a>
 </div>
 
 <br>
@@ -37,7 +38,7 @@
                     {% if parte.audio_kichwa_cue %}
                     <div>
                         <button class="btn-audio mb-2" onclick="document.getElementById('audio_{{ forloop.counter }}').play()">
-                            🔊 Escuchar
+                            🔊 {% trans "Escuchar" %}
                         </button>
                         <audio id="audio_{{ forloop.counter }}">
                             <source src="{{ parte.audio_kichwa_cue.url }}" type="audio/mpeg">
@@ -64,7 +65,7 @@
             <a href="{% url 'jugar_cuerpo_humano' %}" style="text-decoration: none;">
                 <div class="menu-card">
                     <img src="{% static 'imagenes/jugar.gif' %}" alt="Jugar" class="menu-img">
-                    <div class="menu-title">🎮  JUGAR CON EL CUERPO HUMANO</div>
+                    <div class="menu-title">🎮 {% trans "Jugar" %}</div>
                 </div>
             </a>
         </div>

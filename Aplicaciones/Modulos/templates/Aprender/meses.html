@@ -1,5 +1,6 @@
 {% extends "plantillaProgreso.html" %}
 {% load static %}
+{% load i18n %}
 {% block body %}
 <head>
     <link rel="stylesheet" href="{% static 'css/estilosAprender.css' %}">
@@ -9,11 +10,11 @@
 
 <div class="text-center mb-4">
     <div class="fondo_titulo">
-        <h1 class="titulo-kichwa">📅 ¡ Meses de Año | WATAPA KILLAKUNA ! 📆</h1>
+        <h1 class="titulo-kichwa">📅 {% trans "¡Aprende los Meses de Año en kichwa!" %} 📆</h1>
     </div>
 </div>
 <div class="text-center">
-    <a href="{% url 'aprender' %}" class="btn-volver">VOLVER</a>
+    <a href="{% url 'aprender' %}" class="btn-volver">{% trans "VOLVER" %}</a>
 </div>
 
 <br>
@@ -34,7 +35,7 @@
 
                     {% if mes.audio_kichwa_mes %}
                     <button class="btn-audio" onclick="document.getElementById('audio_{{ forloop.counter }}').play()">
-                        🔊 Escuchar
+                        🔊 {% trans "Escuchar" %}
                     </button>
                     <audio id="audio_{{ forloop.counter }}">
                         <source src="{{ mes.audio_kichwa_mes.url }}" type="audio/mpeg">
@@ -50,10 +51,8 @@
     </div>
 </div>
 
-<div class="text-center mb-4">
-    <div class="fondo_titulo">
-        <h5 class="titulo-juego">¡Si ya aprendiste los MESES te invito a JUGAR!</h5>
-    </div>
+<div style="width: 70%; margin-left: 170px;">
+    <hr style="height: 3px; background-color: #000; border: none;">
 </div>
 
 <div class="container">
@@ -62,7 +61,7 @@
             <a href="{% url 'jugar_meses' %}" style="text-decoration: none;">
                 <div class="menu-card">
                     <img src="{% static 'imagenes/jugar.gif' %}" alt="Animales" class="menu-img">
-                    <div class="menu-title">🎮  JUGAR CON LOS MESES</div>
+                    <div class="menu-title">🎮 {% trans "Jugar" %}</div>
                 </div>
             </a>
         </div>

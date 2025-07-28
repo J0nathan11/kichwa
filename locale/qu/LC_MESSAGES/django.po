@@ -123,3 +123,117 @@ msgstr "Pushakshina yaykurik "
 
 msgid "Panel del Administrador"
 msgstr "Pushakkamaypak rikuchik pirka"
+
+#: .\Aplicaciones\Modulos\templates\Aprender\aprender.html:9
+
+msgid "¡Bienvenido/a estudiante"
+msgstr "Allishamushka yachakuk"
+
+msgid "Animales"
+msgstr "Wiwakuna"
+
+msgid "Colores"
+msgstr "Tullpukuna"
+
+msgid "Cuerpo Humano"
+msgstr "Runapa Ukku"
+
+msgid "Dias de la Semana"
+msgstr "Hunkaypa Punchakuna"
+
+msgid "Elementos de la Naturaleza"
+msgstr "Pachamamapa Nipakuna"
+
+msgid "Meses del Año"
+msgstr "Watapa Punchakuna"
+
+msgid "Números"
+msgstr "Yupaykuna"
+
+msgid "Objetos"
+msgstr "Tiyakkuna"
+
+msgid "La Familia"
+msgstr "Ayllu Shutikuna"
+
+msgid "Los Saludos"
+msgstr "Napaykuna"
+
+msgid "VOLVER"
+msgstr "Tikramuna"
+
+msgid "¡Aprende los Animales en Kichwa!"
+msgstr "¡Wiwakunapak shutita kichwapi yachay!"
+
+msgid "Escuchar"
+msgstr "Uyariy"
+
+msgid "Jugar"
+msgstr "Pukllay"
+
+msgid "¡Aprende los Colores en Kichwa!"
+msgstr "¡Kichwapi Tullpukuna yachay!"
+
+msgid "¡Aprende el Cuerpo Humano en Kichwa!"
+msgstr "¡Kichwapi Runapa Ukku  yachay!"
+
+msgid "¡Aprende los Días en Kichwa!"
+msgstr "¡Kichwapi punchawkuna yachay!"
+
+msgid "¡Aprende los Elementos de la Naturaleza en Kichwa!"
+msgstr "!Kichwapi naturaleza Pachamamapa Nipakuna yachay¡" 
+
+msgid "¡Aprende los Meses de Año en kichwa!"
+msgstr "¡Kichwapi Watapa Punchakuna  yachay!"
+
+msgid "¡Aprende los NÚMEROS en Kichwa!"
+msgstr "¡Kichwapi Yupaykuna yachay!"
+
+msgid "¡Aprende los Objetos en Kichwa!"
+msgstr "¡Kichwapi Tiyakkuna yachay!"
+
+msgid "¡La Familia!"
+msgstr "¡Ayllu Shutikuna!"
+
+msgid "¡Aprende los Saludos en Kichwa!"
+msgstr "¡Kichwapi Napaykuna yachay!"
+
+
+msgid "ACTUALIZAR"
+msgstr "Yuyayrina"
+
+msgid "¡Mira la palabra y elige el Animal correcto!"
+msgstr "¡Shutita rikuy, alli Wiwakuna akllay!"
+
+msgid "¡Mira la palabra y elige el Color correcto!"
+msgstr "¡Shutita rikuy, alli Tullpukuna akllay!"
+
+msgid "¡Mira la palabra y elige la parte correcta del cuerpo humano!"
+msgstr "¡Shutita rikuy, alli Runapa Ukku akllay!"
+
+msgid "¡Mira la palabra y elige el Día correcto!"
+msgstr "¡Shutita rikuy, alli Punchawta akllay!"
+
+msgid "¡Mira la palabra y elige el Elemento Natural correcto!"
+msgstr "¡Shutita rikuy, alli Pachamamapa Nipakuna akllay!"
+
+msgid "Palabras"
+msgstr "Simikujna"
+
+msgid "Arrastra la palabra a la imagen correcta"
+msgstr "Suyuta alli rikushpa shutita kimichiy"
+
+msgid "¡Juega y aprende los Meses en Kichwa!"
+msgstr "¡Pukllayta ruray, killakunata kichwapi yachay!"
+
+msgid "¡Mira la palabra y elige el Número correcto en Kichwa!"
+msgstr "¡Shutita rikuy, alli Yupaykuna akllay!"
+
+msgid "¡Juega y aprende los Objetos en Kichwa!"
+msgstr "¡Pukllayta ruray, Tiyakkuna kichwapi yachay!"
+
+msgid "¡Juega y aprende con la Familia en Kichwa!"
+msgstr "¡Pukllayta ruray, Ayllu Shutikuna kichwapi yachay!"
+
+msgid "¡Juega y aprende los Saludos en Kichwa!"
+msgstr "¡Pukllayta ruray, Napaykuna kichwapi yachay!"

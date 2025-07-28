@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -123,9 +124,26 @@
       </button>
       <div class="collapse navbar-collapse" id="menu">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="{% url 'aprender' %}">Inicio</a></li>
-          <li class="nav-item"><a class="nav-link" href="">Progreso</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'logout_estudiante_aprender' %}">Salir</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'aprender' %}">{% trans "Inicio" %}</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="idiomaDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              {% trans "Idioma" %}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="idiomaDropdown">
+              <li>
+                <form action="{% url 'set_language' %}" method="post" class="px-3">
+                  {% csrf_token %}
+                  <input name="next" type="hidden" value="{{ request.path }}">
+                  <select name="language" class="form-select form-select-sm mb-2" onchange="this.form.submit()">
+                    <option value="es" {% if request.LANGUAGE_CODE == 'es' %}selected{% endif %}>🇪🇸 Español</option>
+                    <option value="qu" {% if request.LANGUAGE_CODE == 'qu' %}selected{% endif %}>🌄 Kichwa</option>
+                  </select>
+                </form>
+              </li>
+            </ul>
+          </li>
+
+          <li class="nav-item"><a class="nav-link" href="{% url 'logout_estudiante_aprender' %}">{% trans "Salir" %}</a></li>
         </ul>
       </div>
     </div>
@@ -170,9 +188,9 @@
 </style>
 
 <section class="container-fluid footer_section">
-  <h4>SUMAK KAWSAY &copy; 2025 - Sistema de Aprendizaje Kichwa</h4>
+  <h4>SUMAK KAWSAY &copy; 2025 - {% trans "Sistema de Aprendizaje Kichwa" %}</h4>
   <p class="creditos">
-    Desarrollado por <strong>Oña J.</strong> y <strong>Tiban B.</strong>
+    {% trans "Desarrollado por" %} <strong>Oña J.</strong> y <strong>Tiban B.</strong>
   </p>
 </section>
 

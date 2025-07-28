@@ -1,6 +1,6 @@
 {% extends "plantillaProgreso.html" %}
 {% load static %}
-
+{% load i18n %}
 {% block body %}
 <link rel="stylesheet" href="{% static 'css/estilosAprender.css' %}">
 
@@ -32,13 +32,13 @@
 
 <div class="text-center">
     <div class="text-center fondo_titulo">
-        <h1 class="titulo-aprender">👀 ¡Elige la parte correcta del cuerpo humano!</h1>
+        <h1 class="titulo-aprender">👀 {% trans "¡Mira la palabra y elige la parte correcta del cuerpo humano correcto!" %}</h1>
     </div>
 </div>
 
 <div class="text-center mt-4">
-    <a href="{% url 'ver_cuerpo_humano' %}" class="btn btn-secondary">VOLVER</a>
-    <a href="{% url 'jugar_cuerpo_humano' %}" class="btn btn-secondary">ACTUALIZAR</a>
+    <a href="{% url 'ver_cuerpo_humano' %}" class="btn btn-secondary">{% trans "VOLVER" %}</a>
+    <a href="{% url 'jugar_cuerpo_humano' %}" class="btn btn-secondary">{% trans "ACTUALIZAR" %}</a>
 </div>
 
 <div class="container contenedor-juego text-center">

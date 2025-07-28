@@ -1,6 +1,6 @@
 {% extends "plantillaProgreso.html" %}
 {% load static %}
-
+{% load i18n %}
 {% block body %}
 <link rel="stylesheet" href="{% static 'css/estilosAprender.css' %}">
 
@@ -24,20 +24,20 @@
 
 <div class="text-center">
     <div class="text-center fondo_titulo">
-        <h1 class="titulo-aprender">🎲 ¡Juega y aprende los Objetos en Kichwa!</h1>
+        <h1 class="titulo-aprender">🎲 {% trans "¡Juega y aprende los Objetos en Kichwa!" %}</h1>
     </div>
 </div>
 
 <div class="text-center mt-4">
-    <a href="{% url 'ver_objetos' %}" class="btn btn-secondary">VOLVER</a>
-    <a href="{% url 'jugar_objetos' %}" class="btn btn-secondary">ACTUALIZAR</a>
+    <a href="{% url 'ver_objetos' %}" class="btn btn-secondary">{% trans "VOLVER" %}</a>
+    <a href="{% url 'jugar_objetos' %}" class="btn btn-secondary">{% trans "ACTUALIZAR" %}</a>
 </div>
 
 <div class="container mt-5">
     <div class="row">
         <!-- Palabras -->
         <div class="col-md-4">
-            <h3 class="fondo_titulo" style="margin-left: 90px;">📋 Palabras</h3>
+            <h3 class="fondo_titulo" style="margin-left: 90px;">📋 {% trans "Palabras" %}</h3>
             <br><br>
             <div class="d-flex flex-column align-items-center" id="contenedor-palabras">
                 {% for obj in objetos|dictsort:"palabra_obj" %}
@@ -52,7 +52,7 @@
 
         <!-- Imágenes -->
         <div class="col-md-8">
-            <h3 class="fondo_titulo" style="margin-left: 80px;">🖼️ Arrastra la palabra al objeto correcto</h3>
+            <h3 class="fondo_titulo" style="margin-left: 80px;">🖼️ {% trans "Arrastra la palabra a la imagen correcta" %}</h3>
             <br><br>
             <div class="row">
                 {% for obj in objetos %}

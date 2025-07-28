@@ -1,5 +1,6 @@
 {% extends "plantillaProgreso.html" %}
 {% load static %}
+{% load i18n %}
 {% block body %}
 <head>
     <link rel="stylesheet" href="{% static 'css/estilosAprender.css' %}">
@@ -9,11 +10,11 @@
 
 <div class="text-center mb-4">
     <div class="fondo_titulo">
-        <h1 class="titulo-kichwa">🔢 ¡Aprende los NÚMEROS en Kichwa! 🔢</h1>
+        <h1 class="titulo-kichwa">🔢 {% trans "¡Aprende los NÚMEROS en Kichwa!" %} 🔢</h1>
     </div>
 </div>
 <div class="text-center">
-    <a href="{% url 'aprender' %}" class="btn-volver">VOLVER</a>
+    <a href="{% url 'aprender' %}" class="btn-volver">{% trans "VOLVER" %}</a>
 </div>
 
 <br>
@@ -37,7 +38,7 @@
                     {% if num.audio_kichwa_num %}
                     <div>
                         <button class="btn-audio mb-2" onclick="document.getElementById('audio_{{ forloop.counter }}').play()">
-                            🔊 Escuchar
+                            🔊 {% trans "Escuchar" %}
                         </button>
                         <audio id="audio_{{ forloop.counter }}">
                             <source src="{{ num.audio_kichwa_num.url }}" type="audio/mpeg">
@@ -64,7 +65,7 @@
             <a href="{% url 'jugar_numeros' %}" style="text-decoration: none;">
                 <div class="menu-card">
                     <img src="{% static 'imagenes/jugar.gif' %}" alt="Jugar" class="menu-img">
-                    <div class="menu-title">🎮  JUGAR CON NÚMEROS</div>
+                    <div class="menu-title">🎮 {% trans "Escuchar" %}</div>
                 </div>
             </a>
         </div>

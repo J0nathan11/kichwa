@@ -97,7 +97,7 @@ footer {
   background: linear-gradient(135deg, #f7ffd4, #d0f8ff, #fff8d6);
   border: 4px dashed #379ad6;
   border-radius: 25px;
-  padding: 20px;
+  padding: 10px;
   margin: 20px auto;
   max-width: 600px;
   animation: brillo 4s infinite alternate;
