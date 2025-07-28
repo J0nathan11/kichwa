@@ -3,6 +3,7 @@
 {% load i18n %}
 {% block body %}
 <link rel="stylesheet" href="{% static 'css/estilosAprender.css' %}">
+<link rel="stylesheet" href="{% static 'css/juegoSeleccion.css' %}">
 
 <style>
     .numero-imagen {
@@ -12,21 +13,6 @@
         cursor: pointer;
         border: 2px solid transparent;
         transition: 0.3s;
-    }
-
-    .contenedor-juego {
-        background-color: #e0f7fa;
-        border-radius: 15px;
-        padding: 20px;
-        margin-top: 30px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .palabra-kichwa {
-        font-size: 2rem;
-        font-weight: bold;
-        margin-bottom: 30px;
-        color: #00796b;
     }
 </style>
 
@@ -42,8 +28,8 @@
 </div>
 
 <div class="container contenedor-juego text-center">
-    <div id="palabra-mostrar" class="palabra-kichwa">Palabra aquí</div>
-
+    <div id="palabra-mostrar" class="palabra-kichwa-animada">Palabra aquí</div>
+    <br><br>
     <div class="row justify-content-center" id="contenedor-imagenes">
         {% for num in numeros %}
         <div class="col-md-3 mb-4">
@@ -52,6 +38,8 @@
         {% endfor %}
     </div>
 </div>
+
+<br>
 
 <audio id="sonido-acierto"><source src="{% static 'sonidos/acierto.mp3' %}" type="audio/mpeg"></audio>
 <audio id="sonido-error"><source src="{% static 'sonidos/error.mp3' %}" type="audio/mpeg"></audio>
