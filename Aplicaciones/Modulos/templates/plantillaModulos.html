@@ -128,6 +128,23 @@
           <li class="nav-item"><a class="nav-link" href="{% url 'aprender' %}">{% trans "Aprender" %}</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'login_profesor' %}">{% trans "Profesor" %}</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'login_estudiante' %}">{% trans "Evaluación" %}</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="idiomaDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              {% trans "Idioma" %}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="idiomaDropdown">
+              <li>
+                <form action="{% url 'set_language' %}" method="post" class="px-3">
+                  {% csrf_token %}
+                  <input name="next" type="hidden" value="{{ request.path }}">
+                  <select name="language" class="form-select form-select-sm mb-2" onchange="this.form.submit()">
+                    <option value="es" {% if request.LANGUAGE_CODE == 'es' %}selected{% endif %}>🇪🇸 Español</option>
+                    <option value="qu" {% if request.LANGUAGE_CODE == 'qu' %}selected{% endif %}>🌄 Kichwa</option>
+                  </select>
+                </form>
+              </li>
+            </ul>
+          </li>
         </ul>
       </div>
     </div>

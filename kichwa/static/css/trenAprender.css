@@ -60,7 +60,10 @@ html, body {
     display: flex;
     align-items: center;
     width: max-content;
-    animation: moverTren 60s linear infinite;
+    animation-name: moverTren;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-duration: 25s; 
     gap: 10px;
     position: relative;
     z-index: 3;
@@ -204,4 +207,16 @@ html, body {
 @keyframes volarAvionDerecha {
     0% { transform: translateX(0); }
     100% { transform: translateX(120vw); }
+}
+
+.bloque-decorado {
+    background: linear-gradient(to right, #eaf9ff, #fefce8);
+    border: 3px dashed #4da6ff;
+    border-radius: 20px;
+    padding: 15px 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: fit-content;
+    max-width: 90%;
 }

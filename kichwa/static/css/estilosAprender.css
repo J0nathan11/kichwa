@@ -1,36 +1,90 @@
-
-@keyframes moverArribaAbajo {
-    0% { transform: translateY(15px); }
-    50% { transform: translateY(-5px); }
-    100% { transform: translateY(15px); }
+.titulo-aprender {
+    font-size: 30px;
 }
-
-.titulo-aprender,
+/* Título principal animado */
 .titulo-kichwa {
-    font-family: 'Comic Sans MS', cursive;
+    
     color: #ff5722;
     font-size: 2.5rem;
-    margin-bottom: 20px;
+    margin-bottom: 0;
     text-shadow: 2px 2px #ffe0b2;
-    animation: moverArribaAbajo 2s ease-in-out infinite;
 }
 
-.titulo-juego {
-    font-family: 'Comic Sans MS', cursive;
-    color: #5e645c;
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-    text-shadow: 2px 2px #ffe0b2;
-    animation: moverArribaAbajo 2s ease-in-out infinite;
-}
-
+/* Contenedor animado y decorado del título */
 .fondo_titulo {
-    background-color: #fce4ec;
-    border-radius: 15px;
-    padding: 15px;
-    display: inline-block;
+    background: linear-gradient(135deg, #ffe0f0, #fff9c4);
+    border: 5px dashed #ff8a65;
+    padding: 20px 40px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
+    animation: moverArribaAbajo 2s ease-in-out infinite;
 }
 
+.fondo_titulo::before,
+.fondo_titulo::after {
+    font-size: 2rem;
+    animation: saltito 1s ease-in-out infinite alternate;
+}
+
+/* Tarjetas de animales */
+.card-mes {
+    background: linear-gradient(145deg, #fefbd8, #e0f7fa);
+    border-radius: 25px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: reboteTarjeta 2.5s ease-in-out infinite alternate;
+    border: 3px solid #aed581;
+}
+
+.card-mes:hover {
+    transform: scale(1.05) rotate(-1deg);
+    box-shadow: 0 10px 18px rgba(0, 0, 0, 0.3);
+}
+
+.card-title {
+    font-size: 1.6rem;
+    color: #388e3c;
+    font-weight: bold;
+}
+
+/* Botón de audio */
+.btn-audio {
+    background-color: #fff176;
+    color: #5d4037;
+    font-weight: bold;
+    border: 2px solid #ffb300;
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-size: 1.1rem;
+    animation: pulso 1.8s infinite ease-in-out;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    transition: transform 0.3s;
+}
+
+.btn-audio:hover {
+    background-color: #ffe082;
+    transform: scale(1.05);
+}
+
+/* Botón volver */
+.btn-volver {
+    background-color: #7e7c7a; 
+    color: white;
+    font-size: 1.2rem;
+    padding: 10px 30px;
+    border: none;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-volver:hover {
+    background-color: #afaead; 
+    color: #fffde7;     
+}
+
+/* Carta de jugar */
 .menu-card {
     border-radius: 20px;
     background-color: #fce4ec;
@@ -58,49 +112,25 @@
     text-shadow: 1px 1px #fff;
 }
 
-.card-mes {
-    background-color: #fffde7;
-    border-radius: 20px;
-    transition: transform 0.3s ease;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+/* Animaciones */
+@keyframes moverArribaAbajo {
+    0% { transform: translateY(15px); }
+    50% { transform: translateY(-5px); }
+    100% { transform: translateY(15px); }
 }
 
-.card-mes:hover {
-    transform: scale(1.05);
+@keyframes reboteTarjeta {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-5px); }
 }
 
-.card-title {
-    font-size: 1.6rem;
-    color: #388e3c;
-    font-weight: bold;
+@keyframes pulso {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+    100% { transform: scale(1); }
 }
 
-.btn-audio {
-    background-color: #ffca28;
-    border: none;
-    border-radius: 10px;
-    padding: 10px 20px;
-    font-size: 1rem;
-    color: #5d4037;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.btn-audio:hover {
-    background-color: #ffc107;
-}
-
-.btn-volver {
-    background-color: #7e7c7a; 
-    color: white;
-    font-size: 1.2rem;
-    padding: 10px 30px;
-    border: none;
-    border-radius: 10px;
-    transition: all 0.3s ease;
-}
-
-.btn-volver:hover {
-    background-color: #afaead; 
-    color: #fffde7;     
+@keyframes saltito {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-5px); }
 }

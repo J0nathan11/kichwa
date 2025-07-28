@@ -5,25 +5,8 @@
 <link rel="stylesheet" href="{% static 'css/estilosInicio.css' %}">
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
+<div class="burbujas-contenedor" id="contenedor-burbujas"></div>
 
-<div class="contenedor-idioma-niños">
-  <form action="{% url 'set_language' %}" method="post">
-    {% csrf_token %}
-    <input name="next" type="hidden" value="{{ request.path }}">
-
-    <label for="language" class="label-idioma">🌍 Idioma:</label>
-    <select name="language" id="language" class="select-idioma">
-      <option value="es" {% if request.LANGUAGE_CODE == 'es' %}selected{% endif %}>🇪🇸 Español</option>
-      <option value="qu" {% if request.LANGUAGE_CODE == 'qu' %}selected{% endif %}>🌄 Kichwa</option>
-    </select>
-
-    <button type="submit" class="btn-idioma">🎈 {% trans "Cambiar idioma" %}</button>
-  </form>
-</div>
-
-
-
-<br><br>
 <div class="contenedor-bienvenida-animado">
   <h2 class="titulo-bienvenida animar-titulo" style="text-align: justify;">
     {% trans "¡Juntos aprendemos kichwa!" %}
@@ -31,14 +14,13 @@
   </h2>
 </div>
 
-<div class="contenedor-boton-aprender">
+<div class="contenedor-idioma-niños">
   <form action="{% url 'aprender' %}">
     <button type="submit" class="btn-aprender" onclick="lanzarConfeti(event)">
       🎒 {% trans "¡Vamos a aprender!" %}
     </button>
   </form>
 </div>
-
 
 <div class="zona-bienvenida">
   
@@ -59,6 +41,21 @@
   </div>
 
 </div>
+
+<audio id="musica-fondo" autoplay loop>
+  <source src="{% static 'audio/musica_inicio.mp3' %}" type="audio/mpeg">
+  Tu navegador no soporta el elemento de audio.
+</audio>
+
+<script>
+  window.addEventListener("load", function () {
+    const musica = document.getElementById("musica-fondo");
+    musica.volume = 0.1; // volumen medio
+    musica.play().catch(() => {
+      console.warn("🔇 Autoplay bloqueado. Se activará cuando el usuario haga clic.");
+    });
+  });
+</script>
 
 <script>
   function colision(rect1, rect2, margen = 10) {
@@ -136,6 +133,8 @@
       imagenes.forEach(img => img.classList.remove("activo"));
       index = (index + 1) % imagenes.length;
       imagenes[index].classList.add("activo");
+
+      lanzarConfetiGaleria(); // 🎉 lanzar confeti cuando se cambia imagen
     }, 4000);
   }
 
@@ -144,6 +143,22 @@
     rotarImagenes();
   };
 </script>
+
+<script>
+function lanzarConfetiGaleria() {
+  const galeria = document.querySelector('.galeria-imagenes');
+  const rect = galeria.getBoundingClientRect();
+  const x = (rect.left + rect.width / 2) / window.innerWidth;
+  const y = (rect.top + rect.height / 2) / window.innerHeight;
+
+  confetti({
+    particleCount: 80,
+    spread: 60,
+    origin: { x: x, y: y }
+  });
+}
+</script>
+
 
 <script>
   function lanzarConfeti(event) {
@@ -159,6 +174,32 @@
       event.target.closest("form").submit();
     }, 1000);
   }
+</script>
+
+<script>
+function lanzarBurbujas() {
+  const contenedor = document.getElementById("contenedor-burbujas");
+
+  setInterval(() => {
+    const burbuja = document.createElement("div");
+    burbuja.classList.add("burbuja");
+
+    const tamaño = Math.random() * 20 + 10;
+    burbuja.style.width = `${tamaño}px`;
+    burbuja.style.height = `${tamaño}px`;
+
+    const posicionX = Math.random() * window.innerWidth;
+    burbuja.style.left = `${posicionX}px`;
+
+    contenedor.appendChild(burbuja);
+
+    setTimeout(() => {
+      burbuja.remove();
+    }, 6000);
+  }, 300); // frecuencia de burbujas
+}
+
+lanzarBurbujas();
 </script>
 
 

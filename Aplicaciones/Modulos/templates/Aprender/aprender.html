@@ -8,9 +8,20 @@
 
 <div class="contenido-principal">
 
-    <!-- ✅ Bienvenida del estudiante -->
-    <div class="titulo-bienvenida">
-        🎓 {% trans "¡Bienvenido/a estudiante" %} {{ nombre_completo|title }}!
+    <div class="bloque-decorado">
+        <div class="titulo-bienvenida mb-3">
+            🎓 {% trans "¡Bienvenido/a estudiante" %} {{ nombre_completo|title }}!
+        </div>
+
+        <label for="velocidad-tren" class="fw-bold fs-5">🚄 Velocidad:</label>
+        <select id="velocidad-tren" class="form-select d-inline-block w-auto ms-2" onchange="cambiarVelocidad()">
+            <option value="25s" selected>Normal</option>
+            <option value="15s">Rápida</option>
+            <option value="40s">Lenta</option>
+        </select>
+
+        <button onclick="pausarTren()" class="btn btn-danger btn-sm ms-3">⏸️ Pausar</button>
+        <button onclick="reanudarTren()" class="btn btn-success btn-sm ms-1">▶️ Reanudar</button>
     </div>
 
     <!-- PÁJAROS DECORATIVOS -->
@@ -20,18 +31,14 @@
          <img src="{% static 'imagenes/avion1.gif' %}" alt="Avión" class="elemento-cielo avion">
     </div>
 
-
     <!-- ✅ Contenedor general del tren -->
     <div class="contenedor-tren-animado">
 
-        <!-- Árbol izquierdo fijo -->
         <img class="decoracion-arbol izquierdo" src="{% static 'imagenes/arbol.gif' %}" alt="Árbol izquierdo">
-
-        <!-- Árbol derecho fijo -->
         <img class="decoracion-arbol derecho" src="{% static 'imagenes/arbol.gif' %}" alt="Árbol derecho">
 
         <!-- 🚂 Tren animado -->
-        <div class="contenedor-tren">
+        <div class="contenedor-tren tren-animado">
 
             <!-- LOCOMOTORA -->
             <div class=" vagon_tren">
@@ -127,5 +134,41 @@
 
     </div>
 </div>
+
+<audio id="musica-fondo" autoplay loop>
+  <source src="{% static 'audio/musica_inicio.mp3' %}" type="audio/mpeg">
+  Tu navegador no soporta el elemento de audio.
+</audio>
+
+<script>
+  window.addEventListener("load", function () {
+    const musica = document.getElementById("musica-fondo");
+    musica.volume = 0.1; // volumen medio
+    musica.play().catch(() => {
+      console.warn("🔇 Autoplay bloqueado. Se activará cuando el usuario haga clic.");
+    });
+  });
+</script>
+
+<script>
+  function cambiarVelocidad() {
+    const nuevaVelocidad = document.getElementById("velocidad-tren").value;
+    const tren = document.querySelector(".contenedor-tren.tren-animado");
+    tren.style.animationDuration = nuevaVelocidad;
+  }
+
+  function pausarTren() {
+    const tren = document.querySelector(".contenedor-tren.tren-animado");
+    tren.style.animationPlayState = "paused";
+  }
+
+  function reanudarTren() {
+    const tren = document.querySelector(".contenedor-tren.tren-animado");
+    tren.style.animationPlayState = "running";
+  }
+</script>
+
+
+
 <br>
 {% endblock %}

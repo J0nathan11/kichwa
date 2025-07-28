@@ -6,19 +6,20 @@
     <link rel="stylesheet" href="{% static 'css/estilosAprender.css' %}">
 </head>
 
-<br>
 
 <div class="text-center mb-4">
     <div class="fondo_titulo">
-        <h1 class="titulo-kichwa">🐾 {% trans "¡Aprende los Animales en Kichwa!" %} 🐾</h1>
+        <h1 class="titulo-kichwa"> 🐾{% trans "¡Aprende los Animales en Kichwa!" %}🐾</h1>
     </div>
 </div>
+<br>
 <div class="text-center">
     <a href="{% url 'aprender' %}" class="btn-volver">{% trans "VOLVER" %}</a>
 </div>
 
 <br>
 
+<!-- 🐾 Tarjetas de animales -->
 <div class="container">
     <div class="row">
         {% for animal in animales %}
@@ -55,10 +56,12 @@
     </div>
 </div>
 
+<!-- Separador decorativo -->
 <div style="width: 70%; margin-left: 170px;">
     <hr style="height: 3px; background-color: #000; border: none;">
 </div>
 
+<!-- 🎮 Botón Jugar -->
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-4 mb-4">
@@ -71,6 +74,14 @@
         </div>
     </div>
 </div>
+
+<!-- 🔊 Audio de bienvenida (opcional) -->
+<script>
+  window.addEventListener("load", function() {
+    const bienvenida = new Audio("{% static 'audio/bienvenida_animales.mp3' %}");
+    bienvenida.play().catch(() => {}); // prevenir errores por autoplay bloqueado
+  });
+</script>
 
 <br>
 {% endblock %}
