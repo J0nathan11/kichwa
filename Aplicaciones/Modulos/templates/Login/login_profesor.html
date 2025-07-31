@@ -50,9 +50,16 @@
                 {% trans "Ingresar" %}
             </button>
 
+            <div style="text-align: center; margin-top: 8px;">
+                <a href="{% url 'recuperar_contrasena' %}"
+                style="border-radius: 10px; font-family: 'Comic Sans MS', cursive; text-decoration: none;">
+                    ¿Olvidaste tu contraseña?
+                </a>
+            </div>
+
             <a href="{% url 'login_admin' %}" class="btn btn-info w-100 mt-2"
             style="border-radius: 10px; font-family: 'Comic Sans MS', cursive; text-decoration: none;">
-                {% trans "Iniciar como Administrador" %}
+                {% trans "Administrador" %}
             </a>
 
 

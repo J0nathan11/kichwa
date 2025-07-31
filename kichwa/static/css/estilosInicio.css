@@ -12,21 +12,6 @@
   overflow: hidden;
 }
 
-.figura {
-  width: 160px;
-  height: 160px;
-  position: absolute;
-  border-radius: 20px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: all 1s ease;
-  opacity: 0;
-  z-index: 2;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1;
-}
 
 .figura img {
   width: 100%;
@@ -241,19 +226,17 @@ footer {
   z-index: 1; 
 }
 
-/* Cada burbuja */
 .burbuja {
   position: absolute;
   bottom: 0;
   width: 20px;
   height: 20px;
-  background: rgba(135, 206, 250, 0.6); /* azul claro */
+  background: rgba(135, 206, 250, 0.6); 
   border-radius: 50%;
   animation: subirBurbuja 6s linear infinite;
   opacity: 0.7;
 }
 
-/* Animación de subir y desaparecer */
 @keyframes subirBurbuja {
   0% {
     transform: translateY(0) scale(1);
@@ -264,3 +247,85 @@ footer {
     opacity: 0;
   }
 }
+
+.globos-medios {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  margin-top: 20px;
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 3;
+}
+
+.globo-medio {
+  width: 200px;
+  height: auto;
+  animation: flotarMedio 4s ease-in-out infinite;
+}
+
+@keyframes flotarMedio {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-8px); }
+  100% { transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .globo-medio {
+    display: none;
+  }
+}
+
+
+.escena-naturaleza {
+  position: relative;
+  width: 50%;
+  height: 100%;
+  padding: 30px 20px 0 40px;
+  margin-left: 10px;
+  margin-right: 50PX;
+  box-sizing: border-box;
+}
+
+.figura.pajaro {
+  position: absolute;
+  top: 20px;
+  left: 140px;
+  width: 180px;
+  z-index: 2;
+}
+
+.figura.conejo {
+  position: absolute;
+  bottom: 80px;
+  left: 0px; 
+  width: 500px;
+  z-index: 2;
+}
+
+.figura.arbol {
+  position: absolute;
+  bottom: 100px;
+  right: 260px; 
+  width: 320px;
+  z-index: 1;
+}
+
+.figura.arbol2 {
+  position: absolute;
+  bottom: 100px;
+  right: 0px; 
+  width: 320px;
+  z-index: 1;
+}
+
+.figura.sendero {
+  position: absolute;
+  bottom: 95px;
+  left: 0;
+  width: 100%;
+  height: auto;
+  z-index: 0;
+}
+

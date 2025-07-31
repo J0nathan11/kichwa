@@ -2,34 +2,51 @@
 {% load static %}
 {% load i18n %}
 {% block body %}
+
 <link rel="stylesheet" href="{% static 'css/estilosInicio.css' %}">
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
 <div class="burbujas-contenedor" id="contenedor-burbujas"></div>
 
-<div class="contenedor-bienvenida-animado">
-  <h2 class="titulo-bienvenida animar-titulo" style="text-align: justify;">
-    {% trans "¡Juntos aprendemos kichwa!" %}
-    <img src="{% static 'imagenes/inicio/ardilla.gif' %}" alt="ardilla" class="gif-ardilla">
-  </h2>
-</div>
+<!-- 🎈 Globos a los lados del recuadro central -->
+<div class="globos-medios">
+  <img src="{% static 'imagenes/inicio/globo.gif' %}" class="globo-medio globo-medio-izquierda" alt="Globo Izquierda">
 
-<div class="contenedor-idioma-niños">
-  <form action="{% url 'aprender' %}">
-    <button type="submit" class="btn-aprender" onclick="lanzarConfeti(event)">
-      🎒 {% trans "¡Vamos a aprender!" %}
-    </button>
-  </form>
+  <div class="contenedor-bienvenida-animado">
+    <h2 class="titulo-bienvenida animar-titulo" style="text-align: justify;">
+      {% trans "¡Juntos aprendemos kichwa!" %}
+      <img src="{% static 'imagenes/inicio/ardilla.gif' %}" alt="ardilla" class="gif-ardilla">
+    </h2>
+
+    <form action="{% url 'aprender' %}" style="text-align: center;">
+      <button type="submit" class="btn-aprender" onclick="lanzarConfeti(event)">
+        🎒 {% trans "¡Vamos a aprender!" %}
+      </button>
+    </form>
+  </div>
+
+  <img src="{% static 'imagenes/inicio/globo.gif' %}" class="globo-medio globo-medio-derecha" alt="Globo Derecha">
 </div>
 
 <div class="zona-bienvenida">
-  
-  <!-- Figuras animadas -->
-  <div class="contenedor-figuras">
-    <div class="figura" id="figura1"><img src="{% static 'imagenes/inicio/mikey_mouse.gif' %}"></div>
-    <div class="figura" id="figura2"><img src="{% static 'imagenes/inicio/pato_donal.gif' %}"></div>
-    <div class="figura" id="figura3"><img src="{% static 'imagenes/inicio/doraemon.gif' %}"></div>
-    <div class="figura" id="figura4"><img src="{% static 'imagenes/inicio/pitufo.gif' %}"></div>
+
+  <!-- Figuras fijas en escena -->
+  <div class="contenedor-figuras escena-naturaleza">
+    <div class="figura sendero">
+      <img src="{% static 'imagenes/escena/camino.gif' %}" alt="Sendero">
+    </div>
+    <div class="figura conejo">
+      <img src="{% static 'imagenes/escena/box.gif' %}" alt="Conejo">
+    </div>
+    <div class="figura arbol">
+      <img src="{% static 'imagenes/escena/arbol.gif' %}" alt="Árbol">
+    </div>
+    <div class="figura arbol2">
+      <img src="{% static 'imagenes/escena/arbol.gif' %}" alt="Árbol">
+    </div>
+    <div class="figura pajaro">
+      <img src="{% static 'imagenes/escena/pajaro.gif' %}" alt="Pájaro">
+    </div>
   </div>
 
   <!-- Galería -->
@@ -50,80 +67,11 @@
 <script>
   window.addEventListener("load", function () {
     const musica = document.getElementById("musica-fondo");
-    musica.volume = 0.1; // volumen medio
+    musica.volume = 0.1;
     musica.play().catch(() => {
-      console.warn("🔇 Autoplay bloqueado. Se activará cuando el usuario haga clic.");
+      console.warn("🔇 Autoplay bloqueado.");
     });
   });
-</script>
-
-<script>
-  function colision(rect1, rect2, margen = 10) {
-    return !(
-      rect1.left + rect1.width + margen < rect2.left ||
-      rect1.left > rect2.left + rect2.width + margen ||
-      rect1.top + rect1.height + margen < rect2.top ||
-      rect1.top > rect2.top + rect2.height + margen
-    );
-  }
-
-  function moverAleatorio(figura, posiciones) {
-    const zona = document.querySelector(".contenedor-figuras");
-    const zonaWidth = zona.clientWidth;
-    const zonaHeight = zona.clientHeight;
-
-    const figuraWidth = figura.offsetWidth;
-    const figuraHeight = figura.offsetHeight;
-
-    const margen = 20;
-    const maxIntentos = 500;
-    let intentos = 0;
-    let nuevaPos;
-
-    do {
-      const left = Math.floor(Math.random() * (zonaWidth - figuraWidth - margen));
-      const top = Math.floor(Math.random() * (zonaHeight - figuraHeight - margen));
-
-      const nuevaCaja = {
-        left: left,
-        top: top,
-        width: figuraWidth,
-        height: figuraHeight
-      };
-
-      const colisiona = posiciones.some(pos => colision(nuevaCaja, pos, margen));
-      if (!colisiona) {
-        nuevaPos = nuevaCaja;
-        break;
-      }
-
-      intentos++;
-    } while (intentos < maxIntentos);
-
-    if (nuevaPos) {
-      posiciones.push(nuevaPos);
-      figura.style.left = nuevaPos.left + "px";
-      figura.style.top = nuevaPos.top + "px";
-      figura.style.opacity = 0;
-      setTimeout(() => figura.style.opacity = 1, 300);
-    }
-  }
-
-  function iniciarMovimiento() {
-    const figuras = document.querySelectorAll(".figura");
-    const posiciones = [];
-
-    figuras.forEach((figura, index) => {
-      setTimeout(() => moverAleatorio(figura, posiciones), index * 300);
-    });
-
-    setInterval(() => {
-      const nuevasPosiciones = [];
-      figuras.forEach((figura, index) => {
-        setTimeout(() => moverAleatorio(figura, nuevasPosiciones), index * 300);
-      });
-    }, 8000);
-  }
 
   function rotarImagenes() {
     const imagenes = document.querySelectorAll('.galeria-item');
@@ -134,33 +82,23 @@
       index = (index + 1) % imagenes.length;
       imagenes[index].classList.add("activo");
 
-      lanzarConfetiGaleria(); // 🎉 lanzar confeti cuando se cambia imagen
+      lanzarConfetiGaleria();
     }, 4000);
   }
 
-  window.onload = () => {
-    iniciarMovimiento();
-    rotarImagenes();
-  };
-</script>
+  function lanzarConfetiGaleria() {
+    const galeria = document.querySelector('.galeria-imagenes');
+    const rect = galeria.getBoundingClientRect();
+    const x = (rect.left + rect.width / 2) / window.innerWidth;
+    const y = (rect.top + rect.height / 2) / window.innerHeight;
 
-<script>
-function lanzarConfetiGaleria() {
-  const galeria = document.querySelector('.galeria-imagenes');
-  const rect = galeria.getBoundingClientRect();
-  const x = (rect.left + rect.width / 2) / window.innerWidth;
-  const y = (rect.top + rect.height / 2) / window.innerHeight;
+    confetti({
+      particleCount: 80,
+      spread: 60,
+      origin: { x: x, y: y }
+    });
+  }
 
-  confetti({
-    particleCount: 80,
-    spread: 60,
-    origin: { x: x, y: y }
-  });
-}
-</script>
-
-
-<script>
   function lanzarConfeti(event) {
     event.preventDefault();
 
@@ -174,33 +112,33 @@ function lanzarConfetiGaleria() {
       event.target.closest("form").submit();
     }, 1000);
   }
+
+  function lanzarBurbujas() {
+    const contenedor = document.getElementById("contenedor-burbujas");
+
+    setInterval(() => {
+      const burbuja = document.createElement("div");
+      burbuja.classList.add("burbuja");
+
+      const tamaño = Math.random() * 20 + 10;
+      burbuja.style.width = `${tamaño}px`;
+      burbuja.style.height = `${tamaño}px`;
+
+      const posicionX = Math.random() * window.innerWidth;
+      burbuja.style.left = `${posicionX}px`;
+
+      contenedor.appendChild(burbuja);
+
+      setTimeout(() => {
+        burbuja.remove();
+      }, 6000);
+    }, 300);
+  }
+
+  window.onload = () => {
+    rotarImagenes();
+    lanzarBurbujas();
+  };
 </script>
-
-<script>
-function lanzarBurbujas() {
-  const contenedor = document.getElementById("contenedor-burbujas");
-
-  setInterval(() => {
-    const burbuja = document.createElement("div");
-    burbuja.classList.add("burbuja");
-
-    const tamaño = Math.random() * 20 + 10;
-    burbuja.style.width = `${tamaño}px`;
-    burbuja.style.height = `${tamaño}px`;
-
-    const posicionX = Math.random() * window.innerWidth;
-    burbuja.style.left = `${posicionX}px`;
-
-    contenedor.appendChild(burbuja);
-
-    setTimeout(() => {
-      burbuja.remove();
-    }, 6000);
-  }, 300); // frecuencia de burbujas
-}
-
-lanzarBurbujas();
-</script>
-
 
 {% endblock %}

@@ -87,6 +87,9 @@ def validar_correo(correo):
         return False
 
 # AGREGAR PROFESOR
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+
 def agregar_profesor(request):
     if not request.user.is_authenticated or not request.user.is_superuser:
         return redirect('login_admin')
@@ -131,12 +134,35 @@ def agregar_profesor(request):
                 sexo=sexo,
                 estado=estado,
                 usuario=usuario,
-                contrasena=contrasena  
+                contrasena=contrasena
             )
             if foto:
                 profesor.foto = foto
 
             profesor.save()
+
+            # ✅ Enviar correo al profesor
+            try:
+                asunto = '🎓 Confirmación de Registro'
+                mensaje = render_to_string('correos/profesor_confirmacion.html', {
+                    'nombre': nombres,
+                    'usuario': usuario,
+                    'email': email,
+                })
+                
+                send_mail(
+                    asunto,
+                    '',
+                    settings.EMAIL_HOST_USER,  # ✅ usa lo que tienes en settings.py
+                    [email],
+                    html_message=mensaje,
+                    fail_silently=False
+                )
+            except Exception as e:
+                print("✅ Enviando correo a:", email)
+
+                print("❌ Error al enviar correo:", e)
+
             messages.success(request, 'Profesor agregado correctamente.')
             return redirect('lista_profesor')
 
@@ -146,6 +172,10 @@ def agregar_profesor(request):
         'error_email': error_email,
         'error_telefono': error_telefono
     })
+
+
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 
 # EDITAR PROFESOR
 def editar_profesor(request, id):
@@ -158,6 +188,8 @@ def editar_profesor(request, id):
     error_usuario = None
     error_email = None
     error_telefono = None
+
+    email_anterior = profesor.email  # 🔍 Guarda el correo anterior
 
     if request.method == 'POST':
         nombres = request.POST.get('nombres').strip()
@@ -185,7 +217,6 @@ def editar_profesor(request, id):
         elif not validar_correo(email):
             error_email = "El correo electrónico ingresado no es válido."
         else:
-            # Actualizar datos
             profesor.nombres = nombres
             profesor.apellidos = apellidos
             profesor.cedula = cedula
@@ -194,12 +225,34 @@ def editar_profesor(request, id):
             profesor.sexo = sexo
             profesor.estado = estado
             profesor.usuario = usuario
-            profesor.contrasena = contrasena  # en texto plano como solicitaste
+            profesor.contrasena = contrasena
 
             if foto:
                 profesor.foto = foto
 
             profesor.save()
+
+            # ✅ Si cambió el correo, enviar notificación al nuevo email
+            if email != email_anterior:
+                try:
+                    asunto = '📧 Actualización de Correo Electrónico'
+                    mensaje = render_to_string('correos/profesor_confirmacion.html', {
+                        'nombre': nombres,
+                        'usuario': usuario,
+                        'email': email,
+                    })
+
+                    send_mail(
+                        asunto,
+                        '',
+                        settings.EMAIL_HOST_USER,
+                        [email],
+                        html_message=mensaje,
+                        fail_silently=False
+                    )
+                except Exception as e:
+                    print("❌ Error al enviar notificación de correo cambiado:", e)
+
             messages.success(request, 'Datos del profesor actualizados correctamente.')
             return redirect('lista_profesor')
 
@@ -282,12 +335,33 @@ def configuracion_profesor(request):
         profesor.email = request.POST.get('email')
         profesor.sexo = request.POST.get('sexo')
         profesor.usuario = request.POST.get('usuario')
-        profesor.contrasena = request.POST.get('contrasena')  # Si es en texto plano (no recomendado)
+        profesor.contrasena = request.POST.get('contrasena')  # texto plano como pediste
 
         if 'foto' in request.FILES:
             profesor.foto = request.FILES['foto']
 
         profesor.save()
+
+        # ✅ Enviar correo de confirmación de actualización
+        try:
+            asunto = '🔔 Actualización de Datos'
+            mensaje = render_to_string('correos/profesor_actualizacion.html', {
+                'nombre': profesor.nombres,
+                'usuario': profesor.usuario,
+                'email': profesor.email,
+            })
+
+            send_mail(
+                asunto,
+                '',
+                settings.EMAIL_HOST_USER,
+                [profesor.email],
+                html_message=mensaje,
+                fail_silently=False
+            )
+        except Exception as e:
+            print("❌ Error al enviar correo de actualización:", e)
+
         messages.success(request, 'Datos actualizados correctamente.')
         return redirect('configuracion_profesor')
 
@@ -2453,3 +2527,42 @@ def logout_estudiante_aprender(request):
 #---------------------HISTORIA--------------------
 def historia(request):
     return render(request, 'Historia/historia.html')
+
+
+#----------------------RECUPERAR CONTRASEÑA---------------------
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.contrib import messages
+from .models import Profesor
+
+def recuperar_contrasena(request):
+    if request.method == 'POST':
+        cedula = request.POST.get('cedula').strip()
+        email = request.POST.get('email').strip()
+
+        try:
+            profesor = Profesor.objects.get(cedula=cedula, email=email)
+
+            # Cargar plantilla HTML del correo
+            mensaje = render_to_string('correos/recuperar_contrasena.html', {
+                'nombre': profesor.nombres,
+                'usuario': profesor.usuario,
+                'contrasena': profesor.contrasena,
+            })
+
+            send_mail(
+                '🔐 Recuperación de Contraseña',
+                '',
+                settings.EMAIL_HOST_USER,
+                [email],
+                html_message=mensaje,
+                fail_silently=False,
+            )
+
+            messages.success(request, 'La contraseña ha sido enviada a tu correo electrónico.')
+            return redirect('login_profesor')
+
+        except Profesor.DoesNotExist:
+            messages.error(request, 'No se encontró un profesor con esa cédula y correo.')
+
+    return render(request, 'Login/recuperar_contrasena.html')

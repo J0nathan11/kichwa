@@ -1,0 +1,58 @@
+{% extends "plantillaModulos.html" %}
+{% load static %}
+{% load i18n %}
+{% block body %}
+
+<link rel="stylesheet" href="{% static 'css/estilosLogin.css' %}">
+
+<div class="d-flex justify-content-center align-items-center" style="min-height: 400px;">
+    <div class="card shadow p-5" style="width: 100%; max-width: 400px; border-radius: 15px;">
+        <h2 class="text-center mb-4 text-danger" style="font-family: 'Comic Sans MS', cursive;">
+            Recuperar Contraseña
+        </h2>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger mt-3" role="alert"
+                     style="font-family: 'Comic Sans MS', cursive;  color: #fff; background-color: #FF5733; border-radius: 10px;">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST" id="frm_login_recuperar_contrasena">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="cedula" class="form-label" style="font-family: 'Comic Sans MS', cursive; color: #000000;"> {% trans "Cédula" %}:</label>
+                <input type="text" name="cedula" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label" style="font-family: 'Comic Sans MS', cursive; color: #000000;">Correo electrónico</label>
+                <input type="email" name="email" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-danger w-100"
+                    style="border-radius: 10px; font-family: 'Comic Sans MS', cursive;">
+                Recuperar Contraseña
+            </button>
+        </form>
+
+        <a href="{% url 'login_profesor' %}" class="btn btn-secondary w-100 mt-3"
+           style="border-radius: 10px; font-family: 'Comic Sans MS', cursive;">
+            {% trans "Salir" %}
+        </a>
+    </div>
+</div>
+<script>
+    $("#frm_login_recuperar_contrasena").validate({
+        rules: {
+            cedula: { required: true },
+            email: { required: true }
+        },
+        messages: {
+            cedula: { required: "{% trans 'Por favor ingrese la Cédula' %}" },
+            email: { required: "{% trans 'Por favor ingrese el Correo Electrónico' %}" }
+        }
+    });
+</script>
+<br><br><br>
+{% endblock %}

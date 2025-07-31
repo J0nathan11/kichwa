@@ -105,6 +105,7 @@
             nombres: { required: true },
             apellidos: { required: true },
             cedula: { required: true, minlength: 10, maxlength: 10 },
+            telefono: { required: true, minlength: 10, maxlength: 10 },
             email: { required: true },
             usuario: { required: true },
             contrasena: { required: true },
@@ -118,6 +119,11 @@
                 required: "Ingrese la cédula",
                 minlength: "La cédula debe tener 10 dígitos",
                 maxlength: "La cédula debe tener 10 dígitos"
+            },
+            telefono: {
+                required: "Ingrese el número del télefono",
+                minlength: "El teléfono debe tener 10 dígitos",
+                maxlength: "El teléfono debe tener 10 dígitos"
             },
             email: { required: "Ingrese el correo electrónico" },
             usuario: { required: "Ingrese el nombre de usuario" },

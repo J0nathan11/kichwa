@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 
 from . import views 
 urlpatterns = [
@@ -206,8 +206,11 @@ urlpatterns = [
     path('admin_bienvenida/', views.admin_bienvenida, name='admin_bienvenida'),
     path('logout_admin/', views.logout_admin, name='logout_admin'),
 
-    #--------------------HISTORIA---------------------
-    path('historia/', views.historia, name='historia'),
+    #--------------------IDIOMA---------------------
+    path('i18n/', include('django.conf.urls.i18n')),
+
+    #------------------RECUPERRAR CONTRASEÑA---------------
+    path('recuperar-contrasena/', views.recuperar_contrasena, name='recuperar_contrasena'),
 
 
 ]

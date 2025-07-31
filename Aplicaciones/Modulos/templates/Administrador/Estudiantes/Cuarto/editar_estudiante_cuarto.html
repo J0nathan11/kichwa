@@ -102,6 +102,28 @@
     document.getElementById('apellidos_est').addEventListener('input', function () {
         this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
     });
+
+        function capitalizarPalabras(campo) {
+        let palabras = campo.value.toLowerCase().split(' ');
+        for (let i = 0; i < palabras.length; i++) {
+            if (palabras[i].length > 0) {
+                palabras[i] = palabras[i][0].toUpperCase() + palabras[i].substring(1);
+            }
+        }
+        campo.value = palabras.join(' ');
+    }
+
+    // Aplicar al escribir en nombres y apellidos
+    document.getElementById('nombres_est').addEventListener('input', function () {
+        this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+        capitalizarPalabras(this);
+    });
+
+    document.getElementById('apellidos_est').addEventListener('input', function () {
+        this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+        capitalizarPalabras(this);
+    });
+
 </script>
 
 <br>
