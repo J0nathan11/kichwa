@@ -10,7 +10,8 @@
     </div>
     <br>
     {% if evaluaciones %}
-        {% for evaluacion in evaluaciones %}
+        {% for item in evaluaciones %}
+            {% with evaluacion=item.evaluacion %}
             <div class="card mb-4 p-4" style="border-radius: 15px; background-color: #c7dbff; box-shadow: 0 4px 6px rgba(42, 110, 203, 0.3);">
                 <h3 style="color: #1a49a1; font-size: 1.8rem; margin-bottom: 10px;">
                     {{ evaluacion.titulo_eva_ter }}
@@ -18,13 +19,23 @@
                 <p style="font-size: 1.2rem; color: #154a86;">
                     {{ evaluacion.descripcion_eva_ter }}
                 </p>
-                <a href="{% url 'mostrar_evaluacion_tercero' evaluacion.id %}" 
-                   class="btn btn-primary btn-lg"
-                   style="border-radius: 25px; font-weight: bold; background-color: #2a6ecb; border: none; box-shadow: 0 4px 8px rgba(42, 110, 203, 0.6);">
-                   🎯 ¡Iniciar Evaluación!
-                </a>
+
+                {% if item.respondida %}
+                    <div class="alert alert-info mt-2" style="font-size: 1.3rem; color: #1a49a1; background-color: #e0ecff; border-radius: 10px;">
+                        ✅ Ya realizaste esta evaluación.<br>
+                        Tu nota fue: <strong>{{ item.nota }}</strong> / 10 🎓
+                    </div>
+                {% else %}
+                    <a href="{% url 'mostrar_evaluacion_tercero' evaluacion.id %}" 
+                    class="btn btn-primary btn-lg"
+                    style="border-radius: 25px; font-weight: bold; background-color: #2a6ecb; border: none; box-shadow: 0 4px 8px rgba(42, 110, 203, 0.6);">
+                    🎯 ¡Iniciar Evaluación!
+                    </a>
+                {% endif %}
             </div>
+            {% endwith %}
         {% endfor %}
+
     {% else %}
         <p class="text-center" style="font-size: 1.5rem; color: #6a8ccf; margin-top: 40px;">
             No hay evaluaciones disponibles para Tercero 😔

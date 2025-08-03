@@ -14,7 +14,7 @@
                         {% csrf_token %}
 
                         <div class="form-group">
-                            <label for="palabra_dia">Día:</label>
+                            <label for="palabra_dia">Palabra:</label>
                             <input type="text" name="palabra_dia" id="palabra_dia" class="form-control" placeholder="Ej: Lunes" required>
                             {% if error_palabra %}
                                 <small class="form-text text-danger">{{ error_palabra }}</small>

@@ -1,24 +1,7 @@
 {% extends 'plantillaAdmin.html' %}
-
+{% load static %}
 {% block body %}
-<style>
-    #tbl-Estudiantes {
-        background-color: #a0ccf3;
-    }
-
-    #tbl-Estudiantes th {
-        background-color: #1f77b4;
-        color: white;
-    }
-
-    #tbl-Estudiantes td {
-        color: #333;
-    }
-
-    #tbl-Estudiantes tr:hover {
-        background-color: #d1e7f7;
-    }
-</style>
+<link rel="stylesheet" href="{% static 'css/estilosListaEstudiante.css' %}">
 
 <br><br><br><br>
 <div>
@@ -65,7 +48,13 @@
                     <td>{{ est.cedula_est_ter }}</td>
                     <td>{{ est.genero_est_ter }}</td>
                     <td>{{ est.nivel_escolar_est_ter }}</td>
-                    <td>{{ est.estado_est_ter }}</td>
+                    <td class="text-center">
+                        <label class="switch">
+                            <input type="checkbox" class="toggle-estado-est-ter" data-id="{{ est.id }}" {% if est.estado_est_ter == 'ACTIVO' %}checked{% endif %}>
+                            <span class="slider round"></span>
+                        </label>
+                    </td>
+
                     <td>{{ est.fecha_registro_est_ter }}</td>
                     <td>{{ est.fecha_actualizacion_est_ter }}</td>
                     <td>
@@ -107,5 +96,34 @@
         }
     });
 </script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('.toggle-estado-est-ter').change(function() {
+        const id = $(this).data('id');
+        const estado = $(this).is(':checked') ? 'ACTIVO' : 'INACTIVO';
+
+        $.ajax({
+            url: "{% url 'ajax_cambiar_estado_estudiante_tercero' %}",
+            type: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            data: {
+                id: id,
+                estado: estado
+            },
+            success: function(response) {
+                console.log("✅ Estado actualizado:", response.estado);
+            },
+            error: function(xhr) {
+                console.error("❌ Error:", xhr.responseText);
+            }
+        });
+    });
+});
+</script>
+
 
 {% endblock %}

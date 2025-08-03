@@ -6,19 +6,19 @@
     <link rel="stylesheet" href="{% static 'css/estilosAprender.css' %}">
 </head>
 
-<br>
-
 <div class="text-center mb-4">
     <div class="fondo_titulo">
         <h1 class="titulo-kichwa">🧍‍♂️ {% trans "¡Aprende el Cuerpo Humano en Kichwa!" %} 🧍‍♀️</h1>
     </div>
 </div>
+<br>
 <div class="text-center">
     <a href="{% url 'aprender' %}" class="btn-volver">{% trans "VOLVER" %}</a>
 </div>
 
 <br>
 
+<!-- 🧍 Tarjetas del cuerpo humano -->
 <div class="container">
     <div class="row">
         {% for parte in cuerpo_humano %}
@@ -28,23 +28,21 @@
                     <h5 class="card-title">📖 {{ parte.palabra_cue }}</h5>
 
                     {% if parte.imagen_cue %}
-                    <div class="mb-3">
-                        <img src="{{ parte.imagen_cue.url }}" alt="{{ parte.palabra_cue }}" class="img-fluid" style="max-height: 120px; border-radius: 15px;">
+                    <div class="mb-3"
+                         onmouseenter="document.getElementById('audio_{{ forloop.counter }}').play()"
+                         onmouseleave="document.getElementById('audio_{{ forloop.counter }}').pause(); document.getElementById('audio_{{ forloop.counter }}').currentTime = 0;">
+                        <img src="{{ parte.imagen_cue.url }}" alt="{{ parte.palabra_cue }}"
+                             class="img-fluid imagen-cuerpo" style="max-height: 120px; border-radius: 15px;">
                     </div>
                     {% else %}
                     <p>📷 No hay imagen disponible.</p>
                     {% endif %}
 
                     {% if parte.audio_kichwa_cue %}
-                    <div>
-                        <button class="btn-audio mb-2" onclick="document.getElementById('audio_{{ forloop.counter }}').play()">
-                            🔊 {% trans "Escuchar" %}
-                        </button>
-                        <audio id="audio_{{ forloop.counter }}">
-                            <source src="{{ parte.audio_kichwa_cue.url }}" type="audio/mpeg">
-                            Tu navegador no soporta audio.
-                        </audio>
-                    </div>
+                    <audio id="audio_{{ forloop.counter }}">
+                        <source src="{{ parte.audio_kichwa_cue.url }}" type="audio/mpeg">
+                        Tu navegador no soporta audio.
+                    </audio>
                     {% else %}
                     <p>🔇 No hay audio disponible.</p>
                     {% endif %}
@@ -55,10 +53,12 @@
     </div>
 </div>
 
+<!-- Separador decorativo -->
 <div style="width: 70%; margin-left: 170px;">
     <hr style="height: 3px; background-color: #000; border: none;">
 </div>
 
+<!-- 🎮 Botón Jugar -->
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-4 mb-4">

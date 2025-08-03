@@ -147,6 +147,7 @@ def agregar_profesor(request):
                 mensaje = render_to_string('correos/profesor_confirmacion.html', {
                     'nombre': nombres,
                     'usuario': usuario,
+                    'contrasena': contrasena,
                     'email': email,
                 })
                 
@@ -239,6 +240,7 @@ def editar_profesor(request, id):
                     mensaje = render_to_string('correos/profesor_confirmacion.html', {
                         'nombre': nombres,
                         'usuario': usuario,
+                        'contrasena': contrasena,
                         'email': email,
                     })
 
@@ -270,9 +272,19 @@ def eliminar_profesor(request, id):
         return redirect('login_admin')
 
     profesor = get_object_or_404(Profesor, id=id)
+
+    tiene_eval_ter = Evaluacion_Tercero.objects.filter(profesor=profesor).exists()
+    tiene_eval_cua = Evaluacion_Cuarto.objects.filter(profesor=profesor).exists()
+
+    if tiene_eval_ter or tiene_eval_cua:
+        messages.error(request, "❌ No se puede eliminar a este docente porque tiene evaluaciones registradas.")
+        return redirect('lista_profesor')
+
     profesor.delete()
-    messages.success(request, "Profesor eliminado correctamente.")
-    return redirect('lista_profesor') 
+    messages.success(request, "✅ Profesor eliminado correctamente.")
+    return redirect('lista_profesor')
+
+
 
 # ----------------------PAGUINA DE INICIO----------------------
 def inicio(request):
@@ -1433,6 +1445,21 @@ def lista_estudiantes_cuarto(request):
     estudiantes = Estudiante_Cuarto.objects.all()
     return render(request, 'Administrador/Estudiantes/Cuarto/lista_estudiantes_cuarto.html', {'estudiantes': estudiantes})
 
+@csrf_exempt
+def ajax_cambiar_estado_estudiante_cuarto(request):
+    if request.method == 'POST':
+        id = request.POST.get('id')
+        estado = request.POST.get('estado')
+
+        estudiante = get_object_or_404(Estudiante_Cuarto, id=id)
+        estudiante.estado_est_cua = estado
+        estudiante.save()
+
+        return JsonResponse({'estado': estudiante.estado_est_cua})
+
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+
 # AGREGAR CUARTO
 def agregar_estudiante_cuarto(request):
     if not request.session.get('profesor_id'):
@@ -1524,6 +1551,20 @@ def lista_estudiantes_tercero(request):
     
     estudiantes = Estudiante_Tercero.objects.all()
     return render(request, 'Administrador/Estudiantes/Tercero/lista_estudiantes_tercero.html', {'estudiantes': estudiantes})
+
+@csrf_exempt
+def ajax_cambiar_estado_estudiante_tercero(request):
+    if request.method == 'POST':
+        id = request.POST.get('id')
+        estado = request.POST.get('estado')
+
+        estudiante = get_object_or_404(Estudiante_Tercero, id=id)
+        estudiante.estado_est_ter = estado
+        estudiante.save()
+
+        return JsonResponse({'estado': estudiante.estado_est_ter})
+
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
 
 # AGREGAR TERCERO
 def agregar_estudiante_tercero(request):
@@ -1647,9 +1688,12 @@ TIPOS_APRENDIZAJE = [
 
 # AGREGAR EVALUACION CUARTO
 def agregar_evaluacion_cuarto(request):
+    if not request.session.get('profesor_id'):
+        return redirect('login_profesor')
+
     error_titulo = None
     max_evaluaciones = 3
-    total_evaluaciones = Evaluacion_Cuarto.objects.count()
+    total_evaluaciones = Evaluacion_Cuarto.objects.filter(profesor_id=request.session['profesor_id']).count()
 
     if total_evaluaciones >= max_evaluaciones:
         messages.warning(request, "Ya has alcanzado el límite de 3 evaluaciones para Cuarto.")
@@ -1662,7 +1706,7 @@ def agregar_evaluacion_cuarto(request):
         estado = request.POST.get("estado_eva_cua") == "on"
         tipos = request.POST.getlist("tipo_aprendizaje_eva_cua")
 
-        if Evaluacion_Cuarto.objects.filter(titulo_eva_cua__iexact=titulo).exists():
+        if Evaluacion_Cuarto.objects.filter(titulo_eva_cua__iexact=titulo, profesor_id=request.session['profesor_id']).exists():
             error_titulo = f'El título "{titulo}" ya está registrado.'
         else:
             Evaluacion_Cuarto.objects.create(
@@ -1671,6 +1715,7 @@ def agregar_evaluacion_cuarto(request):
                 nivel_escolar_eva_cua=nivel_escolar,
                 estado_eva_cua=estado,
                 tipo_aprendizaje_eva_cua=",".join(tipos),
+                profesor_id=request.session['profesor_id'],
                 fecha_creacion_eva_cua=timezone.now()
             )
             messages.success(request, "Evaluación agregada exitosamente.")
@@ -1681,12 +1726,15 @@ def agregar_evaluacion_cuarto(request):
         "error_titulo": error_titulo
     })
 
+
 # LISTAR EVALUACIONES CUARTO
 def lista_evaluaciones_cuarto(request):
     if not request.session.get('profesor_id'):
         return redirect('login_profesor')
 
-    evaluaciones = Evaluacion_Cuarto.objects.all()
+    profesor_id = request.session['profesor_id']
+    evaluaciones = Evaluacion_Cuarto.objects.filter(profesor_id=profesor_id)
+
     for eva in evaluaciones:
         eva.tipos_lista = [t.strip() for t in eva.tipo_aprendizaje_eva_cua.split(",")] if eva.tipo_aprendizaje_eva_cua else []
 
@@ -1698,9 +1746,32 @@ def lista_evaluaciones_cuarto(request):
     })
 
 
+@csrf_exempt
+def ajax_cambiar_estado_evaluacion_cuarto(request):
+    if request.method == 'POST':
+        id = request.POST.get('id')
+        estado = request.POST.get('estado') == 'true'
+
+        evaluacion = get_object_or_404(Evaluacion_Cuarto, id=id)
+        evaluacion.estado_eva_cua = estado
+        evaluacion.save()
+
+        return JsonResponse({'estado': evaluacion.estado_eva_cua})
+
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+
 # EDITAR EVALUACION CUARTO
 def editar_evaluacion_cuarto(request, id):
+    if not request.session.get('profesor_id'):
+        return redirect('login_profesor')
+
     evaluacion = get_object_or_404(Evaluacion_Cuarto, id=id)
+
+    if evaluacion.profesor_id != request.session.get('profesor_id'):
+        messages.error(request, "❌ No tienes permiso para editar esta evaluación.")
+        return redirect('lista_evaluaciones_cuarto')
+
     error_titulo = None
 
     if request.method == "POST":
@@ -1710,7 +1781,7 @@ def editar_evaluacion_cuarto(request, id):
         estado = request.POST.get("estado_eva_cua") == "on"
         tipos = request.POST.getlist("tipo_aprendizaje_eva_cua")
 
-        if Evaluacion_Cuarto.objects.filter(titulo_eva_cua__iexact=titulo).exclude(id=evaluacion.id).exists():
+        if Evaluacion_Cuarto.objects.filter(titulo_eva_cua__iexact=titulo, profesor_id=request.session['profesor_id']).exclude(id=evaluacion.id).exists():
             error_titulo = f'El título "{titulo}" ya está registrado.'
         else:
             evaluacion.titulo_eva_cua = titulo
@@ -1780,7 +1851,9 @@ def agregar_evaluacion_tercero(request):
                 nivel_escolar_eva_ter=nivel_escolar,
                 estado_eva_ter=estado,
                 tipo_aprendizaje_eva_ter=",".join(tipos),
+                profesor_id=request.session['profesor_id']  # 👈 se asocia al profesor logueado
             )
+
             messages.success(request, "Evaluación agregada exitosamente.")
             return redirect("lista_evaluaciones_tercero")
 
@@ -1794,7 +1867,8 @@ def lista_evaluaciones_tercero(request):
     if not request.session.get('profesor_id'):
         return redirect('login_profesor')
 
-    evaluaciones = Evaluacion_Tercero.objects.all()
+    profesor_id = request.session.get('profesor_id')
+    evaluaciones = Evaluacion_Tercero.objects.filter(profesor_id=profesor_id)
     for eva in evaluaciones:
         eva.tipos_lista = [t.strip() for t in eva.tipo_aprendizaje_eva_ter.split(",")] if eva.tipo_aprendizaje_eva_ter else []
 
@@ -1805,9 +1879,45 @@ def lista_evaluaciones_tercero(request):
         'total_evaluaciones': total_evaluaciones
     })
 
-# EDITAR
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from .models import Evaluacion_Tercero
+
+@csrf_exempt
+def ajax_cambiar_estado_evaluacion(request):
+    if request.method == 'POST':
+        id = request.POST.get('id')
+        estado = request.POST.get('estado')
+
+        try:
+            evaluacion = get_object_or_404(Evaluacion_Tercero, id=id)
+
+            # Convertimos a booleano real
+            nuevo_estado = estado == 'true'
+
+            # Solo guardar si hay un cambio real
+            if evaluacion.estado_eva_ter != nuevo_estado:
+                evaluacion.estado_eva_ter = nuevo_estado
+                evaluacion.save()
+
+            return JsonResponse({'estado': evaluacion.estado_eva_ter})
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
+
 def editar_evaluacion_tercero(request, id):
+    if not request.session.get('profesor_id'):
+        return redirect('login_profesor')
+
     evaluacion = get_object_or_404(Evaluacion_Tercero, id=id)
+
+    # ✅ Verificar que la evaluación pertenece al profesor logueado
+    if evaluacion.profesor_id != request.session.get('profesor_id'):
+        messages.error(request, "❌ No tienes permiso para editar esta evaluación.")
+        return redirect('lista_evaluaciones_tercero')
+
     error_titulo = None
 
     if request.method == "POST":
@@ -1826,7 +1936,7 @@ def editar_evaluacion_tercero(request, id):
             evaluacion.estado_eva_ter = estado
             evaluacion.tipo_aprendizaje_eva_ter = ",".join(tipos)
             evaluacion.save()
-            messages.success(request, "Evaluación actualizada exitosamente.")
+            messages.success(request, "✅ Evaluación actualizada exitosamente.")
             return redirect("lista_evaluaciones_tercero")
 
     evaluacion.tipos_lista = [t.strip() for t in evaluacion.tipo_aprendizaje_eva_ter.split(",")] if evaluacion.tipo_aprendizaje_eva_ter else []
@@ -2113,12 +2223,29 @@ def ver_evaluacion_tercero(request):
         return redirect('login_estudiante')
 
     # Corrección aquí
-    evaluaciones = Evaluacion_Tercero.objects.filter(estado_eva_ter=True)
+    evaluaciones_raw = Evaluacion_Tercero.objects.filter(estado_eva_ter=True)
 
+    evaluaciones = []
+    for eva in evaluaciones_raw:
+        resultado = Resultado_Evaluacion_Tercero.objects.filter(fk_estudiante_ter=estudiante, fk_evaluacion_ter=eva).first()
+        if resultado:
+            evaluaciones.append({
+                'evaluacion': eva,
+                'respondida': True,
+                'nota': resultado.nota_res_ter
+            })
+        else:
+            evaluaciones.append({
+                'evaluacion': eva,
+                'respondida': False,
+                'nota': None
+            })
+            
     return render(request, 'Evaluacion/ver_evaluacion_tercero.html', {
         'estudiante': estudiante,
         'evaluaciones': evaluaciones
-    })
+})
+
 
 
 def ver_evaluacion_cuarto(request):
@@ -2131,12 +2258,28 @@ def ver_evaluacion_cuarto(request):
         return redirect('login_estudiante')
 
     # Corrección aquí
-    evaluaciones = Evaluacion_Cuarto.objects.filter(estado_eva_cua=True)
+    evaluaciones_raw = Evaluacion_Cuarto.objects.filter(estado_eva_cua=True)
 
+    evaluaciones = []
+    for eva in evaluaciones_raw:
+        resultado = Resultado_Evaluacion_Cuarto.objects.filter(fk_estudiante_cua=estudiante, fk_evaluacion_cua=eva).first()
+        if resultado:
+            evaluaciones.append({
+                'evaluacion': eva,
+                'respondida': True,
+                'nota': resultado.nota_res_cua
+            })
+        else:
+            evaluaciones.append({
+                'evaluacion': eva,
+                'respondida': False,
+                'nota': None
+            })
     return render(request, 'Evaluacion/ver_evaluacion_cuarto.html', {
-        'estudiante': estudiante,
-        'evaluaciones': evaluaciones
-    })
+    'estudiante': estudiante,
+    'evaluaciones': evaluaciones
+})
+
 
 #--------------------VER EVALUACION 10 PREGUNTAS-------------------------
 

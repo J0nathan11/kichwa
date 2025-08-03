@@ -30,7 +30,7 @@
             {% csrf_token %}
             
             <div class="mb-3">
-                <label for="nombres" class="form-label" style="font-family: 'Comic Sans MS', cursive; color: #4164b1;">{% trans "Nombres" %}</label>
+                <label for="nombres" class="form-label" style="font-family: 'Comic Sans MS', cursive; color: #4164b1;">{% trans "Nombres" %}:</label>
                 <input type="text" name="nombres" id="nombres" class="form-control form-control-lg"
                        placeholder="{% trans 'Escribe tus Nombres' %}" required
                        value="{{ request.POST.nombres|default:'' }}"
@@ -38,7 +38,7 @@
             </div>
 
             <div class="mb-3">
-                <label for="apellidos" class="form-label" style="font-family: 'Comic Sans MS', cursive; color: #4164b1;">{% trans "Apellidos" %}</label>
+                <label for="apellidos" class="form-label" style="font-family: 'Comic Sans MS', cursive; color: #4164b1;">{% trans "Apellidos" %}:</label>
                 <input type="text" name="apellidos" id="apellidos" class="form-control form-control-lg"
                        placeholder="{% trans 'Escribe tus Apellidos' %}" required
                        value="{{ request.POST.apellidos|default:'' }}"
@@ -46,9 +46,9 @@
             </div>
 
             <div class="mb-3">
-                <label for="cedula" class="form-label" style="font-family: 'Comic Sans MS', cursive; color: #4164b1;">{% trans "Cédula" %}</label>
+                <label for="cedula" class="form-label" style="font-family: 'Comic Sans MS', cursive; color: #4164b1;">{% trans "Cédula" %}:</label>
                 <input type="text" name="cedula" id="cedula" class="form-control form-control-lg"
-                       placeholder="{% trans 'Ingrese la Cédula' %}" maxlength="10" required
+                       placeholder="{% trans 'Ingrese el número de cédula' %}" maxlength="10" required
                        value="{{ request.POST.cedula|default:'' }}"
                        style="border-radius: 10px; border: 2px solid #3cc043; font-size: 14px;">
             </div>
@@ -81,7 +81,7 @@
             nombres: { required: "{% trans 'Por favor ingresa tus Nombres' %}" },
             apellidos: { required: "{% trans 'Por favor ingresa tus Apellidos' %}" },
             cedula: {
-                required: "{% trans 'Por favor ingresa la Cédula' %}",
+                required: "{% trans 'Ingrese el número de cédula' %}",
                 minlength: "La cédula debe tener 10 dígitos",
                 maxlength: "La cédula debe tener 10 dígitos"
             },
@@ -99,6 +99,27 @@
     });
     document.getElementById('apellidos').addEventListener('input', function () {
         this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+    });
+
+    function capitalizarPalabras(campo) {
+        let palabras = campo.value.toLowerCase().split(' ');
+        for (let i = 0; i < palabras.length; i++) {
+            if (palabras[i].length > 0) {
+                palabras[i] = palabras[i][0].toUpperCase() + palabras[i].substring(1);
+            }
+        }
+        campo.value = palabras.join(' ');
+    }
+
+    // Aplicar al escribir en nombres y apellidos
+    document.getElementById('nombres').addEventListener('input', function () {
+        this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+        capitalizarPalabras(this);
+    });
+
+    document.getElementById('apellidos').addEventListener('input', function () {
+        this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+        capitalizarPalabras(this);
     });
 </script>
 <br>

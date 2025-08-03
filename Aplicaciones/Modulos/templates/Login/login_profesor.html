@@ -31,7 +31,7 @@
             {% csrf_token %}
             
             <div class="mb-3">
-                <label for="usuario" class="form-label" style="font-family: 'Comic Sans MS', cursive; color: #4164b1;">{% trans "Usuario" %}</label>
+                <label for="usuario" class="form-label" style="font-family: 'Comic Sans MS', cursive; color: #4164b1;">{% trans "Usuario" %}:</label>
                 <input type="text" name="usuario" id="usuario" class="form-control form-control-lg"
                        placeholder="{% trans 'Escribe tu usuario' %}" required
                        value="{{ request.POST.usuario }}"
@@ -39,7 +39,7 @@
             </div>
 
             <div class="mb-3">
-                <label for="contrasena" class="form-label" style="font-family: 'Comic Sans MS', cursive; color: #4164b1;">{% trans "Contraseña" %}</label>
+                <label for="contrasena" class="form-label" style="font-family: 'Comic Sans MS', cursive; color: #4164b1;">{% trans "Contraseña" %}:</label>
                 <input type="password" name="contrasena" id="contrasena" class="form-control form-control-lg"
                        placeholder="{% trans 'Escribe tu contraseña' %}" required
                        style="border-radius: 10px; border: 2px solid #3cc043; font-size: 14px;">
@@ -53,7 +53,7 @@
             <div style="text-align: center; margin-top: 8px;">
                 <a href="{% url 'recuperar_contrasena' %}"
                 style="border-radius: 10px; font-family: 'Comic Sans MS', cursive; text-decoration: none;">
-                    ¿Olvidaste tu contraseña?
+                    {% trans "¿Olvidaste tu contraseña?" %}
                 </a>
             </div>
 

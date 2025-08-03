@@ -1,24 +1,7 @@
 {% extends 'plantillaAdmin.html' %}
-
+{% load static %}
 {% block body %}
-<style>
-    #tbl-Estudiantes {
-        background-color: #a0ccf3;
-    }
-
-    #tbl-Estudiantes th {
-        background-color: #1f77b4;
-        color: white;
-    }
-
-    #tbl-Estudiantes td {
-        color: #333;
-    }
-
-    #tbl-Estudiantes tr:hover {
-        background-color: #d1e7f7;
-    }
-</style>
+<link rel="stylesheet" href="{% static 'css/estilosListaEstudiante.css' %}">
 
 <br><br><br><br>
 <div>
@@ -66,7 +49,12 @@
                     <td>{{ est.cedula_est_cua }}</td>
                     <td>{{ est.genero_est_cua }}</td>
                     <td>{{ est.nivel_escolar_est_cua }}</td>
-                    <td>{{ est.estado_est_cua }}</td>
+                    <td class="text-center">
+                        <label class="switch">
+                            <input type="checkbox" class="toggle-estado-est-cua" data-id="{{ est.id }}" {% if est.estado_est_cua == 'ACTIVO' %}checked{% endif %}>
+                            <span class="slider round"></span>
+                        </label>
+                    </td>
                     <td>{{ est.fecha_registro_est_cua }}</td>
                     <td>{{ est.fecha_actualizacion_est_cua }}</td>
                     <td>
@@ -91,6 +79,50 @@
 </div>
 
 <script>
-    let table = new DataTable('#tbl-Estudiantes');
+    let table = new DataTable('#tbl-Estudiantes', {
+        language: {
+            lengthMenu: "Mostrar _MENU_ registros por página",
+            zeroRecords: "No se encontraron resultados",
+            info: "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+            infoEmpty: "Mostrando 0 a 0 de 0 entradas",
+            infoFiltered: "(filtrado de _MAX_ entradas totales)",
+            search: "Buscar:",
+            paginate: {
+                first: "Primero",
+                last: "Último",
+                next: "Siguiente",
+                previous: "Anterior"
+            }
+        }
+    });
 </script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('.toggle-estado-est-cua').change(function() {
+        const id = $(this).data('id');
+        const estado = $(this).is(':checked') ? 'ACTIVO' : 'INACTIVO';
+
+        $.ajax({
+            url: "{% url 'ajax_cambiar_estado_estudiante_cuarto' %}",
+            type: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            data: {
+                id: id,
+                estado: estado
+            },
+            success: function(response) {
+                console.log("✅ Estado actualizado:", response.estado);
+            },
+            error: function(xhr) {
+                console.error("❌ Error:", xhr.responseText);
+            }
+        });
+    });
+});
+</script>
+
 {% endblock %}

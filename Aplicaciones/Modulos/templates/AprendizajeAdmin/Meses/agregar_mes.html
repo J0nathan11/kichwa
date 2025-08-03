@@ -14,7 +14,7 @@
                         {% csrf_token %}
 
                         <div class="form-group">
-                            <label for="palabra_mes">Palabra en Kichwa:</label>
+                            <label for="palabra_mes">Palabra:</label>
                             <input type="text" name="palabra_mes" id="palabra_mes" class="form-control" placeholder="Ej: Enero" required>
                             {% if error_palabra %}
                                 <small class="form-text text-danger">{{ error_palabra }}</small>

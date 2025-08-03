@@ -13,15 +13,15 @@
             🎓 {% trans "¡Bienvenido/a estudiante" %} {{ nombre_completo|title }}!
         </div>
 
-        <label for="velocidad-tren" class="fw-bold fs-5">🚄 Velocidad:</label>
+        <label for="velocidad-tren" class="fw-bold fs-5">🚄 {% trans "Velocidad" %}:</label>
         <select id="velocidad-tren" class="form-select d-inline-block w-auto ms-2" onchange="cambiarVelocidad()">
-            <option value="25s" selected>Normal</option>
-            <option value="15s">Rápida</option>
-            <option value="40s">Lenta</option>
+            <option value="25s" selected>{% trans "Normal" %}</option>
+            <option value="15s">{% trans "Rápida" %}</option>
+            <option value="40s">{% trans "Lenta" %}</option>
         </select>
 
-        <button onclick="pausarTren()" class="btn btn-danger btn-sm ms-3">⏸️ Pausar</button>
-        <button onclick="reanudarTren()" class="btn btn-success btn-sm ms-1">▶️ Reanudar</button>
+        <button onclick="pausarTren()" class="btn btn-danger btn-sm ms-3">⏸️ {% trans "Pausar" %}</button>
+        <button onclick="reanudarTren()" class="btn btn-success btn-sm ms-1">▶️ {% trans "Reanudar" %}</button>
     </div>
 
     <!-- PÁJAROS DECORATIVOS -->

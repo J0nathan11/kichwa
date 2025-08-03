@@ -6,19 +6,19 @@
     <link rel="stylesheet" href="{% static 'css/estilosAprender.css' %}">
 </head>
 
-<br>
-
 <div class="text-center mb-4">
     <div class="fondo_titulo">
         <h1 class="titulo-kichwa">🔢 {% trans "¡Aprende los NÚMEROS en Kichwa!" %} 🔢</h1>
     </div>
 </div>
+<br>
 <div class="text-center">
     <a href="{% url 'aprender' %}" class="btn-volver">{% trans "VOLVER" %}</a>
 </div>
 
 <br>
 
+<!-- 🔢 Tarjetas de números -->
 <div class="container">
     <div class="row">
         {% for num in numeros %}
@@ -28,23 +28,21 @@
                     <h5 class="card-title">📖 {{ num.palabra_num }}</h5>
 
                     {% if num.imagen_num %}
-                    <div class="mb-3">
-                        <img src="{{ num.imagen_num.url }}" alt="{{ num.palabra_num }}" class="img-fluid" style="max-height: 120px; border-radius: 15px;">
+                    <div class="mb-3"
+                         onmouseenter="document.getElementById('audio_{{ forloop.counter }}').play()"
+                         onmouseleave="document.getElementById('audio_{{ forloop.counter }}').pause(); document.getElementById('audio_{{ forloop.counter }}').currentTime = 0;">
+                        <img src="{{ num.imagen_num.url }}" alt="{{ num.palabra_num }}"
+                             class="img-fluid imagen-num" style="max-height: 120px; border-radius: 15px;">
                     </div>
                     {% else %}
                     <p>📷 No hay imagen disponible.</p>
                     {% endif %}
 
                     {% if num.audio_kichwa_num %}
-                    <div>
-                        <button class="btn-audio mb-2" onclick="document.getElementById('audio_{{ forloop.counter }}').play()">
-                            🔊 {% trans "Escuchar" %}
-                        </button>
-                        <audio id="audio_{{ forloop.counter }}">
-                            <source src="{{ num.audio_kichwa_num.url }}" type="audio/mpeg">
-                            Tu navegador no soporta audio.
-                        </audio>
-                    </div>
+                    <audio id="audio_{{ forloop.counter }}">
+                        <source src="{{ num.audio_kichwa_num.url }}" type="audio/mpeg">
+                        Tu navegador no soporta audio.
+                    </audio>
                     {% else %}
                     <p>🔇 No hay audio disponible.</p>
                     {% endif %}
@@ -55,17 +53,19 @@
     </div>
 </div>
 
+<!-- Separador decorativo -->
 <div style="width: 70%; margin-left: 170px;">
     <hr style="height: 3px; background-color: #000; border: none;">
 </div>
 
+<!-- 🎮 Botón Jugar -->
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-4 mb-4">
             <a href="{% url 'jugar_numeros' %}" style="text-decoration: none;">
                 <div class="menu-card">
                     <img src="{% static 'imagenes/jugar.gif' %}" alt="Jugar" class="menu-img">
-                    <div class="menu-title">🎮 {% trans "Escuchar" %}</div>
+                    <div class="menu-title">🎮 {% trans "Jugar" %}</div>
                 </div>
             </a>
         </div>

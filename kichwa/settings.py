@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'kichwa.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.kiwcha',
+        'NAME': BASE_DIR / 'db.kiwcha_2025',
     }
 }
 
@@ -146,6 +146,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'ninasuntaariel@gmail.com'  # Cambia esto
-EMAIL_HOST_PASSWORD = 'cgba vnfi gouu fith'  # Usa una contraseña de aplicación, no tu clave normal
+EMAIL_HOST_USER = 'ueibsumakawsay@gmail.com'  # Cambia esto
+EMAIL_HOST_PASSWORD = 'gcts wzfz dtmr rouu'  # Usa una contraseña de aplicación, no tu clave normal
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+

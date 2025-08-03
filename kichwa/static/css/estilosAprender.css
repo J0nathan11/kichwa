@@ -134,3 +134,24 @@
     0% { transform: translateY(0); }
     100% { transform: translateY(-5px); }
 }
+
+.card-mes img {
+    cursor: pointer;
+}
+
+.card-mes img:hover {
+    animation: zoom-cursor 0.4s ease-in-out;
+    filter: drop-shadow(2px 2px 6px #ffb74d);
+}
+
+@keyframes zoom-cursor {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}

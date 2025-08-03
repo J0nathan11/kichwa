@@ -32,14 +32,14 @@
         <form method="POST" action="{% url 'login_admin' %}" id="frm_login_admin">
             {% csrf_token %}
             <div class="mb-3">
-                <label for="usuario" class="form-label" style="font-family: 'Comic Sans MS', cursive; color: #4164b1;">{% trans "Usuario" %}</label>
+                <label for="usuario" class="form-label" style="font-family: 'Comic Sans MS', cursive; color: #4164b1;">{% trans "Usuario" %}:</label>
                 <input type="text" name="usuario" id="usuario" class="form-control form-control-lg"
                     placeholder="{% trans 'Usuario' %}" required
                     style="border-radius: 10px; border: 2px solid #3cc043; font-size: 14px;">
             </div>
 
             <div class="mb-3">
-                <label for="contrasena" class="form-label" style="font-family: 'Comic Sans MS', cursive; color: #4164b1;">{% trans "Contraseña" %}</label>
+                <label for="contrasena" class="form-label" style="font-family: 'Comic Sans MS', cursive; color: #4164b1;">{% trans "Contraseña" %}:</label>
                 <input type="password" name="contrasena" id="contrasena" class="form-control form-control-lg"
                     placeholder="{% trans 'Contraseña' %}" required
                     style="border-radius: 10px; border: 2px solid #3cc043; font-size: 14px;">

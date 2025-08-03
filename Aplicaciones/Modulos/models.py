@@ -120,6 +120,7 @@ class Evaluacion_Cuarto(models.Model):
     tipo_aprendizaje_eva_cua = models.TextField()  
     fecha_creacion_eva_cua = models.DateTimeField(auto_now_add=True)
     fecha_actualizacion_eva_cua = models.DateTimeField(auto_now=True)
+    profesor = models.ForeignKey('Profesor', on_delete=models.PROTECT)  
 
     def __str__(self):
         return self.titulo_eva_cua
@@ -132,10 +133,11 @@ class Evaluacion_Tercero(models.Model):
     tipo_aprendizaje_eva_ter = models.TextField()  
     fecha_creacion_eva_ter = models.DateTimeField(auto_now_add=True)
     fecha_actualizacion_eva_ter = models.DateTimeField(auto_now=True)
+    profesor = models.ForeignKey('Profesor', on_delete=models.PROTECT)  
 
     def __str__(self):
         return self.titulo_eva_ter
-
+    
 # RESULTADO EVALUACIONES DE CUARTO Y TERCERO
 
 class Resultado_Evaluacion_Cuarto(models.Model):
@@ -155,6 +157,7 @@ class Resultado_Evaluacion_Tercero(models.Model):
 
     def __str__(self):
         return f"{self.fk_estudiante_ter} - Nota: {self.nota_res_ter}"
+    
 
 #------------------------LOGIN------------------------------
 
@@ -174,4 +177,3 @@ class Profesor(models.Model):
 
     def __str__(self):
         return f"{self.nombres} {self.apellidos}"
-    

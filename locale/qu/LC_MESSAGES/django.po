@@ -47,7 +47,7 @@ msgstr "Wiñachishka"
 
 #: .\Aplicaciones\Modulos\templates\Login\login_estudiante.html:9
 
-msgid "Modulos de Aprendizaje"
+msgid "Módulos de Aprendizaje"
 msgstr "Yachaypak kamukuna"
 
 msgid "Ingreso del Estudiante"
@@ -124,10 +124,49 @@ msgstr "Pushakshina yaykurik "
 msgid "Panel del Administrador"
 msgstr "Pushakkamaypak rikuchik pirka"
 
+msgid "¿Olvidaste tu contraseña?"
+msgstr "Pakarikchanki shimi pakarishkata?"
+
+msgid "Recuperar Contraseña"
+msgstr "Shimi pakarishkata kutichiy"
+
+msgid "Correo electrónico"
+msgstr "shimikuna"
+
+msgid "Por favor ingrese la Cédula"
+msgstr "Allichu, cedulata yaykuy"
+
+msgid "Por favor ingrese el Correo Electrónico"
+msgstr "Allichu, willay shimita yaykuy"
+
+msgid "Ingrese el número de cédula"
+msgstr "Cedulapa yupayta yaykuy"
+
+msgid "Ingrese un correo electrónico"
+msgstr "Shimikuna willayta yaykuy"
+
 #: .\Aplicaciones\Modulos\templates\Aprender\aprender.html:9
 
 msgid "¡Bienvenido/a estudiante"
 msgstr "Allishamushka yachakuk"
+
+msgid "Velocidad"
+msgstr "Utka"
+
+msgid "Pausar"
+msgstr "Sayachiy"
+
+msgid "Reanudar"
+msgstr "Kaymanta qallariy"
+
+msgid "Normal"
+msgstr "Kikinlla"
+
+msgid "Rápida"
+msgstr "Utka"
+
+msgid "Lenta"
+msgstr "Samaylla"
 
 msgid "Animales"
 msgstr "Wiwakuna"
@@ -237,3 +276,4 @@ msgstr "¡Pukllayta ruray, Ayllu Shutikuna kichwapi yachay!"
 
 msgid "¡Juega y aprende los Saludos en Kichwa!"
 msgstr "¡Pukllayta ruray, Napaykuna kichwapi yachay!"
+

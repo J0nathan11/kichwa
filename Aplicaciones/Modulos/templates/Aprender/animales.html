@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="{% static 'css/estilosAprender.css' %}">
 </head>
 
-
 <div class="text-center mb-4">
     <div class="fondo_titulo">
         <h1 class="titulo-kichwa"> 🐾{% trans "¡Aprende los Animales en Kichwa!" %}🐾</h1>
@@ -29,23 +28,22 @@
                     <h5 class="card-title">📖 {{ animal.palabra_ani }}</h5>
 
                     {% if animal.imagen_ani %}
-                    <div class="mb-3">
-                        <img src="{{ animal.imagen_ani.url }}" alt="{{ animal.palabra_ani }}" class="img-fluid" style="max-height: 120px; border-radius: 15px;">
+                    <div class="mb-3"
+                        onmouseenter="document.getElementById('audio_{{ forloop.counter }}').play()"
+                        onmouseleave="document.getElementById('audio_{{ forloop.counter }}').pause(); document.getElementById('audio_{{ forloop.counter }}').currentTime = 0;">
+                        <img src="{{ animal.imagen_ani.url }}" alt="{{ animal.palabra_ani }}"
+                            class="img-fluid" style="max-height: 120px; border-radius: 15px;">
                     </div>
                     {% else %}
                     <p>📷 No hay imagen disponible.</p>
                     {% endif %}
 
                     {% if animal.audio_kichwa_ani %}
-                    <div>
-                        <button class="btn-audio mb-2" onclick="document.getElementById('audio_{{ forloop.counter }}').play()">
-                            🔊 {% trans "Escuchar" %}
-                        </button>
-                        <audio id="audio_{{ forloop.counter }}">
-                            <source src="{{ animal.audio_kichwa_ani.url }}" type="audio/mpeg">
-                            Tu navegador no soporta audio.
-                        </audio>
-                    </div>
+                    <!-- El audio se activa al pasar el mouse por la imagen -->
+                    <audio id="audio_{{ forloop.counter }}">
+                        <source src="{{ animal.audio_kichwa_ani.url }}" type="audio/mpeg">
+                        Tu navegador no soporta audio.
+                    </audio>
                     {% else %}
                     <p>🔇 No hay audio disponible.</p>
                     {% endif %}
@@ -74,14 +72,6 @@
         </div>
     </div>
 </div>
-
-<!-- 🔊 Audio de bienvenida (opcional) -->
-<script>
-  window.addEventListener("load", function() {
-    const bienvenida = new Audio("{% static 'audio/bienvenida_animales.mp3' %}");
-    bienvenida.play().catch(() => {}); // prevenir errores por autoplay bloqueado
-  });
-</script>
 
 <br>
 {% endblock %}

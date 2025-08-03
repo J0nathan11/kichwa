@@ -1,24 +1,8 @@
 {% extends 'plantillaAdmin.html' %}
-
+{% load static %}
 {% block body %}
-<style>
-    #tbl-Evaluaciones {
-        background-color: #a0ccf3;
-    }
+<link rel="stylesheet" href="{% static 'css/estilosListaEvaluacion.css' %}">
 
-    #tbl-Evaluaciones th {
-        background-color: #1f77b4;
-        color: white;
-    }
-
-    #tbl-Evaluaciones td {
-        color: #333;
-    }
-
-    #tbl-Evaluaciones tr:hover {
-        background-color: #d1e7f7;
-    }
-</style>
 
 <br><br><br><br>
 <div>
@@ -77,7 +61,13 @@
                     </td>
                     <td>{{ eva.fecha_creacion_eva_cua|date:"d/m/Y H:i" }}</td>
                     <td>{{ eva.fecha_actualizacion_eva_cua|date:"d/m/Y H:i" }}</td>
-                    <td>{{ eva.estado_eva_cua|yesno:"Activo,Inactivo" }}</td>
+                    <td class="text-center">
+                        <label class="switch">
+                            <input type="checkbox" class="toggle-estado-eva-cua" data-id="{{ eva.id }}" {% if eva.estado_eva_cua %}checked{% endif %}>
+                            <span class="slider round"></span>
+                        </label>
+                    </td>
+
                     <td>{{ eva.nivel_escolar_eva_cua }}</td>
                     <td>
                         <div style="display: flex;">
@@ -118,5 +108,34 @@
         }
     });
 </script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('.toggle-estado-eva-cua').change(function() {
+        const id = $(this).data('id');
+        const estado = $(this).is(':checked');
+
+        $.ajax({
+            url: "{% url 'ajax_cambiar_estado_evaluacion_cuarto' %}",
+            type: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            data: {
+                id: id,
+                estado: estado
+            },
+            success: function(response) {
+                console.log("✅ Estado actualizado:", response.estado);
+            },
+            error: function(xhr) {
+                console.error("❌ Error:", xhr.responseText);
+            }
+        });
+    });
+});
+</script>
+
 
 {% endblock %}

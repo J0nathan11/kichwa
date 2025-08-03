@@ -8,7 +8,7 @@
 <div class="d-flex justify-content-center align-items-center" style="min-height: 400px;">
     <div class="card shadow p-5" style="width: 100%; max-width: 400px; border-radius: 15px;">
         <h2 class="text-center mb-4 text-danger" style="font-family: 'Comic Sans MS', cursive;">
-            Recuperar Contraseña
+            {% trans "Recuperar Contraseña" %}
         </h2>
 
         {% if messages %}
@@ -24,15 +24,15 @@
             {% csrf_token %}
             <div class="mb-3">
                 <label for="cedula" class="form-label" style="font-family: 'Comic Sans MS', cursive; color: #000000;"> {% trans "Cédula" %}:</label>
-                <input type="text" name="cedula" class="form-control" required>
+                <input type="text" name="cedula" class="form-control" placeholder="{% trans 'Ingrese el número de cédula' %}" required>
             </div>
             <div class="mb-3">
-                <label for="email" class="form-label" style="font-family: 'Comic Sans MS', cursive; color: #000000;">Correo electrónico</label>
-                <input type="email" name="email" class="form-control" required>
+                <label for="email" class="form-label" style="font-family: 'Comic Sans MS', cursive; color: #000000;"> {% trans "Correo electrónico" %}:</label>
+                <input type="email" name="email" class="form-control" placeholder="{% trans 'Ingrese un correo electrónico' %}" required>
             </div>
             <button type="submit" class="btn btn-danger w-100"
                     style="border-radius: 10px; font-family: 'Comic Sans MS', cursive;">
-                Recuperar Contraseña
+                {% trans "Recuperar Contraseña" %}
             </button>
         </form>
 
