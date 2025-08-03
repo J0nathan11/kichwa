@@ -2282,6 +2282,7 @@ def ver_evaluacion_cuarto(request):
 
 
 #--------------------VER EVALUACION 10 PREGUNTAS-------------------------
+import json
 
 def mostrar_evaluacion_tercero(request, evaluacion_id):
     estudiante_id = request.session.get('estudiante_id')
@@ -2309,6 +2310,7 @@ def mostrar_evaluacion_tercero(request, evaluacion_id):
             fecha_res_ter=timezone.now()
         )
 
+        request.session.pop('preguntas_tercero', None)  # Limpia preguntas al terminar
 
         return render(request, 'Evaluacion/mostrar_evaluacion_tercero.html', {
             'evaluacion': evaluacion,
@@ -2316,7 +2318,6 @@ def mostrar_evaluacion_tercero(request, evaluacion_id):
             'puntaje': nota_decimal,
         })
 
-    # Preparar preguntas
     modelos = {
         'objetos': Aprender_Objetos,
         'meses': Aprender_Meses,
@@ -2340,18 +2341,26 @@ def mostrar_evaluacion_tercero(request, evaluacion_id):
                 base = tipo[:3]
                 correcta = getattr(d, f'palabra_{base}', str(d))
                 imagen = getattr(d, f'imagen_{base}', None)
-                otras_opciones = random.sample([getattr(x, f'palabra_{base}', str(x)) for x in datos if x != d], k=2) if len(datos) > 2 else []
+                otras_opciones = random.sample(
+                    [getattr(x, f'palabra_{base}', str(x)) for x in datos if x != d],
+                    k=2
+                ) if len(datos) > 2 else []
                 opciones = [{'texto': o, 'es_correcta': False} for o in otras_opciones]
                 opciones.append({'texto': correcta, 'es_correcta': True})
                 random.shuffle(opciones)
 
                 preguntas_unificadas.append({
                     'palabra_correcta': correcta,
-                    'imagen': imagen,
+                    'imagen': imagen.url if imagen else None,
                     'opciones': opciones,
                 })
 
-    preguntas_random = random.sample(preguntas_unificadas, min(10, len(preguntas_unificadas)))
+    # Guardar o recuperar preguntas desde la sesión
+    if 'preguntas_tercero' not in request.session:
+        preguntas_random = random.sample(preguntas_unificadas, min(10, len(preguntas_unificadas)))
+        request.session['preguntas_tercero'] = json.dumps(preguntas_random)
+    else:
+        preguntas_random = json.loads(request.session['preguntas_tercero'])
 
     return render(request, 'Evaluacion/mostrar_evaluacion_tercero.html', {
         'evaluacion': evaluacion,
@@ -2387,6 +2396,8 @@ def mostrar_evaluacion_cuarto(request, evaluacion_id):
             fecha_res_cua=timezone.now()
         )
 
+        # Limpiar preguntas guardadas después de terminar evaluación
+        request.session.pop('preguntas_cuarto', None)
 
         return render(request, 'Evaluacion/mostrar_evaluacion_cuarto.html', {
             'evaluacion': evaluacion,
@@ -2394,6 +2405,7 @@ def mostrar_evaluacion_cuarto(request, evaluacion_id):
             'puntaje': nota_decimal,
         })
 
+    # Diccionario de modelos
     modelos = {
         'objetos': Aprender_Objetos,
         'meses': Aprender_Meses,
@@ -2414,21 +2426,29 @@ def mostrar_evaluacion_cuarto(request, evaluacion_id):
         if modelo:
             datos = list(modelo.objects.all())
             for d in datos:
-                base = tipo[:3]
+                base = tipo.strip()[:3]
                 correcta = getattr(d, f'palabra_{base}', str(d))
                 imagen = getattr(d, f'imagen_{base}', None)
-                otras_opciones = random.sample([getattr(x, f'palabra_{base}', str(x)) for x in datos if x != d], k=2) if len(datos) > 2 else []
+                otras_opciones = random.sample(
+                    [getattr(x, f'palabra_{base}', str(x)) for x in datos if x != d],
+                    k=2
+                ) if len(datos) > 2 else []
                 opciones = [{'texto': o, 'es_correcta': False} for o in otras_opciones]
                 opciones.append({'texto': correcta, 'es_correcta': True})
                 random.shuffle(opciones)
 
                 preguntas_unificadas.append({
                     'palabra_correcta': correcta,
-                    'imagen': imagen,
+                    'imagen': imagen.url if imagen else None,
                     'opciones': opciones,
                 })
 
-    preguntas_random = random.sample(preguntas_unificadas, min(10, len(preguntas_unificadas)))
+    # ✅ Mantener las mismas preguntas aleatorias durante la evaluación
+    if 'preguntas_cuarto' not in request.session:
+        preguntas_random = random.sample(preguntas_unificadas, min(10, len(preguntas_unificadas)))
+        request.session['preguntas_cuarto'] = json.dumps(preguntas_random)
+    else:
+        preguntas_random = json.loads(request.session['preguntas_cuarto'])
 
     return render(request, 'Evaluacion/mostrar_evaluacion_cuarto.html', {
         'evaluacion': evaluacion,
@@ -2437,9 +2457,7 @@ def mostrar_evaluacion_cuarto(request, evaluacion_id):
     })
 
 
-
-
-#-------------------------------ARENDER  ---------------------
+#------------------------------- ARENDER  ---------------------
 # MESES
 def ver_meses(request):
     if not request.session.get('estudiante_nombre') or not request.session.get('estudiante_apellido'):

@@ -18,7 +18,7 @@
             <div class="row g-0 align-items-center p-3">
                 {% if pregunta.imagen %}
                 <div class="col-md-4 text-center">
-                    <img src="{{ pregunta.imagen.url }}" class="img-fluid rounded" style="max-height: 150px; object-fit: contain;">
+                    <img src="{{ pregunta.imagen }}" class="img-fluid rounded" style="max-height: 150px; object-fit: contain;">
                 </div>
                 {% endif %}
                 <div class="{% if pregunta.imagen %}col-md-8{% else %}col-12{% endif %}">
@@ -61,14 +61,13 @@
     <script>
         const preguntas = document.querySelectorAll('.pregunta');
         const totalPreguntas = preguntas.length;
-        let preguntaActual = 0;
+        let preguntaActual = parseInt(localStorage.getItem('preguntaActual')) || 0;
         let puntaje = 0;
 
         function mostrarPregunta(index) {
             preguntas.forEach(p => p.style.display = 'none');
             if (preguntas[index]) {
                 preguntas[index].style.display = 'block';
-                // Actualiza el texto de "Pregunta X"
                 document.getElementById('numero-pregunta').textContent = `Pregunta ${index + 1}`;
             }
         }
@@ -99,17 +98,21 @@
                 }
 
                 preguntaActual++;
+                localStorage.setItem('preguntaActual', preguntaActual);
+
                 setTimeout(() => {
                     if (preguntaActual < totalPreguntas) {
                         mostrarPregunta(preguntaActual);
                     } else {
                         document.getElementById('notaInput').value = puntaje;
+                        localStorage.removeItem('preguntaActual');
                         document.getElementById('formResultado').submit();
                     }
                 }, 1200);
             });
         });
 
-        mostrarPregunta(0);
+        mostrarPregunta(preguntaActual);
+
     </script>
 {% endif %}
