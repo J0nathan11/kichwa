@@ -124,6 +124,9 @@ msgstr "Pushakshina yaykurik "
 msgid "Panel del Administrador"
 msgstr "Pushakkamaypak rikuchik pirka"
 
+msgid "Administrador"
+msgstr "Kamachiq"
+
 msgid "¿Olvidaste tu contraseña?"
 msgstr "Pakarikchanki shimi pakarishkata?"
 

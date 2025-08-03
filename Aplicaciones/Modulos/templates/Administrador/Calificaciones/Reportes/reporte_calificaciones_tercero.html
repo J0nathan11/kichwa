@@ -60,7 +60,7 @@
                         {% endwith %}
                     {% endfor %}
 
-                    <td><b>{{ promedios|dict_get:est.id|floatformat:2 }}</b></td>
+                    <td style="background-color: #f7d8be;"><b>{{ promedios|dict_get:est.id|floatformat:2 }}</b></td>
                     <td>
                         {% with fechas_ultimo_registro|dict_get:est.id as fecha %}
                             {% if fecha %}
